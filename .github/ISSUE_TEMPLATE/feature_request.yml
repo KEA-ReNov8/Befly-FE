@@ -1,52 +1,56 @@
-name: 'ReNov8 Front-End 이슈 생성'
-description: 'ReNov8 Front Repo에 이슈를 생성하며, 생성된 이슈는 Jira와 연동됩니다.'
-labels: [order]
-title: '이슈 이름을 작성해주세요'
+name: "🛠️ ReNov8 Front-End 이슈 생성"
+description: "✨ ReNov8 Front Repo에 새로운 이슈를 생성하며, 생성된 이슈는 Jira와 연동됩니다."
+title: "📌 이슈 제목을 입력해주세요"
+labels: ["order"]
 body:
   - type: input
     id: parentKey
     attributes:
-      label: '상위 작업 Ticket Number'
-      description: '상위 작업의 Ticket Number를 기입해주세요'
-      placeholder: 'DIAR-00'
+      label: "🔗 상위 작업 Ticket Number"
+      description: "해당 작업과 연관된 Jira Ticket Number를 입력해주세요."
+      placeholder: "예: DIAR-00"
     validations:
       required: true
 
   - type: input
     id: description
     attributes:
-      label: '이슈 내용(Description)'
-      description: '이슈에 대해서 간략히 설명해주세요'
+      label: "📄 이슈 개요 (Description)"
+      description: "이슈에 대한 간략한 설명을 작성해주세요."
     validations:
       required: true
 
   - type: textarea
     id: details
     attributes:
-      label: '상세 내용(Details)'
-      description: '이슈에 대해서 자세히 설명해주세요'
+      label: "📝 상세 내용 (Details)"
+      description: "이슈의 배경, 목표 및 필요한 추가 정보를 입력해주세요."
       value: |
-        - About Details
+        - 이슈의 주요 목표:
+        - 예상되는 결과:
+        - 관련 정보:
     validations:
       required: true
 
   - type: textarea
     id: tasks
     attributes:
-      label: '체크리스트(Tasks)'
-      description: '해당 이슈에 대해 필요한 작업목록을 작성해주세요'
+      label: "✅ 체크리스트 (Tasks)"
+      description: "해당 이슈와 관련된 작업 목록을 작성해주세요."
       value: |
-        - [ ] Task1
-        - [ ] Task2
+        - [ ] 작업 1
+        - [ ] 작업 2
+        - [ ] 작업 3
     validations:
       required: true
 
   - type: textarea
     id: references
     attributes:
-      label: '참조(References)'
-      description: '해당 이슈과 관련된 레퍼런스를 참조해주세요'
+      label: "📚 관련 자료 (References)"
+      description: "이슈와 관련된 문서, 링크, 참고 자료 등을 기재해주세요."
       value: |
-        - Reference1
+        - 📌 Reference 1: [링크 또는 설명]
+        - 📌 Reference 2: [링크 또는 설명]
     validations:
       required: false
