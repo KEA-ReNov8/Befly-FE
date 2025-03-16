@@ -1,4 +1,4 @@
-name: Create Jira Issue
+name: Create Jira Feat Issue
 on:
   issues:
     types: 
@@ -6,8 +6,8 @@ on:
     labels:
       - feat
 jobs:
-  create-issue:
-    name: Create Jira Issue
+  create-feat-issue:
+    name: Create Jira Feat Issue
     runs-on: ubuntu-latest
     steps:
       - name: Jira Login
@@ -60,11 +60,6 @@ jobs:
 
       - name: Log created issue
         run: echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"
-
-      - name: Checkout develop code
-        uses: actions/checkout@v4
-        with:
-          ref: develop
 
       - name: Create branch with Ticket number
         run: |
