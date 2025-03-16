@@ -9,6 +9,7 @@ jobs:
   create-feat-issue:
     name: Create Jira Feat Issue
     runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'feat') # feat 라벨이 있을 때만 실행
     steps:
       - name: Jira Login
         uses: atlassian/gajira-login@v3
