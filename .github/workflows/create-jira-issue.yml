@@ -15,11 +15,14 @@ jobs:
       - name: Set Issue Type  # Issue에서 type을 설정
         id: set_issue_type
         run: |
-          if [[ "${{ toJson(github.event.issue.labels) }}" == *'"feat"'* ]]; then
+          LABELS_JSON='${{ toJson(github.event.issue.labels) }}'
+          echo "Labels JSON: $LABELS_JSON"
+
+          if echo "$LABELS_JSON" | jq -e '.[] | select(.name=="feat")' > /dev/null; then
             echo "ISSUETYPE=Dev" >> $GITHUB_ENV
-          elif [[ "${{ toJson(github.event.issue.labels) }}" == *'"bug"'* ]]; then
+          elif echo "$LABELS_JSON" | jq -e '.[] | select(.name=="bug")' > /dev/null; then
             echo "ISSUETYPE=Bug" >> $GITHUB_ENV
-          elif [[ "${{ toJson(github.event.issue.labels) }}" == *'"refactor"'* ]]; then
+          elif echo "$LABELS_JSON" | jq -e '.[] | select(.name=="refactor")' > /dev/null; then
             echo "ISSUETYPE=Refactor" >> $GITHUB_ENV
           else
             echo "ISSUETYPE=Other" >> $GITHUB_ENV
