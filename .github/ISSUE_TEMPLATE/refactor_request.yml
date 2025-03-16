@@ -1,5 +1,5 @@
 name: "🛠️ ReNov8 Front-End Refactor 이슈 생성"
-description: "✨ ReNov8 Front Repo에 새로운 Refactor 이슈를 생성하며, 생성된 이슈는 Jira와 연동됩니다."
+description: "♻️ ReNov8 Front Repo에 새로운 Refactor 이슈를 생성하며, 생성된 이슈는 Jira와 연동됩니다."
 title: "📌 이슈 제목을 입력해주세요"
 labels:
   - refactor
