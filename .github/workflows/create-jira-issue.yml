@@ -113,33 +113,5 @@ jobs:
           actions: "update-issue"
           token: ${{ secrets.GITHUB_TOKEN }}
           title: "${{ steps.create.outputs.issue }} ${{ github.event.issue.title }}"
-
-      - name: Extract Tasks from Issue Body
-        id: extract_tasks
-        run: |
-          TASKS=$(echo "${{ github.event.issue.body }}" | grep -oP "(?<=- \[ \]) .+")
-          echo "Extracted tasks: $TASKS"
-          echo "::set-output name=tasks::$TASKS"
-
-      - name: Create Jira Sub Task
-        id: create-subtasks
-        run: |
-          # 반복문을 사용해 각 작업을 서브태스크로 생성
-          for TASK in ${{ steps.extract-tasks.outputs.tasks }}
-          do
-            echo "Creating Subtask for: $TASK"
-            # Jira 서브태스크 생성
-            curl -X POST -H "Authorization: Bearer ${{ secrets.JIRA_API_TOKEN }}" \
-              -H "Content-Type: application/json" \
-              -d '{
-                    "fields": {
-                      "project": {"key": "KAN"},
-                      "issuetype": {"name": "Sub-Task"},
-                      "summary": "'"${TASK}"'",
-                      "parent": {"key": "'"${{ steps.create.outputs.issue }}"'"}
-                    }
-                  }' \
-              ${{ secrets.JIRA_BASE_URL }}/rest/api/2/issue/
-          done
           
         
