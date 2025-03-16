@@ -50,11 +50,24 @@ jobs:
         with:
           ref: develop
 
+      - name: Set Template Path Based on Issue Type
+        id: set_template_path
+        run: |
+          if [[ "${{ env.ISSUETYPE }}" == "Dev" ]]; then
+            echo "TEMPLATE_PATH=.github/ISSUE_TEMPLATE/feature_request.yml" >> $GITHUB_ENV
+          elif [[ "${{ env.ISSUETYPE }}" == "Bug" ]]; then
+            echo "TEMPLATE_PATH=.github/ISSUE_TEMPLATE/bug_request.yml" >> $GITHUB_ENV
+          elif [[ "${{ env.ISSUETYPE }}" == "Refactor" ]]; then
+            echo "TEMPLATE_PATH=.github/ISSUE_TEMPLATE/refactor_request.yml" >> $GITHUB_ENV
+          else
+            echo "TEMPLATE_PATH=.github/ISSUE_TEMPLATE/default_issue.yml" >> $GITHUB_ENV
+          fi
+
       - name: Issue Parser  
         uses: stefanbuck/github-issue-praser@v3
         id: issue-parser
         with:
-          template-path: .github/ISSUE_TEMPLATE/feature_request.yml
+          template-path: ${{env.TEMPLATE_PATH}}
 
       - name: Log Issue Parser
         run: |
