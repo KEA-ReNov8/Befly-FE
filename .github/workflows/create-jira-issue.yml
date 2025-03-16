@@ -76,7 +76,7 @@ jobs:
         uses: atlassian/gajira-create@v3
         with:
           project: KAN
-          issuetype: $ISSUETYPE
+          issuetype: "${{ env.ISSUETYPE }}"  # Issue Type 설정
           summary: "${{ github.event.issue.title }}"
           description: "${{ steps.md2jira.outputs.output-text }}"
           fields: |
