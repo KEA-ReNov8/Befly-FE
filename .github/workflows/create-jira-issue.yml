@@ -45,7 +45,7 @@ jobs:
         id: create
         uses: atlassian/gajira-create@v3
         with:
-          project: swacademy-4
+          project: KAN
           issuetype: Dev
           summary: "${{ github.event.issue.title }}"
           description: "${{ steps.md2jira.outputs.output-text }}"
