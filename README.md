@@ -25,11 +25,8 @@
 | <img src="https://img.shields.io/badge/-Notion-000000?style=flat&logo=notion&logoColor=white"> | 작업 관리 및 문서화를 위한 통합 협업 도구.|
 
 ## 💻 Convention 💻
-
 ## 🌲 Branch Convention 🌲
-
 ## 🧑‍💻 Code Convention 🧑‍💻
-
 ## 💬 Issue Convention 💬
 ## 🫷 PR Convention 🫸
 ## 🙏 Commit Convention 🙏
