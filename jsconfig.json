@@ -9,8 +9,12 @@
             "@pages/*": ["src/pages/*"],
             "@home/*": ["src/pages/home/*"],
             "@my/*": ["src/pages/my/*"],
-            "@onboarding/*": ["src/pages/onboarding/*"],
+            "@login/*": ["src/pages/login/*"],
             "@post/*": ["src/pages/post/*"],
+            "@report/*": ["src/pages/report/*"],
+            "@chat/*": ["src/pages/chat/*"],
+            "@profile/*": ["src/pages/profile/*"],
+            "@error/*": ["src/pages/error/*"],
             "@shared/*": ["src/shared/*"],
             "@icon/*": ["src/shared/assets/icon/*"]
         },
