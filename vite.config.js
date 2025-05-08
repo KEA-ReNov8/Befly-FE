@@ -27,12 +27,28 @@ export default defineConfig({
         replacement: path.resolve(__dirname, 'src/pages/my'),
       },
       {
-        find: '@onboarding',
-        replacement: path.resolve(__dirname, 'src/pages/onboarding'),
+        find: '@login',
+        replacement: path.resolve(__dirname, 'src/pages/login'),
       },
       {
         find: '@post',
         replacement: path.resolve(__dirname, 'src/pages/post'),
+      },
+      {
+        find: '@chat',
+        replacement: path.resolve(__dirname, 'src/pages/chat'),
+      },
+      {
+        find: '@report',
+        replacement: path.resolve(__dirname, 'src/pages/report'),
+      },
+      {
+        find: '@profile',
+        replacement: path.resolve(__dirname, 'src/pages/profile'),
+      },
+      {
+        find: '@error',
+        replacement: path.resolve(__dirname, 'src/pages/error'),
       },
       {
         find: '@shared',
