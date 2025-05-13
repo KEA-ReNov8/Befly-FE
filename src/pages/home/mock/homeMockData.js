@@ -2,7 +2,7 @@ export const freePosts = [
   {
     postId: 1,
     title: '이런식으로 해결했어요!',
-    content: 'OLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLO',
+    content: 'OOLOLOLOLOOLO',
     likes: 3,
     comments: 3,
     time: '1분',
@@ -10,8 +10,10 @@ export const freePosts = [
   },
   {
     postId: 2,
-    title: '이런식으로 해결했어요!',
-    content: 'OLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLO',
+    title:
+      '제목이 완전 길죠?!제목이 완전 길죠?!제목이 완전 길죠?!제목이 완전 길죠?!제목이 완전 길죠?!제목이 완전 길죠?!제목이 완전 길죠?!제목이 완전 길죠?!제목이 완전 길죠?!제목이 완전 길죠?!',
+    content:
+      '이렇게 해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요 ',
     likes: 3,
     comments: 3,
     time: '1분',
@@ -20,7 +22,8 @@ export const freePosts = [
   {
     postId: 3,
     title: '이런식으로 해결했어요!',
-    content: 'OLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLO',
+    content:
+      'OLOL결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구요해결했다구OLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLO',
     likes: 3,
     comments: 3,
     time: '1분',

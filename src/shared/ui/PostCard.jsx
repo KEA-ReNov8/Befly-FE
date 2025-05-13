@@ -52,14 +52,15 @@ const CardContainer = styled.div`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: none;
+  box-sizing: border-box;
 
   &:hover {
     transform: translateY(-4px);
   }
-
-  display: flex;
-  flex-direction: column;
-  position: relative;
 `;
 const CardImage = styled.div`
   width: 100%;
@@ -85,6 +86,7 @@ const CardTitle = styled.h3`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding-top: 7px;
 `;
 
 const CardContent = styled.p`
@@ -99,6 +101,7 @@ const CardContent = styled.p`
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  word-break: break-all;
 `;
 // 카드 푸터- 좋아요, 댓글 수, 작성 시간, 닉네임을 표시
 const CardFooter = styled.div`
