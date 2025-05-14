@@ -1,5 +1,13 @@
 import styled from 'styled-components';
 
+export const BannerPlaceHolder = () => {
+  return (
+    <BannerWrapper>
+      <BannerImg src="/sample-banner.jpg" alt="나중에 사진으로 채울겁니다" />
+    </BannerWrapper>
+  );
+};
+
 const BannerWrapper = styled.div`
   width: 100%;
   height: 380px;
@@ -15,11 +23,3 @@ const BannerImg = styled.img`
   height: 100%;
   object-fit: cover;
 `;
-
-export const BannerPlaceHolder = () => {
-  return (
-    <BannerWrapper>
-      <BannerImg src="/sample-banner.jpg" alt="나중에 사진으로 채울겁니다" />
-    </BannerWrapper>
-  );
-};

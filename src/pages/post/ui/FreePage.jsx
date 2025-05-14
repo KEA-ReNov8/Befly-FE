@@ -1,6 +1,3 @@
 export const FreePage = () => {
-    return (
-        <>
-        </>
-    );
+  return <></>;
 };

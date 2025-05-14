@@ -1,6 +1,3 @@
 export const FreePostPage = () => {
-    return (
-        <>
-        </>
-    );
+  return <></>;
 };
