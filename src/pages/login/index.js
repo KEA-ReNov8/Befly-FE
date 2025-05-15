@@ -1,3 +1,2 @@
 export { LoginPage } from '@login/ui/LoginPage';
 export { SignupPage } from '@login/ui/SignupPage';
-export { Confirm } from '@login/ui/Confirm';
