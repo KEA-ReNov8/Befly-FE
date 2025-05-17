@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { BannerPlaceHolder, SectionsContainer } from '../index';
+import TopBar from './../../../shared/ui/TopBar';
 
 export const HomePage = () => {
   const navigate = useNavigate();
   return (
     <HomeContainer>
-      <div>공통상단바 들어갈 자리 </div>
+      <TopBar />
+
       <BannerPlaceHolder />
       <SectionsContainer />
     </HomeContainer>
@@ -19,7 +21,6 @@ const HomeContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 1440px;
-  min-height: 100vh;
   margin: 0 auto;
   background-color: grey;
 `;
