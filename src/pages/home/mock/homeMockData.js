@@ -49,7 +49,7 @@ export const sharePosts = [
     comments: 3,
     time: '1분',
     nickname: '닉네임',
-    categoryColor: '#21c5a7',
+    categoryName: '스트레스',
   },
   {
     postId: 6,
@@ -59,7 +59,7 @@ export const sharePosts = [
     comments: 3,
     time: '1분',
     nickname: '닉네임',
-    categoryColor: '#21c5a7',
+    categoryName: '불안',
   },
   {
     postId: 7,
@@ -69,7 +69,7 @@ export const sharePosts = [
     comments: 3,
     time: '1분',
     nickname: '닉네임',
-    categoryColor: '#21c5a7',
+    categoryName: '상처',
   },
   {
     postId: 8,
@@ -79,6 +79,6 @@ export const sharePosts = [
     comments: 3,
     time: '1분',
     nickname: '닉네임',
-    categoryColor: '#21c5a7',
+    categoryName: '학업',
   },
 ];

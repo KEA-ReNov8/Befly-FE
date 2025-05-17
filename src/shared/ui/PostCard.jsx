@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { colors } from '@/app/styles/colors';
 
 const PostCard = ({
   type,
@@ -10,12 +11,15 @@ const PostCard = ({
   comments,
   time,
   nickname,
-  categoryColor,
+  categoryName,
   postId,
 }) => {
+  const categoryColor = colors.category[categoryName];
+
   const navigate = useNavigate();
 
   const handleClick = () => {
+    // 클릭 시 해당 계시글로 이동
     if (type === 'free') {
       navigate(`/free/${postId}`);
     } else if (type === 'shared') {
@@ -26,17 +30,22 @@ const PostCard = ({
   return (
     <CardContainer onClick={handleClick}>
       <CardImage />
-      {type === 'shared' && <CategoryIndicator color={categoryColor} />}
+      {type === 'shared' && categoryName && (
+        <CategoryPill color={categoryColor}>{categoryName}</CategoryPill>
+      )}
       <CardContentContainer>
         <CardTitle>{title}</CardTitle>
         <CardContent>{content}</CardContent>
         <CardFooter>
-          <span>
-            ❤️ {likes} 💬 {comments}
-          </span>
-          <span>
-            {time} | {nickname}
-          </span>
+          <LeftFooter>
+            <span>❤️ {likes}</span>
+            <span>💬 {comments}</span>
+          </LeftFooter>
+          <RightFooter>
+            <span>{time}</span>
+            <Divider />
+            <span>{nickname}</span>
+          </RightFooter>
         </CardFooter>
       </CardContentContainer>
     </CardContainer>
@@ -48,26 +57,49 @@ const CardContainer = styled.div`
   width: 240px;
   height: 330px;
   background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.1);
+
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
+  &:hover {
+    transform: translateY(-4px);
+  }
+
   display: flex;
   flex-direction: column;
   position: relative;
   flex: none;
   box-sizing: border-box;
-
-  &:hover {
-    transform: translateY(-4px);
-  }
 `;
+
 const CardImage = styled.div`
   width: 100%;
   height: 153px;
   background: #e0e0e0;
-  border-radius: 10px, 10px, 0, 0;
+  border-radius: 8px 8px 0 0;
 `;
+
+const CategoryPill = styled.div`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 65px;
+  height: 25px;
+  padding: 0 5px;
+  background: ${(props) => props.color || '#4CAF50'};
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 999px;
+  position: absolute;
+  left: 50%;
+  top: 140px;
+  transform: translateX(-50%);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+  z-index: 2;
+`;
+
 const CardContentContainer = styled.div`
   width: 100%;
   height: 177px;
@@ -81,21 +113,22 @@ const CardContentContainer = styled.div`
 const CardTitle = styled.h3`
   width: 100%;
   height: 20px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: bold;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding-top: 7px;
+  line-height: 20px;
+  margin-top: 5px;
 `;
 
 const CardContent = styled.p`
   width: 100%;
   flex: 1;
-  max-height: calc(1.2em * 4);
-  font-size: 12px;
+  max-height: calc(1.6em * 4);
+  font-size: 13px;
   color: #666666;
-  line-height: 1.2em;
+  line-height: 1.6em;
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
@@ -110,16 +143,26 @@ const CardFooter = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 10px;
+`;
+
+const LeftFooter = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 12px;
   color: #888888;
 `;
-// 카테고리 인디케이터- 공유글일 경우, 카테고리를 표시하기 위해 사용
-const CategoryIndicator = styled.div`
-  width: 6px;
-  height: 40px;
-  background-color: ${(props) => props.color || '#4CAF50'};
-  position: absolute;
-  left: 0;
-  top: 10px;
-  border-radius: 2px;
+
+const RightFooter = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 12px;
+  color: #888888;
+`;
+
+const Divider = styled.div`
+  width: 1px;
+  height: 10px;
+  background-color: #888888;
 `;
