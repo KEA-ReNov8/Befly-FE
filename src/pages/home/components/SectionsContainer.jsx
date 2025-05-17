@@ -31,13 +31,17 @@ export const SectionsContainer = () => {
 
 const SectionsBg = styled.div`
   width: 100%;
+  height: 1156px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: #e6f6f3;
-  min-height: 900px;
   padding-bottom: 60px;
 `;
 
 const FirstSectionWrapper = styled.div`
   width: 100%;
+  height: 566px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,6 +55,7 @@ const FirstSectionWrapper = styled.div`
 
 const SecondSectionWrapper = styled.div`
   width: 100%;
+  height: 590px;
   background: transparent;
   display: flex;
   flex-direction: column;

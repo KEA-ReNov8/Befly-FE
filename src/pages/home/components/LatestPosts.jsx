@@ -34,35 +34,38 @@ const SectionContainer = styled.div`
 
 const SectionHeader = styled.div`
   width: 100%;
+  height: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   margin: 0 auto 20px auto;
-  padding: 0 32px;
-`;
-const CardsRow = styled.div`
-  width: 100%;
-  display: flex;
-  gap: 40px;
-  justify-content: center;
-  align-items: flex-start;
-  margin: 0 auto;
-  padding: 0 32px;
-  min-height: 340px;
 `;
 
 const SectionTitle = styled.h2`
   color: #21c5a7;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: bold;
 `;
 const MoreButton = styled.button`
   background: none;
   border: none;
   color: #21c5a7;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
+  margin-right: 30px;
+`;
+
+const CardsRow = styled.div`
+  width: 1044px;
+  height: 330px;
+  display: flex;
+  gap: 28px;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0 auto;
+  padding: 0 32px;
+  min-height: 340px;
 `;
