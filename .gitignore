@@ -8,6 +8,9 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Vite 캐시
+.vite
+
 node_modules
 dist
 dist-ssr
