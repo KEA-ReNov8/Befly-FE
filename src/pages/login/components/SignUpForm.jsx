@@ -63,6 +63,7 @@ const Title = styled.h2`
 `;
 
 const Profile = styled.div`
+    position: relative;
     display: flex;
     margin-bottom: 2rem;
 `;
@@ -76,8 +77,8 @@ const ProfileImage = styled.img`
 
 const AddButton = styled.button`
     position: absolute;
-    margin-left: 9.5rem;
-    margin-top: 9.5rem;
+    top: 80%;
+    left: 78%;
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -89,12 +90,13 @@ const AddButton = styled.button`
     padding-bottom: 0.2rem;
 
     &:hover {
-        background-color: ${theme.colors.green[80]};
+        background-color: ${theme.colors.green.hover};
     }
 `;
 
 const Input = styled.div`
     display: flex;
+    position: relative;
     width: 335.7px;
     flex-direction: column;
     align-items: center;
@@ -133,8 +135,8 @@ const Nickname = styled.input`
 
 const CheckButton = styled.button`
     position: absolute;
-    margin-left: 15rem;
-    margin-top: 3.7rem;
+    top: 65%;
+    left: 78%;
     width: 66px;
     height: 30px;
     background-color: ${theme.colors.green.main};
@@ -144,7 +146,7 @@ const CheckButton = styled.button`
     cursor: pointer;
 
     &:hover {
-        background-color: ${theme.colors.green[80]};
+        background-color: ${theme.colors.green.hover};
     }
 `;
 
@@ -178,6 +180,7 @@ const TermContainer = styled.div`
 const Term = styled.input`
     appearance: auto;
     align-items: center;
+    cursor: pointer;
     accent-color: ${theme.colors.green.main};
     color: ${theme.colors.gray[700]};
 `;
