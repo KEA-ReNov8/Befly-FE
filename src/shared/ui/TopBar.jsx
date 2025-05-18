@@ -1,19 +1,38 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
-
+import { useNavigate } from 'react-router-dom';
+import WorryModal from './WorryModal';
+import NotificationModal from './NotificationModal';
 const TopBar = () => {
+  const navigate = useNavigate();
+  const [isWorryModalOpen, setWorryModalOpen] = useState(false);
+  const [isNotificationModalOpen, setNotificationModalOpen] = useState(false);
+  const toggleWorryModal = () => {
+    setWorryModalOpen((prev) => !prev);
+  };
+  const toggleNotificationModal = () => {
+    setNotificationModalOpen((prev) => !prev);
+  };
+
   return (
     <Container>
-      <Logo>Be, Fly</Logo>
+      <Logo onClick={() => navigate('/home')}>Be, Fly</Logo>
       <Nav>
-        <NavButton>자유함</NavButton>
-        <NavButton>공유함</NavButton>
-        <NavButton>고민함</NavButton>
-        <NavButton>마이페이지</NavButton>
+        <NavButton onClick={() => navigate('/free')}>자유함</NavButton>
+        <NavButton onClick={() => navigate('/share')}>공유함</NavButton>
+        <NavButton onClick={() => navigate('/worry')}>고민함</NavButton>
+        <NavButton onClick={() => navigate('/my/myworry')}>마이페이지</NavButton>
       </Nav>
       <RightSection>
-        <WorryButton>고민 생성 +</WorryButton>
-        <NotificationButton />
+        <WorryWrapper>
+          <WorryButton onClick={toggleWorryModal}>고민 생성 +</WorryButton>
+          {isWorryModalOpen && <WorryModal />}
+        </WorryWrapper>
+        <NotificationWrapper>
+          <NotificationButton onClick={toggleNotificationModal} />
+          {isNotificationModalOpen && <NotificationModal />}
+        </NotificationWrapper>
       </RightSection>
     </Container>
   );
@@ -24,7 +43,7 @@ export default TopBar;
 const Container = styled.header`
   width: 100%;
   height: 171px;
-  padding: 40px 220px 0 220px;
+  padding: 55px 220px 0 220px;
   display: flex;
   align-items: center;
   background-color: #fff;
@@ -61,6 +80,14 @@ const RightSection = styled.div`
   gap: 80px;
   align-items: center;
   justify-content: flex-end;
+`;
+
+const WorryWrapper = styled.div`
+  position: relative;
+`;
+
+const NotificationWrapper = styled.div`
+  position: relative;
 `;
 
 const WorryButton = styled.button`

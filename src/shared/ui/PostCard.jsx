@@ -84,12 +84,12 @@ const CategoryPill = styled.div`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 65px;
-  height: 25px;
+  width: 75px;
+  height: 28px;
   padding: 0 5px;
   background: ${(props) => props.color || '#4CAF50'};
   color: #fff;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   border-radius: 999px;
   position: absolute;
@@ -103,12 +103,13 @@ const CategoryPill = styled.div`
 const CardContentContainer = styled.div`
   width: 100%;
   height: 177px;
-  padding: 13.5px 20px;
+  padding: 27px 20px 20px;
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 10px;
 `;
 const CardTitle = styled.h3`
   width: 100%;
@@ -119,18 +120,17 @@ const CardTitle = styled.h3`
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 20px;
-  margin-top: 5px;
 `;
 
 const CardContent = styled.p`
   width: 100%;
   flex: 1;
-  max-height: calc(1.6em * 4);
+  max-height: calc(1.6em * 3);
   font-size: 13px;
   color: #666666;
   line-height: 1.6em;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;

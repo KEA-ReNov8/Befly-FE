@@ -34,7 +34,7 @@ export const colors = {
     학업: '#CAFFB3',
     외로움: '#C0FFDC',
     우울: '#B2FFFC',
-    관계: 'A9E0FF',
+    관계: '#A9E0FF',
     진로: '#8CBAFF',
   },
   other: {
