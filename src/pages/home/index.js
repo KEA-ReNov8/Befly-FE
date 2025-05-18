@@ -1,2 +1,4 @@
 export { HomePage } from '@home/ui/HomePage';
-export { CreateWorry } from '@home/ui/CreateWorry';
+export { BannerPlaceHolder } from './components/BannerPlaceHolder';
+export { LatestPosts } from './components/LatestPosts';
+export { SectionsContainer } from './components/SectionsContainer';
