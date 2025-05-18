@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import PageButton from './PageButton';
+import PagingButton from './PagingButton';
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const pages = [];
@@ -20,7 +20,12 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   return (
     <Wrapper>
       {pages.map((page) => (
-        <PageButton key={page} page={page} isActive={page === currentPage} onClick={onPageChange} />
+        <PagingButton
+          key={page}
+          page={page}
+          isActive={page === currentPage}
+          onClick={onPageChange}
+        />
       ))}
     </Wrapper>
   );
