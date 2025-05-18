@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import PostCard from '../../../shared/ui/PostCard';
+import PostCard from '@shared/ui/PostCard';
 
 export const LatestPosts = ({ title, type, posts, onMore, bg }) => {
   return (

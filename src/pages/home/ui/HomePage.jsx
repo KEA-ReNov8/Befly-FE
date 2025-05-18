@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { BannerPlaceHolder, SectionsContainer } from '../index';
-import TopBar from './../../../shared/ui/TopBar';
+import TopBar from '@/shared/ui/TopBar/TopBar';
 
 export const HomePage = () => {
   const navigate = useNavigate();
