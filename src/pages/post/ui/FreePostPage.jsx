@@ -1,5 +1,4 @@
-// src/pages/post/ui/FreePostPage.jsx
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import TopBar from '@shared/ui/TopBar/TopBar';
@@ -8,6 +7,29 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 
 export const FreePostPage = () => {
   const editorRef = useRef();
+  const [title, setTitle] = useState('');
+  const [htmlContent, setHtmlContent] = useState(''); // html state
+
+  // 이미지 업로드 핸들러 (Mock)
+  const handleImageUpload = async (blob, callback) => {
+    const mockUrl = URL.createObjectURL(blob); // 로컬 Blob를 임시 URL로 변환
+    callback(mockUrl, '업로드 이미지');
+    // 실제 API가 준비되면 아래에 코드 추가
+    // const formData = new FormData();
+    // formData.append('image', blob);
+    // const res =await axios.post('/api/upload', formData);
+    // const imageUrl = res.data.url;
+    // callback(imageUrl, '업로드 이미지');
+  };
+
+  const handleRegister = () => {
+    const editorInstance = editorRef.current.getInstance();
+    const html = editorInstance.getHTML();
+    setHtmlContent(html);
+    console.log('제목:', title);
+    console.log('본문 HTML:', html);
+  };
+
   return (
     <Container>
       <TopBar />
@@ -16,16 +38,19 @@ export const FreePostPage = () => {
           <HeaderTitle>자유함 글쓰기</HeaderTitle>
           <ButtonContainer>
             <TempSaveButton>임시저장</TempSaveButton>
-            <WriteButton>등록</WriteButton>
+            <WriteButton onClick={handleRegister}>등록</WriteButton>
           </ButtonContainer>
         </Header>
-        <TitleInput placeholder="제목" />
+        <TitleInput placeholder="제목" value={title} onChange={(e) => setTitle(e.target.value)} />
         <Editor
           ref={editorRef}
           previewStyle="vertical"
           height="400px"
           initialEditType="markdown"
           useCommandShortcut={true}
+          hooks={{
+            addImageBlobHook: handleImageUpload, // 이미지 업로드 hook 등록
+          }}
         />
       </EditorContainer>
     </Container>
