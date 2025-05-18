@@ -1,6 +1,3 @@
 export const SharePage = () => {
-    return (
-        <>
-        </>
-    );
+  return <></>;
 };
