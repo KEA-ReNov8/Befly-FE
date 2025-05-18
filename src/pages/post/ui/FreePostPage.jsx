@@ -1,14 +1,33 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import TopBar from '@shared/ui/TopBar/TopBar';
 import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
+import { createFreePost } from '../api/post'; // 실제 API 연동 시 활용될 POST 요청 함수 예시
 
 export const FreePostPage = () => {
+  useEffect(() => {
+    const savedTitle = localStorage.getItem('temp_free_post_title');
+    const savedContent = localStorage.getItem('temp_free_post_content');
+
+    if (savedTitle || savedContent) {
+      const shouldRestore = window.confirm('이전에 임시 저장된 내용이 있습니다. 불러올까요?');
+      if (shouldRestore) {
+        if (savedTitle) setTitle(savedTitle);
+        if (savedContent && editorRef.current) {
+          editorRef.current.getInstance().setHTML(savedContent);
+        }
+      }
+    }
+  }, []);
+
+  const navigate = useNavigate();
   const editorRef = useRef();
   const [title, setTitle] = useState('');
   const [htmlContent, setHtmlContent] = useState(''); // html state
+  const [isSubmitting, setIsSubmitting] = useState(false); // 등록 중 상태 관리 - 중복 등록 방지
 
   // 이미지 업로드 핸들러 (Mock)
   const handleImageUpload = async (blob, callback) => {
@@ -22,12 +41,51 @@ export const FreePostPage = () => {
     // callback(imageUrl, '업로드 이미지');
   };
 
-  const handleRegister = () => {
+  const handleTempSave = () => {
     const editorInstance = editorRef.current.getInstance();
     const html = editorInstance.getHTML();
-    setHtmlContent(html);
-    console.log('제목:', title);
-    console.log('본문 HTML:', html);
+    const markdown = editorInstance.getMarkdown();
+
+    if (!title.trim() && !markdown.trim()) {
+      alert('임시 저장할 내용이 없습니다.');
+      return;
+    }
+
+    localStorage.setItem('temp_free_post_title', title);
+    localStorage.setItem('temp_free_post_content', html);
+
+    alert('임시 저장이 완료되었습니다!');
+  };
+
+  const handleRegister = async () => {
+    if (isSubmitting) return; // 중복 방지
+    setIsSubmitting(true);
+
+    const editorInstance = editorRef.current.getInstance();
+    const html = editorInstance.getHTML();
+    const markdown = editorInstance.getMarkdown(); // 마크다운 추출
+
+    // 제목과 내용이 모두 입력되지 않았다면 경고 메시지 표시
+    const isContentEmpty = !markdown.trim(); // 공백 포함 여부 제거
+    if (!title.trim() || isContentEmpty) {
+      alert('제목과 내용을 모두 입력해주세요.');
+      return;
+    }
+
+    try {
+      // 나중에 API 준비되면 아래 주석 제거
+      // await createFreePost({ title, content: html });
+
+      console.log('✅ 등록 완료. title:', title);
+      console.log('✅ 등록 완료. content:', html);
+
+      // 게시글 등록 후 목록 페이지로 이동 처리
+      navigate('/free');
+    } catch (err) {
+      alert('등록 실패. 나중에 다시 시도해주세요.');
+    } finally {
+      setIsSubmitting(false); // 등록 완료 후 상태 초기화
+    }
   };
 
   return (
@@ -37,8 +95,10 @@ export const FreePostPage = () => {
         <Header>
           <HeaderTitle>자유함 글쓰기</HeaderTitle>
           <ButtonContainer>
-            <TempSaveButton>임시저장</TempSaveButton>
-            <WriteButton onClick={handleRegister}>등록</WriteButton>
+            <TempSaveButton onClick={handleTempSave}>임시저장</TempSaveButton>
+            <WriteButton onClick={handleRegister} disabled={isSubmitting}>
+              {isSubmitting ? '등록 중...' : '등록'}
+            </WriteButton>
           </ButtonContainer>
         </Header>
         <TitleInput placeholder="제목" value={title} onChange={(e) => setTitle(e.target.value)} />
