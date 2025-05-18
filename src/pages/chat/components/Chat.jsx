@@ -10,111 +10,111 @@ import SuspendModal from '@chat/components/SuspendModal';
 import SuccessModal from '@chat/components/SuccessModal';
 
 const Chat = () => {
-    const [ isSideBarOpen, setIsSideBarOpen ] = useState(false);
-    const [isSuspendModalOpen, setIsSuspendModalOpen] = useState(false);
-    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-    const [progress, setProgress] = useState(0);
-    const messageListRef = useRef(null);
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+  const [isSuspendModalOpen, setIsSuspendModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const messageListRef = useRef(null);
 
-    const handleSuspendModalOpen = () => {
-        setIsSuspendModalOpen(true);
-    };
+  const handleSuspendModalOpen = () => {
+    setIsSuspendModalOpen(true);
+  };
 
-    const handleSuccessModalOpen = () => {
-        setIsSuccessModalOpen(true);
-    };
+  const handleSuccessModalOpen = () => {
+    setIsSuccessModalOpen(true);
+  };
 
-    const handleSuspendModalClose = () => {
-        setIsSuspendModalOpen(false);
-    };
+  const handleSuspendModalClose = () => {
+    setIsSuspendModalOpen(false);
+  };
 
-    const handleSuccessModalClose = () => {
-        setIsSuccessModalOpen(false);
-    };
+  const handleSuccessModalClose = () => {
+    setIsSuccessModalOpen(false);
+  };
 
-    const toggleSideBar = ()=> {
-        setIsSideBarOpen(!isSideBarOpen);
-    };
+  const toggleSideBar = () => {
+    setIsSideBarOpen(!isSideBarOpen);
+  };
 
-    const handleProgressChange = (currentProgress) => {
-      setProgress(currentProgress);
+  const handleProgressChange = (currentProgress) => {
+    setProgress(currentProgress);
+  }
+
+  //test
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      text: '안녕하세요 저는 나래입니다. 고민이 있으시면 언제든지 물어보세요. 제가 도와드리겠습니다.',
+      isUser: false,
+      timestamp: new Date(),
+    },
+  ]);
+
+  useEffect(() => {
+    if (messageListRef.current) {
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
     }
+  }, [messages]);
 
-    //test
-    const [messages, setMessages] = useState([
-        {
-          id: 1,
-          text: '안녕하세요 저는 나래입니다. 고민이 있으시면 언제든지 물어보세요. 제가 도와드리겠습니다.',
-          isUser: false,
-          timestamp: new Date(),
-        },
-      ]);
+  const handleSendMessage = (text) => {
+    if (!text.trim()) return;
 
-    useEffect(() => {
-      if (messageListRef.current) {
-        messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
-      }
-    }, [messages]);  
+    const newMessage = {
+      id: messages.length + 1,
+      text,
+      isUser: true,
+      timestamp: new Date(),
+    };
 
-    const handleSendMessage = (text) => {
-        if (!text.trim()) return;
-        
-        const newMessage = {
-          id: messages.length + 1,
-          text,
-          isUser: true,
-          timestamp: new Date(),
-        };
-        
-        setMessages([...messages, newMessage]);
-        
-        // 챗봇 응답 시뮬레이션
-        setTimeout(() => {
-          const botResponse = {
-            id: messages.length + 2,
-            text: '걱정마 잘 될거야~',
-            isUser: false,
-            timestamp: new Date(),
-          };
-          setMessages(prev => [...prev, botResponse]);
-        }, 1000);
+    setMessages([...messages, newMessage]);
+
+    // 챗봇 응답 시뮬레이션
+    setTimeout(() => {
+      const botResponse = {
+        id: messages.length + 2,
+        text: '걱정마 잘 될거야~',
+        isUser: false,
+        timestamp: new Date(),
       };
+      setMessages(prev => [...prev, botResponse]);
+    }, 1000);
+  };
 
-      return (
-        <Container>
-            <ChatContainer data-sidebarOpen={isSideBarOpen}>
-              <SideBarContainer data-isOpen={isSideBarOpen}>
-                <SideBar isOpen={isSideBarOpen} onClose={toggleSideBar} />
-              </SideBarContainer>
-              <MenuButtonContainer>
-                {!isSideBarOpen && (
-                  <MenuButton onClick={toggleSideBar}>
-                    <img src={ChatMenu} alt="menu" />
-                  </MenuButton>
-                )}
-              </MenuButtonContainer>
-              <TopContainer>
-                <Header>
-                  <Title>AI 메이트 나래</Title>
-                  <ProgressBar onProgressChange={handleProgressChange} />
-                </Header>
-                {progress < 100 ? (
-                  <SuspendButton onClick={handleSuspendModalOpen}>대화 종료</SuspendButton>
-                ) : (
-                  <FinishButton onClick={handleSuccessModalOpen}>대화 완료</FinishButton>
-                )}
-              </TopContainer>
-              <MessageList ref={messageListRef}>
-                {messages.map((message)=> (
-                  <ChatMessage key={message.id} message={message} />
-                  ))}
-              </MessageList>
-              <ChatForm onSendMessage={handleSendMessage} />
-            </ChatContainer>
-            {isSuspendModalOpen && <SuspendModal onClose={handleSuspendModalClose} />}
-            {isSuccessModalOpen && <SuccessModal onClose={handleSuccessModalClose} />}
-        </Container>
-      );
+  return (
+    <Container>
+      <ChatContainer data-sidebarOpen={isSideBarOpen}>
+        <SideBarContainer data-isOpen={isSideBarOpen}>
+          <SideBar isOpen={isSideBarOpen} onClose={toggleSideBar} />
+        </SideBarContainer>
+        <MenuButtonContainer>
+          {!isSideBarOpen && (
+            <MenuButton onClick={toggleSideBar}>
+              <img src={ChatMenu} alt="menu" />
+            </MenuButton>
+          )}
+        </MenuButtonContainer>
+        <TopContainer>
+          <Header>
+            <Title>AI 메이트 나래</Title>
+            <ProgressBar onProgressChange={handleProgressChange} />
+          </Header>
+          {progress < 100 ? (
+            <SuspendButton onClick={handleSuspendModalOpen}>대화 종료</SuspendButton>
+          ) : (
+            <FinishButton onClick={handleSuccessModalOpen}>대화 완료</FinishButton>
+          )}
+        </TopContainer>
+        <MessageList ref={messageListRef}>
+          {messages.map((message) => (
+            <ChatMessage key={message.id} message={message} />
+          ))}
+        </MessageList>
+        <ChatForm onSendMessage={handleSendMessage} />
+      </ChatContainer>
+      {isSuspendModalOpen && <SuspendModal onClose={handleSuspendModalClose} />}
+      {isSuccessModalOpen && <SuccessModal onClose={handleSuccessModalClose} />}
+    </Container>
+  );
 };
 
 const Container = styled.div`
