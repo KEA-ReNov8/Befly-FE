@@ -123,7 +123,10 @@ const Container = styled.div`
   height: 830px;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
   border: 1px solid ${theme.colors.gray[500]};
+  background-color: ${theme.colors.other.white};
 `;
 
 const MenuButtonContainer = styled.div`
