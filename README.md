@@ -6,12 +6,12 @@
 #### [노션 링크](https://www.notion.so/Team-Space-1b3ea3db585680a5aa1fd8f6b5aaa9fb)
 
 ## FE Members
-<img width="160px" src="https://avatars.githubusercontent.com/u/106726806?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/106726806?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/106726806?v=4"/> |
-|:-----:|:-----:|:-----:|
-|[김동윤](https://github.com/dyk-im)|[김찬우](https://github.com/chanudevelop)|[김동섭](https://github.com/dohsub)|
-|팀장 👨🏻‍💻|팀원 👨🏻‍💻|팀원 👨🏻‍💻|
-|열심히 합시다!!|화이팅!!|화이팅!!!|
-|``<br/>|``<br/>|``<br/>|
+<img width="160px" src="https://avatars.githubusercontent.com/u/106726806?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/106726806?v=4"/> |
+|:-----:|:-----:|
+|[김동윤](https://github.com/dyk-im)|[김찬우](https://github.com/chanudevelop)|
+|팀장 👨🏻‍💻|팀원 👨🏻‍💻|
+|열심히 합시다!!|화이팅!!|
+|``<br/>|``<br/>|
 
 </div>
 <br/>
