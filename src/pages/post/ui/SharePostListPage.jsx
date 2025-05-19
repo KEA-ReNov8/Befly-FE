@@ -25,7 +25,7 @@ export const SharePostListPage = () => {
       </SearchBarWrapper>
       <BoardGrid>
         {currentPosts.map((post) => (
-          <PostCard key={post.postId} {...post} />
+          <PostCard key={post.postId} {...post} currentPage={currentPage} />
         ))}
       </BoardGrid>
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
