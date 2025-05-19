@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 
-const FreeCommentList = ({
+const CommentListBox = ({
   comments,
   replyInput,
   replyingTo,
@@ -77,7 +77,7 @@ const FreeCommentList = ({
   </CommentListSection>
 );
 
-export default FreeCommentList;
+export default CommentListBox;
 
 const CommentListSection = styled.div`
   width: 1044px;
@@ -86,6 +86,7 @@ const CommentListSection = styled.div`
   box-sizing: border-box;
   border-radius: 10px;
   border: 1px solid ${theme.colors.gray[200]};
+  margin-top: 30px;
 `;
 const CommentBlock = styled.div`
   margin-bottom: 24px;

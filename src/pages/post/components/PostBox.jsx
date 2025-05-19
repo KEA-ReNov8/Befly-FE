@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 
-const FreePost = ({ title, author, date, content, stats, onEdit }) => (
+const PostBox = ({ title, author, date, content, stats, onEdit }) => (
   <PostContainer>
     <PostHeader>
       <HeaderWrapper>
@@ -22,7 +22,7 @@ const FreePost = ({ title, author, date, content, stats, onEdit }) => (
   </PostContainer>
 );
 
-export default FreePost;
+export default PostBox;
 
 const PostContainer = styled.div`
   width: 1044px;

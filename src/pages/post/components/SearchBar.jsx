@@ -7,15 +7,15 @@ export const SearchBar = () => {
     <Wrapper>
       <Input type="text" placeholder="검색어를 입력해주세요." />
       <SearchButton>
-        <img src={SearchIcon} alt="search" width={25} height={25} />
+        <img src={SearchIcon} alt="search" width={16} height={16} />
       </SearchButton>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  width: 480px;
-  height: 35px;
+  width: 240px;
+  height: 30px;
   margin-top: 20px;
   display: flex;
   align-items: center;
@@ -25,7 +25,7 @@ const Wrapper = styled.div`
 `;
 
 const Input = styled.input`
-  width: 480px;
+  width: 240px;
   height: 100%;
   border: none;
   padding: 0 16px;
@@ -36,7 +36,7 @@ const Input = styled.input`
 `;
 
 const SearchButton = styled.button`
-  width: 35px;
+  width: 24px;
   height: 100%;
   border: none;
   background-color: #fff;

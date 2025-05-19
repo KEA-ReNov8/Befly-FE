@@ -1,53 +1,54 @@
 import styled from 'styled-components';
 import TopBar from '@shared/ui/TopBar/TopBar';
 import theme from '@app/styles/theme';
-import { useRef, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import FreePost from './FreePost';
-import FreeCommentInput from './FreeCommentInput';
-import FreeCommentList from './FreeCommentList';
-import FreePageBottom from './FreePageBottom';
+import { useRef, useState, useEffect } from 'react';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import PostBox from '../components/PostBox';
+import CommentInputBox from '../components/CommentInputBox';
+import CommentListBox from '../components/CommentListBox';
+import FreePageBottomBox from '../components/FreePageBottomBox';
+import { mockFreePostData, dummyComments } from '../data/DummyPosts';
 
 export const FreePage = () => {
   // 로그인한 유저의 id (실제 서비스에서는 context나 props로 받아올 수 있음)
   const userId = 123;
   const navigate = useNavigate();
   const location = useLocation();
+  const { postId } = useParams();
+  const [post, setPost] = useState(null);
+
   // 댓글 입력창의 값 상태
   const [commentInput, setCommentInput] = useState('');
-  // 댓글 및 답글(대댓글) 전체 리스트 상태 (초기값은 예시, 실제로는 백엔드에서 받아올 수 있음)
-  const [comments, setComments] = useState([
-    {
-      id: 1,
-      author: '닉네임',
-      authorId: 123,
-      content: '좋아요! 저도 써봐야겠어요!',
-      date: '2023.05.21 17:28',
-      replies: [
-        {
-          id: 11,
-          author: '닉네임',
-          authorId: 123,
-          content: '좋아요! 저도 써봐야겠어요!',
-          date: '2023.05.21 17:28',
-        },
-      ],
-    },
-    {
-      id: 2,
-      author: '닉네임',
-      authorId: 456,
-      content: '좋아요! 저도 써봐야겠어요!',
-      date: '2023.05.21 17:28',
-      replies: [],
-    },
-  ]);
+  // 댓글 및 답글(대댓글) 전체 리스트 상태
+  const [comments, setComments] = useState([]);
   // 답글 입력창의 값 상태 (댓글 id별로 관리)
   const [replyInput, setReplyInput] = useState({});
   // 현재 답글 입력창이 열려있는 댓글 id (하나만 열림)
   const [replyingTo, setReplyingTo] = useState(null);
   // 댓글 입력창 textarea DOM 참조 (높이 자동 조절용)
   const commentRef = useRef(null);
+
+  useEffect(() => {
+    // postId에 해당하는 게시글 찾기
+    const foundPost = mockFreePostData.find((p) => p.id === parseInt(postId));
+    if (foundPost) {
+      setPost(foundPost);
+      // 임시로 dummyComments를 사용
+      setComments(
+        dummyComments.map((comment) => ({
+          id: comment.id,
+          author: comment.writer,
+          authorId: Math.floor(Math.random() * 1000), // 임시 authorId
+          content: comment.content,
+          date: comment.createdAt,
+          replies: [],
+        })),
+      );
+    } else {
+      // 게시글을 찾지 못한 경우 목록으로 이동
+      navigate('/free');
+    }
+  }, [postId, navigate]);
 
   // 댓글 입력창 값 변경 핸들러 (textarea 높이 자동 조절 포함)
   const handleInputChange = (e) => {
@@ -144,23 +145,25 @@ export const FreePage = () => {
         <TopBar />
       </TopBarWrapper>
       {/* 게시글 본문 영역 */}
-      <FreePost
-        title="이런식으로 해결했어요"
-        author="닉네임"
-        date="생성일"
-        content={'내용 쌸라쌸라내용 쌸라쌸라내용 쌸라쌸라내용 쌸라쌸라내용 쌸라쌸라'}
-        stats={{ like: 100, comment: comments.length }}
-        onEdit={() => {}}
-      />
+      {post && (
+        <PostBox
+          title={post.title}
+          author={post.nickname}
+          date={post.createdAt}
+          content={post.content}
+          stats={{ like: post.likes, comment: post.comments }}
+          onEdit={() => {}}
+        />
+      )}
       {/* 댓글 입력창 */}
-      <FreeCommentInput
+      <CommentInputBox
         value={commentInput}
         onChange={handleInputChange}
         onSubmit={handleCommentSubmit}
         inputRef={commentRef}
       />
       {/* 댓글/답글 리스트 및 답글 입력창 */}
-      <FreeCommentList
+      <CommentListBox
         comments={comments}
         replyInput={replyInput}
         replyingTo={replyingTo}
@@ -170,7 +173,7 @@ export const FreePage = () => {
         userId={userId}
       />
       {/* 하단 '목록으로 돌아가기' 버튼 */}
-      <FreePageBottom onClick={handleGoList} />
+      <FreePageBottomBox onClick={handleGoList} />
     </PageContainer>
   );
 };

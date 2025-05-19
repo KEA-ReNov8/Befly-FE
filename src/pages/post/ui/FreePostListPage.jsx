@@ -30,9 +30,9 @@ export const FreePostListPage = () => {
     <Container>
       <TopBar />
       <SectionTitleBar title="자유함" />
-      <SearchBarWrapper>
+      <Wrapper>
         <SearchBar />
-      </SearchBarWrapper>
+      </Wrapper>
       <BoardGrid>
         {currentPosts.map((post) => (
           <PostCard key={post.postId} {...post} currentPage={currentPage} />
@@ -62,8 +62,9 @@ const BoardGrid = styled.div`
   margin-botton: 20px;
 `;
 
-const SearchBarWrapper = styled.div`
-  width: 480px;
-  align-self: flex-start;
-  margin: 10px 0 10px 200px;
+const Wrapper = styled.div`
+  width: 1044px;
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 0;
 `;

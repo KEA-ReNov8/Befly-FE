@@ -7,8 +7,11 @@ import Pagination from '../components/Pagination';
 import { SharedummyPosts } from '../data/DummyPosts';
 import PostCard from '@shared/ui/PostCard';
 import theme from '@app/styles/theme';
+import FilterButton from '@/pages/post/components/FilterButton';
+const categories = ['전체', '불안', '상처', '스트레스', '학업', '외로움', '우울', '관계', '진로'];
 
 export const SharePostListPage = () => {
+  const [selectedCategory, setSelectedCategory] = useState('전체');
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 8;
   const startIndex = (currentPage - 1) * postsPerPage;
@@ -20,9 +23,20 @@ export const SharePostListPage = () => {
     <Container>
       <TopBar />
       <SectionTitleBar title="공유함" />
-      <SearchBarWrapper>
+      <Wrapper>
+        <CategoryBar>
+          {categories.map((cat) => (
+            <FilterButton
+              key={cat}
+              selected={selectedCategory === cat}
+              onClick={() => setSelectedCategory(cat)}
+            >
+              {cat}
+            </FilterButton>
+          ))}
+        </CategoryBar>
         <SearchBar />
-      </SearchBarWrapper>
+      </Wrapper>
       <BoardGrid>
         {currentPosts.map((post) => (
           <PostCard key={post.postId} {...post} currentPage={currentPage} />
@@ -52,8 +66,16 @@ const BoardGrid = styled.div`
   margin-botton: 20px;
 `;
 
-const SearchBarWrapper = styled.div`
-  width: 480px;
-  align-self: flex-start;
-  margin: 10px 0 10px 200px;
+const Wrapper = styled.div`
+  width: 1044px;
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0 0 0;
+`;
+const CategoryBar = styled.div`
+  width: 785px;
+  height: 30px;
+  display: flex;
+  gap: 8px;
+  margin: 20px 0 10px 0;
 `;
