@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { colors } from '@/app/styles/colors';
+import { useLocation } from 'react-router-dom';
 
 const PostCard = ({
   type,
@@ -13,17 +14,19 @@ const PostCard = ({
   nickname,
   categoryName,
   postId,
+  currentPage,
 }) => {
   const categoryColor = colors.category[categoryName];
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleClick = () => {
     // 클릭 시 해당 계시글로 이동
     if (type === 'free') {
-      navigate(`/free/${postId}`);
+      navigate(`/free/${postId}`, { state: { from: location.pathname, page: currentPage } });
     } else if (type === 'shared') {
-      navigate(`/share/${postId}`);
+      navigate(`/share/${postId}`, { state: { from: location.pathname, page: currentPage } });
     }
   };
 

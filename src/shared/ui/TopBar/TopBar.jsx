@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import WorryModal from './WorryModal';
 import NotificationModal from './NotificationModal';
+
 const TopBar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isWorryModalOpen, setWorryModalOpen] = useState(false);
   const [isNotificationModalOpen, setNotificationModalOpen] = useState(false);
   const toggleWorryModal = () => {
@@ -19,8 +21,12 @@ const TopBar = () => {
     <Container>
       <Logo onClick={() => navigate('/home')}>Be, Fly</Logo>
       <Nav>
-        <NavButton onClick={() => navigate('/free')}>자유함</NavButton>
-        <NavButton onClick={() => navigate('/share')}>공유함</NavButton>
+        <NavButton onClick={() => navigate('/free', { state: { from: location.pathname } })}>
+          자유함
+        </NavButton>
+        <NavButton onClick={() => navigate('/share', { state: { from: location.pathname } })}>
+          공유함
+        </NavButton>
         <NavButton onClick={() => navigate('/worry')}>고민함</NavButton>
         <NavButton onClick={() => navigate('/my/myworry')}>마이페이지</NavButton>
       </Nav>

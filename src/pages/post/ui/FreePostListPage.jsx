@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import TopBar from '@shared/ui/TopBar/TopBar';
 import { SectionTitleBar } from '../components/SectionTitleBar';
@@ -7,7 +7,10 @@ import Pagination from '../components/Pagination';
 import { FreedummyPosts } from '../data/DummyPosts';
 import PostCard from '@shared/ui/PostCard';
 import theme from '@app/styles/theme';
+import { useLocation } from 'react-router-dom';
+
 export const FreePostListPage = () => {
+  const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 8;
   const startIndex = (currentPage - 1) * postsPerPage;
@@ -15,6 +18,13 @@ export const FreePostListPage = () => {
   const currentPosts = FreedummyPosts.slice(startIndex, endIndex);
 
   const totalPages = Math.ceil(FreedummyPosts.length / postsPerPage);
+
+  useEffect(() => {
+    // URL state에서 페이지 번호를 읽어와서 설정
+    if (location.state?.page) {
+      setCurrentPage(location.state.page);
+    }
+  }, [location.state]);
 
   return (
     <Container>
@@ -25,7 +35,7 @@ export const FreePostListPage = () => {
       </SearchBarWrapper>
       <BoardGrid>
         {currentPosts.map((post) => (
-          <PostCard key={post.postId} {...post} />
+          <PostCard key={post.postId} {...post} currentPage={currentPage} />
         ))}
       </BoardGrid>
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />

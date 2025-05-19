@@ -24,7 +24,7 @@ export const FreePostPage = () => {
   }, []);
 
   const navigate = useNavigate();
-  const editorRef = useRef();
+  const editorRef = useRef(null);
   const [title, setTitle] = useState('');
   const [htmlContent, setHtmlContent] = useState(''); // html state
   const [isSubmitting, setIsSubmitting] = useState(false); // 등록 중 상태 관리 - 중복 등록 방지
