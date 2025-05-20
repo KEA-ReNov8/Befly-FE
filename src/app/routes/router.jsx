@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { RootLayout } from '@app/layout';
 import { HomePage } from '@pages/home';
 import { LoginPage, SignupPage } from '@pages/login';
-import { MyFreePage, MyPage, MySharePage, MyWorryPage } from '@pages/my';
+import { MyPage, MyWorryPage } from '@pages/my';
 import {
   FreePage,
   FreePostListPage,
@@ -11,7 +11,7 @@ import {
   SharePostListPage,
   SharePostPage,
 } from '@pages/post';
-import { UserFreePage, UserProfile, UserSharePage } from '@pages/profile';
+import { UserProfilePage } from '@pages/profile';
 import { ReportPage } from '@pages/report';
 import { ChatPage } from '@pages/chat';
 import { ErrorPage } from '@pages/error/ErrorPage';
@@ -85,14 +85,6 @@ export const router = createBrowserRouter([
         element: <MyPage />,
       },
       {
-        path: 'myfree',
-        element: <MyFreePage />,
-      },
-      {
-        path: 'myshare',
-        element: <MySharePage />,
-      },
-      {
         path: 'myworry',
         element: <MyWorryPage />,
       },
@@ -104,15 +96,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <UserProfile />,
-      },
-      {
-        path: 'userfree',
-        element: <UserFreePage />,
-      },
-      {
-        path: 'usershare',
-        element: <UserSharePage />,
+        element: <UserProfilePage />,
       },
     ],
   },
