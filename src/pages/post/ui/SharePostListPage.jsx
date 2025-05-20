@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import TopBar from '@shared/ui/TopBar/TopBar';
 import PostCard from '@shared/ui/PostCard';
@@ -10,6 +11,7 @@ const categories = ['전체', '불안', '상처', '스트레스', '학업', '외
 
 export const SharePostListPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('전체');
+  const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 8;
   const startIndex = (currentPage - 1) * postsPerPage;
@@ -17,6 +19,13 @@ export const SharePostListPage = () => {
   const currentPosts = SharedummyPosts.slice(startIndex, endIndex);
 
   const totalPages = Math.ceil(SharedummyPosts.length / postsPerPage);
+
+  useEffect(() => {
+    // URL state에서 페이지 번호를 읽어와서 설정
+    if (location.state?.page) {
+      setCurrentPage(location.state.page);
+    }
+  }, [location.state]);
   return (
     <Container>
       <TopBar />

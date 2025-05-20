@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import TopBar from '@shared/ui/TopBar/TopBar';
 import PostCard from '@shared/ui/PostCard';
@@ -9,6 +9,7 @@ import theme from '@app/styles/theme';
 
 export const FreePostListPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 8;
   const startIndex = (currentPage - 1) * postsPerPage;
@@ -24,11 +25,17 @@ export const FreePostListPage = () => {
     }
   }, [location.state]);
 
+  // 자유글 작성 버튼 클릭 시 FreePostPage로 이동
+  const handleWriteClick = () => {
+    navigate('/free/createfree');
+  };
+
   return (
     <Container>
       <TopBar />
       <SectionTitleBar title="자유함" />
       <Wrapper>
+        <WriteButton onClick={handleWriteClick}>자유글 작성</WriteButton>
         <SearchBar />
       </Wrapper>
       <BoardGrid>
@@ -64,5 +71,24 @@ const Wrapper = styled.div`
   width: 1044px;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
   margin: 10px 0;
+`;
+
+// 자유글 작성 버튼 스타일
+const WriteButton = styled.button`
+  height: 40px;
+  padding: 0 20px;
+  background: ${theme.colors.green.main};
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  &:hover {
+    background: ${theme.colors.green.dark};
+  }
 `;

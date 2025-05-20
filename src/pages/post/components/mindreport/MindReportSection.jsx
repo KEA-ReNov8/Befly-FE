@@ -17,33 +17,33 @@ export const MindReportSection = () => {
 
   return (
     <SectionWrapper>
-      <NavButton onClick={handlePrev} disabled={page === 0}>
+      <LeftNavButton onClick={handlePrev} disabled={page === 0}>
         &lt;
-      </NavButton>
+      </LeftNavButton>
       <ContentArea>
         <ReportHeader>OOO님의 분석 리포트</ReportHeader>
         {page === 0 && <AnalysisCardsPage />}
         {page === 1 && <AIAnalysisPage />}
         {page === 2 && <AIOpinionPage />}
       </ContentArea>
-      <NavButton onClick={handleNext} disabled={page === 2}>
+      <RightNavButton onClick={handleNext} disabled={page === 2}>
         &gt;
-      </NavButton>
+      </RightNavButton>
     </SectionWrapper>
   );
 };
 
 const SectionWrapper = styled.div`
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
   margin: 32px 0;
-  gap: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ContentArea = styled.div`
-  width: 905px;
+  width: 100%;
   min-height: 582px;
   display: flex;
   flex-direction: column;
@@ -69,15 +69,26 @@ const ReportHeader = styled.div`
 `;
 
 const NavButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
   background: none;
   border: none;
   font-size: 40px;
   color: ${theme.colors.green.main};
   cursor: pointer;
-
   transition: color 0.2s;
   &:disabled {
     color: #ccc;
     cursor: default;
   }
+`;
+
+const LeftNavButton = styled(NavButton)`
+  left: -32px;
+`;
+
+const RightNavButton = styled(NavButton)`
+  right: -32px;
 `;

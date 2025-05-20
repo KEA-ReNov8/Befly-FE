@@ -49,7 +49,7 @@ const TitleDivider = styled.div`
 
 const ReportContent = styled.div`
   font-size: 14px;
-  width: 750px;
+  width: 900px;
   padding: 0 40px;
   color: #222;
   line-height: 1.7;

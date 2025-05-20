@@ -18,6 +18,7 @@ export const SharePage = () => {
   const location = useLocation();
   const { postId } = useParams();
   const [post, setPost] = useState(null);
+
   const [commentInput, setCommentInput] = useState('');
   const [comments, setComments] = useState([]);
   const [replyInput, setReplyInput] = useState({});
@@ -113,7 +114,13 @@ export const SharePage = () => {
     setReplyInput({ ...replyInput, [commentId]: '' });
     setReplyingTo(null);
   };
-
+  const handleGoList = () => {
+    if (location.state?.from) {
+      navigate(location.state.from, { state: { page: location.state.page } });
+    } else {
+      navigate('/share');
+    }
+  };
   return (
     <PageContainer>
       <TopBarWrapper>
@@ -147,7 +154,7 @@ export const SharePage = () => {
         onReplySubmit={handleReplySubmit}
         userId={userId}
       />
-      <PageBottomBox onClick={() => navigate('/share')} />
+      <PageBottomBox onClick={handleGoList} />
     </PageContainer>
   );
 };
