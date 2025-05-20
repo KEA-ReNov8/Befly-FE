@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-
+import theme from '@app/styles/theme';
 export const AIAnalysisPage = () => {
   return (
     <FullBox>
@@ -20,38 +20,38 @@ export const AIAnalysisPage = () => {
 
 const FullBox = styled.div`
   width: 100%;
-  height: 100%;
   min-height: 470px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 `;
 
 const ReportTitle = styled.div`
-  width: 100%;
+  width: 165px;
+  height: 45px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
+  font-size: 20px;
   color: #3cc1a1;
   font-weight: 700;
-  margin-bottom: 24px;
-  margin-top: 32px;
+  margin-top: 70px;
+  margin-bottom: 40px;
 `;
 
 const TitleDivider = styled.div`
-  width: 120px;
+  width: 165px;
   height: 2px;
-  background: #d3f3ed;
+  background: ${theme.colors.green.main};
   margin: 16px auto 0 auto;
 `;
 
 const ReportContent = styled.div`
-  font-size: 18px;
+  font-size: 14px;
+  width: 750px;
+  padding: 0 40px;
   color: #222;
   line-height: 1.7;
-  width: 100%;
-  text-align: center;
+  text-align: flex-start;
 `;

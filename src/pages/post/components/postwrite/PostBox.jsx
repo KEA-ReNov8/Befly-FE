@@ -77,7 +77,10 @@ const PostContent = styled.div`
   font-size: 15px;
   color: ${theme.colors.gray[800]};
   line-height: 1.6;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  width: 905px;
+  margin-left: 20px;
+
   img {
     max-width: 100%;
     margin: 20px 0;
@@ -92,4 +95,5 @@ const PostStats = styled.div`
   gap: 16px;
   font-size: 14px;
   color: ${theme.colors.gray[600]};
+  margin-left: 20px;
 `;

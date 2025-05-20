@@ -39,6 +39,7 @@ const SectionWrapper = styled.div`
   align-items: center;
   justify-content: center;
   margin: 32px 0;
+  gap: 20px;
 `;
 
 const ContentArea = styled.div`
@@ -50,7 +51,7 @@ const ContentArea = styled.div`
   justify-content: flex-start;
   border: 1px solid #e0e0e0;
   border-radius: 16px;
-  background: #fafafa;
+  background: #fff;
   font-size: 20px;
   font-weight: 500;
   position: relative;
@@ -59,12 +60,12 @@ const ContentArea = styled.div`
 
 const ReportHeader = styled.div`
   position: absolute;
-  top: 32px;
-  left: 48px;
-  font-size: 18px;
-  color: #3cc1a1;
-  font-weight: 700;
-  letter-spacing: -0.5px;
+  top: 35px;
+  left: 45px;
+  font-size: 20px;
+  color: ${theme.colors.green.main};
+  font-weight: 600;
+  letter-spacing: -0px;
 `;
 
 const NavButton = styled.button`
@@ -73,7 +74,7 @@ const NavButton = styled.button`
   font-size: 40px;
   color: ${theme.colors.green.main};
   cursor: pointer;
-  padding: 0 24px;
+
   transition: color 0.2s;
   &:disabled {
     color: #ccc;
