@@ -16,7 +16,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     width: 280px;
-    height: 100%;
 `;
 
 const Button = styled.button`
@@ -27,7 +26,7 @@ const Button = styled.button`
     height: 40px;
     border: none;
     cursor: pointer;
-    border-radius: 15px;
+    border-radius: 5px;
 
     background-color: ${(props) => 
     props['data-active'] ? theme.colors.green.light : 'transparent'};
@@ -60,7 +59,7 @@ const Status = styled.div`
     border-radius: 10px;
     font-size: ${theme.fontSize.xsmall};
     font-family: ${theme.fontFamily.pretendard};
-    color: ${theme.colors.white};
+    color: ${theme.colors.other.white};
 
     background-color: ${props => 
     props['data-active'] ? 'white' : theme.colors.green.main};
@@ -71,6 +70,5 @@ const Status = styled.div`
         background-color: white;
         color: ${theme.colors.green.main};
 `;
-
 
 export default SideBarButton;
