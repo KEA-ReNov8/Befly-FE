@@ -119,7 +119,7 @@ export const FreePostPage = () => {
 
 const Container = styled.div`
   width: 1440px;
-  height: 1024px;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
