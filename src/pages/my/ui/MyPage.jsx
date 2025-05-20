@@ -3,7 +3,6 @@ import theme from '@app/styles/theme';
 import MyProfile from '@my/components/MyProfile';
 import TopBar from '@shared/ui/TopBar/TopBar';
 
-
 export const MyPage = () => {
     return (
         <Wrapper>
