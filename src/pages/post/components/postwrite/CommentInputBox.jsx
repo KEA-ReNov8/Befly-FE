@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 
-const CommentInputBox = ({ value, onChange, onSubmit, inputRef }) => (
+export const CommentInputBox = ({ value, onChange, onSubmit, inputRef }) => (
   <CommentInputContainer>
     <CommentInput
       ref={inputRef}
@@ -12,8 +12,6 @@ const CommentInputBox = ({ value, onChange, onSubmit, inputRef }) => (
     <CommentButton onClick={onSubmit}>등록</CommentButton>
   </CommentInputContainer>
 );
-
-export default CommentInputBox;
 
 const CommentInputContainer = styled.div`
   width: 1044px;

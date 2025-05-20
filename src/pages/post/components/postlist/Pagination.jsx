@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import PagingButton from './PagingButton';
+import { PagingButton } from '@post/components/postlist/PagingButton';
 
-const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+export const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const pages = [];
 
   // 총 페이지 수가 5 이상일 경우 5개만 노출 (현재 페이지 중심)
@@ -30,8 +30,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     </Wrapper>
   );
 };
-
-export default Pagination;
 
 const Wrapper = styled.div`
   display: flex;

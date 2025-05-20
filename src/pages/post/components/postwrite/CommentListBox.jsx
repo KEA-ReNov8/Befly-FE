@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 
-const CommentListBox = ({
+export const CommentListBox = ({
   comments,
   replyInput,
   replyingTo,
@@ -76,8 +76,6 @@ const CommentListBox = ({
     ))}
   </CommentListSection>
 );
-
-export default CommentListBox;
 
 const CommentListSection = styled.div`
   width: 1044px;

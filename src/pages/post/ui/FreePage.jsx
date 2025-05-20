@@ -3,10 +3,7 @@ import TopBar from '@shared/ui/TopBar/TopBar';
 import theme from '@app/styles/theme';
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import PostBox from '../components/PostBox';
-import CommentInputBox from '../components/CommentInputBox';
-import CommentListBox from '../components/CommentListBox';
-import PageBottomBox from '../components/PageBottomBox';
+import { PostBox, CommentInputBox, CommentListBox, PageBottomBox } from '../components/index';
 import { mockFreePostData, dummyComments } from '../data/DummyPosts';
 
 export const FreePage = () => {

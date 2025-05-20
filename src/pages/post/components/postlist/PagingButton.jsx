@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const PagingButton = ({ page, isActive, onClick }) => {
+export const PagingButton = ({ page, isActive, onClick }) => {
   return (
     <Wrapper
       onClick={() => onClick(page)}
@@ -13,8 +13,6 @@ const PagingButton = ({ page, isActive, onClick }) => {
     </Wrapper>
   );
 };
-
-export default PagingButton;
 
 const Wrapper = styled.button`
   width: 9px;

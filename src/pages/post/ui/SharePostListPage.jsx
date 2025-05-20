@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import TopBar from '@shared/ui/TopBar/TopBar';
-import { SectionTitleBar } from '../components/SectionTitleBar';
-import { SearchBar } from '../components/SearchBar';
-import Pagination from '../components/Pagination';
-import { SharedummyPosts } from '../data/DummyPosts';
 import PostCard from '@shared/ui/PostCard';
+import { SearchBar, Pagination, FilterButton, SectionTitleBar } from '../components/index';
+import { SharedummyPosts } from '../data/DummyPosts';
 import theme from '@app/styles/theme';
-import FilterButton from '@/pages/post/components/FilterButton';
+
 const categories = ['전체', '불안', '상처', '스트레스', '학업', '외로움', '우울', '관계', '진로'];
 
 export const SharePostListPage = () => {

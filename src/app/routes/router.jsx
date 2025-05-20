@@ -71,7 +71,7 @@ export const router = createBrowserRouter([
         element: <SharePostPage />,
       },
       {
-        path: ':id',
+        path: ':postId',
         element: <SharePage />,
       },
     ],

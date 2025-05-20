@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 
-const PostBox = ({ title, author, date, content, stats, onEdit }) => (
+export const PostBox = ({ title, author, date, content, stats, onEdit, children = null }) => (
   <PostContainer>
     <PostHeader>
       <HeaderWrapper>
@@ -14,6 +14,8 @@ const PostBox = ({ title, author, date, content, stats, onEdit }) => (
       </HeaderWrapper>
       <EditButton onClick={onEdit}>...</EditButton>
     </PostHeader>
+    {/* MindReportSection 등 children이 들어갈 위치 */}
+    {children}
     <PostContent dangerouslySetInnerHTML={{ __html: content }} />
     <PostStats>
       <span>❤️ {stats.like}</span>
@@ -21,8 +23,6 @@ const PostBox = ({ title, author, date, content, stats, onEdit }) => (
     </PostStats>
   </PostContainer>
 );
-
-export default PostBox;
 
 const PostContainer = styled.div`
   width: 1044px;

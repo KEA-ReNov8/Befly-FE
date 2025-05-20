@@ -1,14 +1,12 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
-const FilterButton = ({ selected, onClick, children }) => {
+export const FilterButton = ({ selected, onClick, children }) => {
   return (
     <StyledButton className={selected ? 'selected' : ''} onClick={onClick}>
       {children}
     </StyledButton>
   );
 };
-
-export default FilterButton;
 
 const StyledButton = styled.button`
   width: 73px;

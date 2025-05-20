@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import TopBar from '@shared/ui/TopBar/TopBar';
-import { SectionTitleBar } from '../components/SectionTitleBar';
-import { SearchBar } from '../components/SearchBar';
-import Pagination from '../components/Pagination';
-import { FreedummyPosts } from '../data/DummyPosts';
 import PostCard from '@shared/ui/PostCard';
+import { SearchBar, Pagination, SectionTitleBar } from '@/pages/post/components/index';
+import { FreedummyPosts } from '@post/data/DummyPosts';
 import theme from '@app/styles/theme';
-import { useLocation } from 'react-router-dom';
 
 export const FreePostListPage = () => {
   const location = useLocation();
