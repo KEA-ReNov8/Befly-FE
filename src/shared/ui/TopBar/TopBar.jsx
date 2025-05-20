@@ -31,14 +31,14 @@ const TopBar = () => {
         <NavButton onClick={() => navigate('/my/myworry')}>마이페이지</NavButton>
       </Nav>
       <RightSection>
-        <WorryWrapper>
-          <WorryButton onClick={toggleWorryModal}>고민 생성 +</WorryButton>
-          {isWorryModalOpen && <WorryModal />}
-        </WorryWrapper>
         <NotificationWrapper>
           <NotificationButton onClick={toggleNotificationModal} />
           {isNotificationModalOpen && <NotificationModal />}
         </NotificationWrapper>
+        <WorryWrapper>
+          <WorryButton onClick={toggleWorryModal}>고민 생성 +</WorryButton>
+          {isWorryModalOpen && <WorryModal />}
+        </WorryWrapper>
       </RightSection>
     </Container>
   );
@@ -47,16 +47,16 @@ const TopBar = () => {
 export default TopBar;
 
 const Container = styled.header`
-  width: 100%;
-  height: 171px;
-  padding: 55px 220px 0 220px;
+  width: 1440px;
+  height: 106px;
+  padding: 0 190px;
   display: flex;
   align-items: center;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  gap: 70px;
 `;
 const Logo = styled.div`
+  margin-right: 120px;
   color: ${theme.colors.green.main};
   font-size: 40px;
   font-family: ${theme.fontFamily.pretendard};
@@ -67,6 +67,7 @@ const Nav = styled.nav`
   display: flex;
   align-items: center;
   gap: 70px;
+  margin-right: 120px;
 `;
 
 const NavButton = styled.button`
@@ -83,7 +84,7 @@ const NavButton = styled.button`
 
 const RightSection = styled.div`
   display: flex;
-  gap: 80px;
+  gap: 60px;
   align-items: center;
   justify-content: flex-end;
 `;

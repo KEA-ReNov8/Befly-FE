@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 
-const FreePageBottomBox = ({ onClick }) => (
+const PageBottomBox = ({ onClick }) => (
   <PageBottom>
     <ToListButton onClick={onClick}>목록으로 돌아가기</ToListButton>
   </PageBottom>
 );
 
-export default FreePageBottomBox;
+export default PageBottomBox;
 
 const PageBottom = styled.div`
   height: 52px;

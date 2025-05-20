@@ -6,7 +6,7 @@ import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import PostBox from '../components/PostBox';
 import CommentInputBox from '../components/CommentInputBox';
 import CommentListBox from '../components/CommentListBox';
-import FreePageBottomBox from '../components/FreePageBottomBox';
+import PageBottomBox from '../components/PageBottomBox';
 import { mockFreePostData, dummyComments } from '../data/DummyPosts';
 
 export const FreePage = () => {
@@ -173,7 +173,7 @@ export const FreePage = () => {
         userId={userId}
       />
       {/* 하단 '목록으로 돌아가기' 버튼 */}
-      <FreePageBottomBox onClick={handleGoList} />
+      <PageBottomBox onClick={handleGoList} />
     </PageContainer>
   );
 };
