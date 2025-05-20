@@ -154,4 +154,3 @@ const PostSection = styled.div`
 `;
 
 export default UserProfile;
-
