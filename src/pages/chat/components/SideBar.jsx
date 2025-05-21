@@ -16,6 +16,9 @@ const SideBar = ({ isOpen, onClose }) => {
                 <SideBarButton active/>
                 <SideBarButton active={false}/>
                 <SideBarButton active={false}/>
+                <SideBarButton active={false}/>
+                <SideBarButton active={false}/>
+                <SideBarButton active={false}/>
             </SideBarContent>
         </SideBarContainer>
     );
@@ -24,6 +27,8 @@ const SideBar = ({ isOpen, onClose }) => {
 const SideBarContainer = styled.div`
     width: 316px;
     height: 100%;
+    display: flex;
+    flex-direction: column;
     border-right: 1px solid ${theme.colors.gray[200]};
     background-color: ${theme.colors.gray[200]};
 `;
@@ -31,7 +36,6 @@ const SideBarContainer = styled.div`
 const SideBarHeader = styled.div`
     height: 120px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid ${theme.colors.gray[500]};
 `;
@@ -45,13 +49,14 @@ const MenuButton = styled.button`
 `;
 
 const SideBarContent = styled.div`
+    flex: 1;
+    overflow-y: auto;
     list-style: none;
     padding: 10px;
-    gap: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 10px;
 `;
 

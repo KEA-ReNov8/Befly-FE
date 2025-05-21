@@ -31,6 +31,7 @@ const ProfileMark = styled.div`
 `; //src: url('/images/profile.png'); AI 이미지
 
 const MessageBubble = styled.div`
+  white-space: pre-wrap;
   position: relative;
   max-width: 70%;
   padding: 16px 16px;

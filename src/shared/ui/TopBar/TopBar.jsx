@@ -28,7 +28,7 @@ const TopBar = () => {
           공유함
         </NavButton>
         <NavButton onClick={() => navigate('/worry')}>고민함</NavButton>
-        <NavButton onClick={() => navigate('/my/myworry')}>마이페이지</NavButton>
+        <NavButton onClick={() => navigate('/my')}>마이페이지</NavButton>
       </Nav>
       <RightSection>
         <NotificationWrapper>

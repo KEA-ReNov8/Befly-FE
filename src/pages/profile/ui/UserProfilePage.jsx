@@ -1,17 +1,18 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
+import UserProfile from '@profile/components/UserProfile';
 import TopBar from '@shared/ui/TopBar/TopBar';
-import WorryList from '@my/components/WorryList';
 
-export const MyWorryPage = () => {
+
+export const UserProfilePage = ( ) => {
     return (
         <Wrapper>
             <TopBar />
-            <Line>고민함</Line>
-            <WorryList />
+            <Line > 비플라이2 님의 프로필</Line>
+            <UserProfile />
         </Wrapper>
     );
-}
+};
 
 const Wrapper = styled.div`
     display: flex;
@@ -23,7 +24,6 @@ const Wrapper = styled.div`
 `;
 
 const Line = styled.div`
-    margin-bottom: 20px;
     width: 100%;
     height: 66px;
     background-color: ${theme.colors.green.main};

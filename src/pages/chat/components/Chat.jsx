@@ -104,12 +104,14 @@ const Chat = () => {
             <FinishButton onClick={handleSuccessModalOpen}>대화 완료</FinishButton>
           )}
         </TopContainer>
+        <MessageContainer>
         <MessageList ref={messageListRef}>
           {messages.map((message) => (
             <ChatMessage key={message.id} message={message} />
           ))}
         </MessageList>
         <ChatForm onSendMessage={handleSendMessage} />
+        </MessageContainer>
       </ChatContainer>
       {isSuspendModalOpen && <SuspendModal onClose={handleSuspendModalClose} />}
       {isSuccessModalOpen && <SuccessModal onClose={handleSuccessModalClose} />}
@@ -165,7 +167,7 @@ const ChatContainer = styled.div`
 
 const TopContainer = styled.div`
   width: 100%;
-  height: 120px;
+  height: 125px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -228,6 +230,12 @@ const FinishButton = styled.button`
   &:hover {
     background-color: ${theme.colors.green.hover};
   }
+`;
+
+const MessageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
 `;
 
 const MessageList = styled.div`

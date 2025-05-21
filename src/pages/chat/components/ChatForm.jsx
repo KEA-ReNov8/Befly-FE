@@ -44,11 +44,15 @@ const Container = styled.form`
     align-items:flex-end;
     padding: 30px;
     gap: 20px;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
 `;
 
 const InputContainer = styled.div`
     width: 100%;
-    height: 110px;
+    height: auto;
+    max-height: 200px;
     display: flex;
     justify-content: center;
     padding: 16px;
@@ -60,18 +64,20 @@ const InputContainer = styled.div`
 
 const TextArea = styled.textarea`
     flex: 1;
-    max-width: 100%;
+    width: 100%;
     border: none;
     outline: none;
     resize: none;
-    overflow: hidden;
-    line-height: 1.1;
-    max-height: 200px;
-
-    background-color: transparent;
+    overflow-y: auto;
+    line-height: 1.5;
     font-size: ${theme.fontSize.small};
     color: ${theme.colors.black};
-    
+    background-color: transparent;
+
+    max-height: calc(1.5em * 4); // 최대 4줄
+    min-height: calc(1.5em * 1); // 최소 1줄
+    height: auto;
+
     &::placeholder {
         color: ${theme.colors.gray[400]};
     }
