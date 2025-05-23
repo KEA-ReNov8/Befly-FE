@@ -120,14 +120,16 @@ const Chat = () => {
 };
 
 const Container = styled.div`
+  //margin-top: 30px;
   display: flex;
   width: 1140px;
   height: 830px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  border: 1px solid ${theme.colors.gray[500]};
+  //box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.05);
+  //border-radius: 10px;
+  //border:none;
+  //border: 1px solid ${theme.colors.gray[200]};
   background-color: ${theme.colors.other.white};
 `;
 
@@ -166,8 +168,9 @@ const ChatContainer = styled.div`
 `;
 
 const TopContainer = styled.div`
+  margin-top: 3px;
   width: 100%;
-  height: 125px;
+  height: 120px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -176,7 +179,6 @@ const TopContainer = styled.div`
   padding-left: 30px;
   padding-right: 30px;
   padding-bottom: 30px;
-  margin-bottom: 20px;
 `;
 
 const Header = styled.header`
@@ -235,7 +237,7 @@ const FinishButton = styled.button`
 const MessageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 90vh;
+  height: 770px;
 `;
 
 const MessageList = styled.div`
