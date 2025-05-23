@@ -25,7 +25,7 @@ const SideBar = ({ isOpen, onClose }) => {
 };
 
 const SideBarContainer = styled.div`
-    width: 316px;
+    width: 250px;
     height: 100%;
     display: flex;
     flex-direction: column;
