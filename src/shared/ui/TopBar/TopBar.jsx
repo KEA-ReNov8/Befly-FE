@@ -27,7 +27,7 @@ const TopBar = () => {
         <NavButton onClick={() => navigate('/share', { state: { from: location.pathname } })}>
           공유함
         </NavButton>
-        <NavButton onClick={() => navigate('/worry')}>고민함</NavButton>
+        <NavButton onClick={() => navigate('/my/myworry')}>고민함</NavButton>
         <NavButton onClick={() => navigate('/my')}>마이페이지</NavButton>
       </Nav>
       <RightSection>
@@ -53,7 +53,7 @@ const Container = styled.header`
   display: flex;
   align-items: center;
   background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid ${theme.colors.gray[200]};
 `;
 const Logo = styled.div`
   margin-right: 120px;
