@@ -1,8 +1,20 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
+import { useState } from 'react';
+import TermModal from './TermModal';
 //reactform, zod, store 예정
 
 const SignUpForm = ({ onSubmit }) => {
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleModalOpen = () => {
+        setIsModalOpen(true);   
+    }
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+    }
     
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -34,9 +46,10 @@ const SignUpForm = ({ onSubmit }) => {
             </Gender>
             <TermContainer>
                 <Term type="checkbox" id="term" required />
-                <TermText>이용약관 개인정보 수집 및 정보이용에 동의합니다.</TermText>
+                <TermText onClick={handleModalOpen}>이용약관 개인정보 수집 및 정보이용에 동의합니다.</TermText>
             </TermContainer>
             <SubmitButton type="submit">시작하기</SubmitButton>
+            {isModalOpen && <TermModal onClose={handleModalClose} />}
         </Container>
     );
 };
@@ -190,6 +203,11 @@ const TermText = styled.p`
     color: ${theme.colors.black};
     padding-top: 0.2rem;
     margin-left: 0.5rem;
+    cursor: pointer;
+
+    &:hover {
+        color: ${theme.colors.green.main};
+    }
 `;
 
 const SubmitButton = styled.button`

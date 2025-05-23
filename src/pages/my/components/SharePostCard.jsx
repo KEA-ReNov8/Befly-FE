@@ -56,7 +56,7 @@ const Category = styled.p`
     height: 28px;
     margin-bottom: 20px;
     background-color: ${(props) => theme.colors.category[props['data-category']]};
-    color: ${theme.colors.other.white};
+    font-weight: ${theme.font.regular.fontWeight};
     font-family: ${theme.fontFamily.pretendard};
 `;
 
