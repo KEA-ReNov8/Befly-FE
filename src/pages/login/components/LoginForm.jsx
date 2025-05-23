@@ -23,7 +23,7 @@ const LoginForm = () => {
             <FormFooter>
                 <Link href="/signup">회원가입</Link>
                 <Divider>|</Divider>
-                <Link href="/reset-pwd">비밀번호초기화</Link>
+                <Link href="/find-pw">비밀번호찾기</Link>
             </FormFooter>
         </FormContainer>
     );
@@ -68,13 +68,11 @@ const Button = styled.button`
     border-radius: 0.5rem;
     width: 28.375rem;
     height: 3.125rem;
-    transition: background-color 0.2s;
-    font-size: ${theme.fontSize.small};
+    transition: background-color 0.3s;
     font-family: ${theme.fontFamily.pretendard};
-    font-weight: 500;
 
     &:hover {
-    background-color: ${theme.colors.green.light};
+    background-color: ${theme.colors.green.hover};
   }
 `;
 

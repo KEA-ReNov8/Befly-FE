@@ -17,15 +17,17 @@ const Background= ({children}) => {
 };
 
 const Container = styled.div`
-    display: flex;
-    margin: 10px auto;
-    width: 74rem;
-    height: 53.5rem;
-    border-radius: 0.5rem;
-    background-color: #FFFFFF;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-    margin-top: 30px;
-    margin-bottom: 50px;
+  display: flex;
+  margin: 10px auto;
+  width: 74rem;
+  height: 53.5rem;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+  margin-bottom: 50px;
+  perspective: 2000px; /* 3D 회전을 위한 시점 */
+  overflow: hidden;
 `;
 
 const Logo = styled.h1`
@@ -37,6 +39,58 @@ const Logo = styled.h1`
 `;
 
 const LeftSide = styled.div`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.5rem 0 0 0.5rem;
+    background-color: ${theme.colors.green.main};
+    animation: openLeftPage 0.8s ease-out forwards;
+    transform-origin: right center;
+
+    @keyframes openLeftPage {
+        0% {
+            transform: rotateY(90deg);
+            opacity: 0;
+        }
+        100% {
+            transform: rotateY(0deg);
+            opacity: 1;
+        }
+    }
+
+    h2 {
+        color: white;
+        font-size: ${theme.fontSize.large};
+        font-family: ${theme.fontFamily.pretendard};
+        line-height: 1.2;
+        margin-left: 1.5rem;
+        margin-top: 1.5rem;
+    }
+`;
+
+const RightSide = styled.div`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    animation: openRightPage 0.8s ease-out forwards;
+    transform-origin: left center;
+
+    @keyframes openRightPage {
+        0% {
+            transform: rotateY(-90deg);
+            opacity: 0;
+        }
+        100% {
+            transform: rotateY(0deg);
+            opacity: 1;
+        }
+    }
+`;
+
+/*const LeftSide = styled.div`
     flex: 1;
     display: flex;
     border-radius: 0.5rem 0 0 0.5rem;
@@ -60,6 +114,6 @@ const RightSide = styled.div`
     align-items: center;
     justify-content: center;
     padding: 2rem;
-`;
+`;*/
 
 export default Background;
