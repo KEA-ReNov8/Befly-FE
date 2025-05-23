@@ -2,14 +2,20 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import CategoryTag from './CategoryTag';
-
+import { useNavigate } from 'react-router-dom';
 const WorryModal = () => {
+
+  const navigate = useNavigate();
   // 나중에 고민생성하기 버튼 누르면 데이터 넘겨주는 과정 추가하면 될듯
   const [worryTitle, setWorryTitle] = useState(''); // 고민 제목
   const [selectedCategory, setSelectedCategory] = useState(''); // 고민카테고리
   const handleCategoryClick = (cat) => {
     setSelectedCategory(cat);
     console.log('선택된 카테고리:', cat);
+  };
+
+  const handleSubmit = () => {
+    navigate('/chat');
   };
 
   return (
@@ -34,7 +40,7 @@ const WorryModal = () => {
           ),
         )}
       </CategoryList>
-      <SubmitButton>고민 생성하기</SubmitButton>
+      <SubmitButton onClick={handleSubmit}>고민 생성하기</SubmitButton>
     </Container>
   );
 };
