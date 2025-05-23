@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { RootLayout } from '@app/layout';
 import { HomePage } from '@pages/home';
-import { LoginPage, SignupPage } from '@pages/login';
+import { LoginPage, SignupPage, SelfSignupPage, FindPwPage } from '@pages/login';
 import { MyPage, MyWorryPage } from '@pages/my';
 import {
   FreePage,
@@ -28,7 +28,11 @@ export const router = createBrowserRouter([
     },*/
   {
     path: 'signup',
-    element: <SignupPage />,
+    element: <SelfSignupPage />,
+  },
+  {
+    path: 'find-pw',
+    element: <FindPwPage />,
   },
   {
     path: 'home',
