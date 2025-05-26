@@ -15,16 +15,23 @@ const KakaoLoginButton = () => {
 
 const Link = styled.a`
     text-decoration: none;
+    cursor: pointer;
 `;
 
 const Button = styled.button`
+    width: 28.375rem;
+    height: 3.125rem;
     display: flex;
     background-color: transparent;
     cursor: pointer;
     border: none;
-    border-radius: 5rem;
-    width: 28.375rem;
-    height: 3.125rem;
+    border-radius: 8px;
+    transition: transform 0.3s ease-in-out;
+
+    &:hover {
+        opacity: 0.5;
+        transition: opacity 0.3s ease-in-out;
+    }
 `;
 
 const Img = styled.img`

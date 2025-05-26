@@ -26,7 +26,6 @@ const ProfileMark = styled.div`
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     background-color: ${theme.colors.green.main};
 `; //src: url('/images/profile.png'); AI 이미지
 
@@ -35,9 +34,8 @@ const MessageBubble = styled.div`
   position: relative;
   max-width: 70%;
   padding: 16px 16px;
-  border-radius: 15px;
+  border-radius: 8px;
   border:none;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   word-wrap: break-word;
   line-height: 1.5;
   background-color: ${(props) => (props['data-isUser'] ? theme.colors.gray[300] : theme.colors.green.main)};

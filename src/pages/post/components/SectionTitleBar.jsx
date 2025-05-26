@@ -8,9 +8,9 @@ const Wrapper = styled.div`
   width: 1440px;
   height: 66px;
   background-color: ${theme.colors.green.main};
-  color: #fff;
-  font-size: 24px;
-  font-weight: 700;
+  color: ${theme.colors.other.white};
+  font-size: ${theme.fontSize.xl};
+  font-weight: ${theme.fontWeight.bold};
   display: flex;
   align-items: center;
   padding-left: 200px;

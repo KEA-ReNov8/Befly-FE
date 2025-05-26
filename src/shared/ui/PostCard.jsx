@@ -1,8 +1,7 @@
-import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { colors } from '@/app/styles/colors';
 import { useLocation } from 'react-router-dom';
+import theme from '@app/styles/theme';
 
 const PostCard = ({
   type,
@@ -16,7 +15,7 @@ const PostCard = ({
   postId,
   currentPage,
 }) => {
-  const categoryColor = colors.category[categoryName];
+  const categoryColor = theme.colors.category[categoryName];
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,8 +40,8 @@ const PostCard = ({
         <CardContent>{content}</CardContent>
         <CardFooter>
           <LeftFooter>
-            <span>❤️ {likes}</span>
-            <span>💬 {comments}</span>
+            <span>♡ {likes}</span>
+            <span>🗨️ {comments}</span>
           </LeftFooter>
           <RightFooter>
             <span>{time}</span>
@@ -59,12 +58,12 @@ export default PostCard;
 const CardContainer = styled.div`
   width: 240px;
   height: 330px;
-  background: #ffffff;
+  background: ${theme.colors.other.white};
   border-radius: 8px;
-  box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.1);
-
+  //border: 1px solid ${theme.colors.gray[400]};
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: transform 0.2s ease-in-out;
+  transition: all 0.3s;
   &:hover {
     transform: translateY(-4px);
   }
@@ -79,7 +78,7 @@ const CardContainer = styled.div`
 const CardImage = styled.div`
   width: 100%;
   height: 153px;
-  background: #e0e0e0;
+  background: ${theme.colors.gray[300]};
   border-radius: 8px 8px 0 0;
 `;
 
@@ -87,19 +86,18 @@ const CategoryPill = styled.div`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 75px;
-  height: 28px;
+  width: 80px;
+  height: 30px;
   padding: 0 5px;
-  background: ${(props) => props.color || '#4CAF50'};
-  color: #fff;
-  font-size: 14px;
-  font-weight: 500;
+  background: ${(props) => props.color || theme.colors.green.main};
+  color: ${theme.colors.gray[900]};
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.medium};
   border-radius: 999px;
   position: absolute;
   left: 50%;
   top: 140px;
   transform: translateX(-50%);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
   z-index: 2;
 `;
 
@@ -114,11 +112,12 @@ const CardContentContainer = styled.div`
   align-items: flex-start;
   gap: 10px;
 `;
+
 const CardTitle = styled.h3`
   width: 100%;
   height: 20px;
-  font-size: 15px;
-  font-weight: bold;
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.semibold};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -129,8 +128,9 @@ const CardContent = styled.p`
   width: 100%;
   flex: 1;
   max-height: calc(1.6em * 3);
-  font-size: 13px;
-  color: #666666;
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.regular};
+  color: ${theme.colors.gray[800]};
   line-height: 1.6em;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -142,7 +142,6 @@ const CardContent = styled.p`
 // 카드 푸터- 좋아요, 댓글 수, 작성 시간, 닉네임을 표시
 const CardFooter = styled.div`
   width: 100%;
-  height: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -152,20 +151,22 @@ const LeftFooter = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
-  font-size: 12px;
-  color: #888888;
+  font-size: ${theme.fontSize.sm};
+  font-weight: ${theme.fontWeight.regular};
+  color: ${theme.colors.gray[800]};
 `;
 
 const RightFooter = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
-  font-size: 12px;
-  color: #888888;
+  font-size: ${theme.fontSize.sm};
+  font-weight: ${theme.fontWeight.regular};
+  color: ${theme.colors.gray[800]};
 `;
 
 const Divider = styled.div`
   width: 1px;
   height: 10px;
-  background-color: #888888;
+  background-color: ${theme.colors.gray[800]};
 `;

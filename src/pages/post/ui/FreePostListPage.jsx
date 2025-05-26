@@ -27,7 +27,7 @@ export const FreePostListPage = () => {
 
   // 자유글 작성 버튼 클릭 시 FreePostPage로 이동
   const handleWriteClick = () => {
-    navigate('/free/createfree');
+    navigate('/free/create-free');
   };
 
   return (
@@ -35,7 +35,7 @@ export const FreePostListPage = () => {
       <TopBar />
       <SectionTitleBar title="자유함" />
       <Wrapper>
-        <WriteButton onClick={handleWriteClick}>자유글 작성</WriteButton>
+        <WriteButton onClick={handleWriteClick}>글쓰기</WriteButton>
         <SearchBar />
       </Wrapper>
       <BoardGrid>
@@ -70,7 +70,7 @@ const BoardGrid = styled.div`
 const Wrapper = styled.div`
   width: 1044px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   gap: 12px;
   margin: 10px 0;
@@ -78,17 +78,20 @@ const Wrapper = styled.div`
 
 // 자유글 작성 버튼 스타일
 const WriteButton = styled.button`
-  height: 40px;
   padding: 0 20px;
-  background: ${theme.colors.green.main};
-  color: #fff;
+  margin-top: 18px;
+  height: 28px;
   border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: 500;
+  border-radius: 8px;
+  background: ${theme.colors.green.main};
+  color: ${theme.colors.other.white};
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.medium};
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.3s ease-in-out;
+
   &:hover {
-    background: ${theme.colors.green.dark};
+    background: ${theme.colors.green.hover};
+    transition: background 0.3s ease-in-out;
   }
 `;

@@ -7,7 +7,7 @@ const SuspendModal = ( {onClose}) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate('/list');
+        navigate('/my/myworry');
     };
 
     return (
@@ -50,9 +50,9 @@ const ModalContainer = styled.div`
     width: 344px;
     height: 420px;
     z-index: 1001;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
     background-color: white;
+    border: 1px solid ${theme.colors.gray[400]};
 `;
 
 const Img = styled.img`
@@ -73,15 +73,15 @@ const TitleContainer = styled.div`
 
 const Title = styled.h2`
     margin-top: 10px;
-    font-size: ${theme.fontSize.smallMedium};
-    font-family: ${theme.fontFamily.pretendard};
+    font-size: ${theme.fontSize.lg};
+    font-weight: ${theme.fontWeight.medium};
 `;
 
 const SubTitle = styled.p`
     margin-top: 20px;
-    font-size: ${theme.fontSize.xsmall};
-    color: ${theme.colors.gray[700]};
-    font-family: ${theme.fontFamily.pretendard};
+    font-size: ${theme.fontSize.smMd};
+    font-weight: ${theme.fontWeight.regular};
+    color: ${theme.colors.gray[800]};
 `;
 
 const ButtonContainer = styled.div`
@@ -97,12 +97,12 @@ const SuspendButton = styled.button`
     cursor: pointer;
     border: none;
     background-color: ${theme.colors.red[400]};
-    color: white;
-    font-family: ${theme.fontFamily.pretendard};
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: ${theme.colors.other.white};
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.medium};
 
     &:hover {
-        background-color: ${theme.colors.red.main};
+        background-color: ${theme.colors.red.hover};
     }
 `;
 
@@ -113,8 +113,9 @@ const ReturnButton = styled.button`
     cursor: pointer;
     background-color: white;
     border: 1px solid ${theme.colors.gray[500]};
-    font-family: ${theme.fontFamily.pretendard};
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: ${theme.colors.other.black};
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.medium};
 
     &:hover {
         background-color: ${theme.colors.gray[500]};

@@ -121,19 +121,16 @@ const Chat = () => {
 
 const Container = styled.div`
   display: flex;
-  width: 1140px;
+  width: 1440px;
   height: 830px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  border: 1px solid ${theme.colors.gray[500]};
   background-color: ${theme.colors.other.white};
 `;
 
 const MenuButtonContainer = styled.div`
   position: absolute;
-  top: 6%;
+  margin-top: 45px;
   left: 3%;
   z-index: 10;
 `;
@@ -162,51 +159,47 @@ const ChatContainer = styled.div`
   width: 100%;
   height: 100%;
   transition: margin-left 0.3s ease;
-  margin-left: ${(props) => (props['data-sidebarOpen'] ? '316px' : '0')};
+  margin-left: ${(props) => (props['data-sidebarOpen'] ? '310px' : '0')};
 `;
 
 const TopContainer = styled.div`
+  margin-top: 10px;
   width: 100%;
-  height: 125px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid ${theme.colors.gray[300]};
   padding-top: 20px;
   padding-left: 30px;
   padding-right: 30px;
   padding-bottom: 30px;
-  margin-bottom: 20px;
 `;
 
 const Header = styled.header`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #fff;
 `;
 
 const Title = styled.h1`
-  font-size: 18px;
-  font-weight: 500;
+  font-size: ${theme.fontSize.xl};
+  font-weight: ${theme.fontWeight.bold};
   color: ${theme.colors.green.main};
-  font-family: ${theme.fontFamily.pretendard};
-  font-size: ${theme.fontSize.medium};
   padding-top: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 `;
 
 const SuspendButton = styled.button`
   position: absolute;
+  margin-bottom: 10px;
   left: 90%;
   width: 98px;
   height: 38px;
   border: none;
-  border-radius: 100px;
-  color: white;
+  border-radius: 30px;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: ${theme.fontFamily.pretendard};
+  color: ${theme.colors.other.white};
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.medium};
   background-color: ${theme.colors.red[400]};
 
   &:hover {
@@ -216,15 +209,16 @@ const SuspendButton = styled.button`
 
 const FinishButton = styled.button`
   position: absolute;
+  margin-bottom: 10px;
   left: 90%;
   width: 98px;
   height: 38px;
   border: none;
-  border-radius: 100px;
+  border-radius: 30px;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  color: white;
-  font-family: ${theme.fontFamily.pretendard};
+  color: ${theme.colors.other.white};
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.medium};
   background-color: ${theme.colors.green.main};
 
   &:hover {
@@ -235,7 +229,7 @@ const FinishButton = styled.button`
 const MessageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 90vh;
+  height: 770px;
 `;
 
 const MessageList = styled.div`
@@ -244,7 +238,7 @@ const MessageList = styled.div`
   padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   scroll-behavior: smooth;
 `;
 

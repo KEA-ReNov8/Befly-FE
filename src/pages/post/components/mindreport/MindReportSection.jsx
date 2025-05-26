@@ -22,9 +22,19 @@ export const MindReportSection = () => {
       </LeftNavButton>
       <ContentArea>
         <ReportHeader>OOO님의 분석 리포트</ReportHeader>
-        {page === 0 && <AnalysisCardsPage />}
-        {page === 1 && <AIAnalysisPage />}
-        {page === 2 && <AIOpinionPage />}
+        <SliderContainer>
+          <SliderWrapper style={{ transform: `translateX(-${page * 33.333}%)` }}>
+            <SliderPage>
+              <AnalysisCardsPage />
+            </SliderPage>
+            <SliderPage>
+              <AIAnalysisPage />
+            </SliderPage>
+            <SliderPage>
+              <AIOpinionPage />
+            </SliderPage>
+          </SliderWrapper>
+        </SliderContainer>
       </ContentArea>
       <RightNavButton onClick={handleNext} disabled={page === 2}>
         &gt;
@@ -49,23 +59,46 @@ const ContentArea = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  border: 1px solid #e0e0e0;
-  border-radius: 16px;
-  background: #fff;
-  font-size: 20px;
-  font-weight: 500;
+  border: 1px solid ${theme.colors.gray[400]};
+  border-radius: 8px;
+  background: ${theme.colors.other.white};
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.medium};
   position: relative;
   padding: 48px 0 0 0;
+  overflow: hidden;
+`;
+
+const SliderContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+`;
+
+const SliderWrapper = styled.div`
+  display: flex;
+  width: 300%;
+  height: 100%;
+  transition: transform 0.5s ease-in-out;
+`;
+
+const SliderPage = styled.div`
+  width: 33.333%;
+  height: 100%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
 `;
 
 const ReportHeader = styled.div`
-  position: absolute;
-  top: 35px;
-  left: 45px;
-  font-size: 20px;
+  margin-left: 40px;
+  font-size: ${theme.fontSize.xl};
   color: ${theme.colors.green.main};
-  font-weight: 600;
+  font-weight: ${theme.fontWeight.semibold};
   letter-spacing: -0px;
+  margin-bottom: 20px;
 `;
 
 const NavButton = styled.button`
@@ -75,12 +108,12 @@ const NavButton = styled.button`
   z-index: 2;
   background: none;
   border: none;
-  font-size: 40px;
+  font-size: ${theme.fontSize.title};
   color: ${theme.colors.green.main};
   cursor: pointer;
   transition: color 0.2s;
   &:disabled {
-    color: #ccc;
+    color: ${theme.colors.gray[400]};
     cursor: default;
   }
 `;

@@ -32,7 +32,7 @@ const StatSection = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 120px;
+    gap: 100px;
 `;
 
 const StatItem = styled.div`
@@ -40,18 +40,18 @@ const StatItem = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 15px;
 `;
 
 const StatValue = styled.p`
-    font-size: ${theme.fontSize.medium};
-    font-family: ${theme.fontFamily.pretendard};
+    font-size: ${theme.fontSize.xl};
+    font-weight: ${theme.fontWeight.semibold};
     color: ${theme.colors.green.main};
 `;
 
 const StatLabel = styled.p`
-    font-size: ${theme.fontSize.small};
-    font-family: ${theme.fontFamily.pretendard};
+    font-size: ${theme.fontSize.lgMd};
+    font-weight: ${theme.fontWeight.medium};
     color: ${theme.colors.gray[800]};
 `;
 

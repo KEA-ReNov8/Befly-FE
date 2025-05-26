@@ -1,9 +1,10 @@
 import styled from 'styled-components';
+import theme from '@app/styles/theme';
 
 export const BannerPlaceHolder = () => {
   return (
     <BannerWrapper>
-      <BannerImg src="/sample-banner.jpg" alt="나중에 사진으로 채울겁니다" />
+      <BannerImg src="/sample-banner.jpg" alt="배너 위치" />
     </BannerWrapper>
   );
 };
@@ -11,7 +12,7 @@ export const BannerPlaceHolder = () => {
 const BannerWrapper = styled.div`
   width: 100%;
   height: 380px;
-  background: #e0e0e0;
+  background: ${theme.colors.gray[400]};
   display: flex;
   align-items: center;
   justify-content: center;

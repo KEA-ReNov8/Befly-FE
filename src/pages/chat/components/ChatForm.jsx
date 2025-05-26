@@ -41,25 +41,30 @@ const ChatForm = ( { onSendMessage }) => {
 
 const Container = styled.form`
     display: flex;
+    height: 170px;
     align-items:flex-end;
     padding: 30px;
     gap: 20px;
     position: sticky;
     bottom: 0;
     z-index: 10;
+    background-color: transparent;
 `;
 
 const InputContainer = styled.div`
     width: 100%;
     height: auto;
+    min-height: 80px;
     max-height: 200px;
     display: flex;
     justify-content: center;
     padding: 16px;
     border-radius: 15px;
     border: 1px solid ${theme.colors.gray[500]};
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
     background-color: white;
+    ::-webkit-scrollbar {
+        display: none;
+    }
 `;
 
 const TextArea = styled.textarea`
@@ -70,7 +75,8 @@ const TextArea = styled.textarea`
     resize: none;
     overflow-y: auto;
     line-height: 1.5;
-    font-size: ${theme.fontSize.small};
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.regular};
     color: ${theme.colors.black};
     background-color: transparent;
 
@@ -79,7 +85,7 @@ const TextArea = styled.textarea`
     height: auto;
 
     &::placeholder {
-        color: ${theme.colors.gray[400]};
+        color: ${theme.colors.gray[600]};
     }
 `;
 
@@ -92,10 +98,10 @@ const SendButton = styled.button`
     opacity: ${({ disabled }) => (disabled ? '0.5' : '1')};
     pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
     border-radius: 50%;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
     background-color: ${theme.colors.green.main};
-    font-size: ${theme.fontSize.large};
-    color: white;
+    font-size: ${theme.fontSize.lg};
+    font-weight: ${theme.fontWeight.semibold};
+    color: ${theme.colors.other.white};
 
     &:hover {
         background-color: ${theme.colors.green.hover};

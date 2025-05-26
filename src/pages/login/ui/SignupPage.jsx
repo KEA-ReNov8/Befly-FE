@@ -2,6 +2,8 @@ import SignUpForm from '@login/components/SignUpForm';
 import ConfirmModal from '@login/components/ConfirmModal';
 import { useState } from 'react';
 import styled from 'styled-components';
+import theme from '@app/styles/theme';
+import Footer from '@shared/ui/Footer';
 
 export const SignupPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,6 +21,7 @@ export const SignupPage = () => {
     return (
         <Wrapper>
             <SignUpForm onSubmit={handleFormSubmit}/>
+            <Footer />
             {isModalOpen && (
                 <ModalOverlay>
                     <ModalContainer>
@@ -32,6 +35,7 @@ export const SignupPage = () => {
 
 const Wrapper = styled.div`
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     margin-top: 5%;
@@ -43,17 +47,17 @@ const ModalOverlay = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.5);
 `;
 
 const ModalContainer = styled.div`
     background-color: white;
-    padding: 1rem;
+    padding: 0.5rem;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid ${theme.colors.gray.main};
     z-index: 1001;
 `;

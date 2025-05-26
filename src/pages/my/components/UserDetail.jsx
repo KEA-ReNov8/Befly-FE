@@ -9,14 +9,12 @@ const UserDetail = ({ handleProfileClick, userData }) => {
                     <UserName>{userData.username}</UserName>
                     <Badge />
                 </NameSection>
-            <Email>{userData.email}</Email>
         </ProfileSection>
     );
 };
 
 const ProfileSection = styled.div`
     width: 100%;
-    height: 400px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -28,8 +26,8 @@ const ProfileImage = styled.img`
     height: 170px;
     border-radius: 50%;
     object-fit: cover;
-    background-color: ${theme.colors.gray[200]};
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    border: none;
+    background-color: ${theme.colors.gray[300]};
 `;
 
 const NameSection = styled.div`
@@ -41,19 +39,14 @@ const NameSection = styled.div`
 `;
 
 const UserName = styled.p`
-    font-size: ${theme.fontSize.large};
-    font-family: ${theme.fontFamily.pretendard};
+    margin-left: 30px;
+    font-size: ${theme.fontSize.xl};
+    font-weight: ${theme.fontWeight.semibold};
 `;
 
 const Badge = styled.img`
     width: 18px;
     height: 18px;
-`;
-
-const Email = styled.p`
-    margin-top: 20px;
-    font-size: ${theme.fontSize.small};
-    font-family: ${theme.fontFamily.pretendard};
 `;
 
 export default UserDetail;

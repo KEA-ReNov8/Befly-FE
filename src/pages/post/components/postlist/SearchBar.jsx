@@ -16,11 +16,11 @@ export const SearchBar = () => {
 const Wrapper = styled.div`
   width: 240px;
   height: 30px;
-  margin-top: 20px;
+  margin-top: 18px;
   display: flex;
   align-items: center;
   border: 1.5px solid ${theme.colors.gray[300]};
-  border-radius: 10px;
+  border-radius: 20px;
   overflow: hidden;
 `;
 
@@ -29,7 +29,9 @@ const Input = styled.input`
   height: 100%;
   border: none;
   padding: 0 16px;
-  font-size: 14px;
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.regular};
+
   &:focus {
     outline: none;
   }
@@ -39,7 +41,8 @@ const SearchButton = styled.button`
   width: 24px;
   height: 100%;
   border: none;
-  background-color: #fff;
+  background-color: ${theme.colors.other.white};
+  padding-right: 10px;
   cursor: pointer;
   display: flex;
   align-items: center;

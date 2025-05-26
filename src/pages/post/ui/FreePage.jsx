@@ -140,6 +140,7 @@ export const FreePage = () => {
       {/* 상단 네비게이션 바 */}
       <TopBarWrapper>
         <TopBar />
+        <Line>자유함</Line>
       </TopBarWrapper>
       {/* 게시글 본문 영역 */}
       {post && (
@@ -149,7 +150,7 @@ export const FreePage = () => {
           date={post.createdAt}
           content={post.content}
           stats={{ like: post.likes, comment: post.comments }}
-          onEdit={() => {}}
+          postId={post.id}
         />
       )}
       {/* 댓글 입력창 */}
@@ -179,7 +180,7 @@ export const FreePage = () => {
 const PageContainer = styled.div`
   width: 1440px;
   min-height: 100vh;
-  background-color: #fff;
+  background-color: ${theme.colors.other.white};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -187,4 +188,16 @@ const PageContainer = styled.div`
 // 상단 TopBar 래퍼 스타일
 const TopBarWrapper = styled.div`
   flex-shrink: 0;
+`;
+
+const Line = styled.div`
+    width: 100%;
+    height: 66px;
+    background-color: ${theme.colors.green.main};
+    display: flex;
+    align-items: center;
+    font-size: ${theme.fontSize.xl};
+    font-weight: ${theme.fontWeight.bold};
+    padding-left: 220px;
+    color: ${theme.colors.other.white};
 `;

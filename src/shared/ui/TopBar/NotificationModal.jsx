@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import NotificationItem from './NotificationItem';
+import theme from '@/app/styles/theme';
 // 임시 목데이터
 const dummyNotifications = [
   { id: 1, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
@@ -29,23 +30,24 @@ const NotificationModal = () => {
 export default NotificationModal;
 
 const Wrapper = styled.div`
-  width: 300px;
+  width: 330px;
   height: 195px;
   position: absolute;
-  top: 50px;
+  top: 55px;
   left: 50%;
   transform: translateX(-20%);
-  background-color: #fff;
+  background-color: ${theme.colors.other.white};
   border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  border: 1px solid ${theme.colors.gray[400]};
   overflow-y: auto;
-  padding: 20px 16px;
+  overflow-x: auto;
+  padding: 10px 16px;
   box-sizing: border-box;
-  z-index: 999;
+  z-index: 1000;
 `;
 
 const ItemList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  justify-content: center;
 `;

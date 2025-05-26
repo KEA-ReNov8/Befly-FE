@@ -19,14 +19,13 @@ const Container = styled.div`
 `;
 
 const Button = styled.button`
-    position: relative;
     display: flex;
     align-items: center;
     width: 100%;
     height: 40px;
     border: none;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 8px;
 
     background-color: ${(props) => 
     props['data-active'] ? theme.colors.green.light : 'transparent'};
@@ -42,23 +41,21 @@ const Title = styled.p`
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 200px;
-    font-size: ${theme.fontSize.small};
-    font-family: ${theme.fontFamily.pretendard};
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.regular};
     color: ${theme.colors.black};
 `;
 
 const Status = styled.div`
     width: 65px;
-    height: 23px;
-    position: absolute;
+    height: 26px;
+    margin-left: 110px;
     display: flex;
     align-items: center;
     justify-content: center;
-    top: 20%;
-    right: 5%;
-    border-radius: 10px;
-    font-size: ${theme.fontSize.xsmall};
-    font-family: ${theme.fontFamily.pretendard};
+    border-radius: 5px;
+    font-size: ${theme.fontSize.smMd};
+    font-weight: ${theme.fontWeight.regular};
     color: ${theme.colors.other.white};
 
     background-color: ${props => 

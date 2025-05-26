@@ -50,7 +50,6 @@ const UserProfile = () => {
                 <UserDetail userData={userData} />
             </ProfileContainer>
             <UserStat userData={userData}/>
-            <Line />
             <ButtonContainer>
                 <ShareButton data-active={activeTab === '공유'} onClick={() => handleTabChange('공유')}>공유함</ShareButton>
                 <FreeButton data-active={activeTab === '자유'} onClick={() => handleTabChange('자유')}>자유함</FreeButton>
@@ -72,23 +71,15 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: 1px solid ${theme.colors.gray[200]};
-    border-radius: 15px;
-    background-color: ${theme.colors.other.white};
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-    margin-bottom: 100px;
-`;
-
-const Line = styled.div`
-    width: 80%;
-    height: 1px;
-    margin-top: 30px;
-    background-color: ${theme.colors.gray[500]};
+    border: 1px solid ${theme.colors.gray[400]};
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    margin-bottom: 80px;
 `;
 
 const ProfileContainer = styled.div`
     width: 100%;
-    height: 240px;
+    margin-top: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -96,25 +87,24 @@ const ProfileContainer = styled.div`
 
 const ButtonContainer = styled.div`
     position: relative;
-    width: 95%;
+    width: 100%;
     height: 50px;
     display: flex;
     margin-top: 30px;
-    margin-left: 50px;
-    gap: 10px;
+    margin-left: 10%;
+    gap: 20px;
 `;
 
 const ShareButton = styled.button`
-    width: 82px;
+    width: 84px;
     height: 30px;
-    border-radius: 10px;
+    border-radius: 8px;
     background-color: ${ (props) => props['data-active'] ? theme.colors.green.main : theme.colors.other.white };
-    color: ${ (props) => props['data-active'] ? theme.colors.other.white : theme.colors.other.black };
-    font-size: ${theme.fontSize.xsmall};
-    font-family: ${theme.fontFamily.pretendard};
+    color: ${ (props) => props['data-active'] ? theme.colors.other.white : theme.colors.gray[800] };
+    font-size: ${theme.fontSize.smMd};
+    font-weight: ${theme.fontWeight.medium};
     cursor: pointer;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-    border: 1px solid ${ (props) => props['data-active'] ? theme.colors.green.main : theme.colors.gray[200]};
+    border: 1px solid ${ (props) => props['data-active'] ? theme.colors.green.main : theme.colors.gray[400]};
     transition: all 0.3s;
 
     &:hover {
@@ -124,16 +114,15 @@ const ShareButton = styled.button`
 `;
 
 const FreeButton = styled.button`
-    width: 82px;
+    width: 84px;
     height: 30px;
-    border-radius: 10px;
+    border-radius: 8px;
     background-color: ${ (props) => props['data-active'] ? theme.colors.green.main : theme.colors.other.white };
-    color: ${ (props) => props['data-active'] ? theme.colors.other.white : theme.colors.other.black};
-    font-size: ${theme.fontSize.xsmall};
-    font-family: ${theme.fontFamily.pretendard};
+    color: ${ (props) => props['data-active'] ? theme.colors.other.white : theme.colors.gray[800]};
+    font-size: ${theme.fontSize.smMd};
+    font-weight: ${theme.fontWeight.medium};
     cursor: pointer;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-    border: 1px solid ${ (props) => props['data-active'] ? theme.colors.green.main : theme.colors.gray[200]};
+    border: 1px solid ${ (props) => props['data-active'] ? theme.colors.green.main : theme.colors.gray[400]};
     transition: all 0.3s;
 
     &:hover {
@@ -143,9 +132,9 @@ const FreeButton = styled.button`
 `;
 
 const PostSection = styled.div`
+    margin-left: 10%;
     width: 100%;
     margin-top: 20px;
-    margin-left: 65px;
     margin-bottom: 50px;
     display: flex;
     align-items: center;

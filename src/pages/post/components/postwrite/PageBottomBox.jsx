@@ -10,17 +10,23 @@ export const PageBottomBox = ({ onClick }) => (
 const PageBottom = styled.div`
   height: 52px;
   flex-shrink: 0;
-  margin-top: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
 `;
 const ToListButton = styled.button`
-  width: 333px;
-  height: 50px;
+  width: 336px;
+  height: 58px;
   background-color: ${theme.colors.green.main};
-  color: #fff;
+  color: ${theme.colors.other.white};
   border: none;
   border-radius: 8px;
-  font-size: 18px;
+  font-size: ${theme.fontSize.lgMd};
+  font-weight: ${theme.fontWeight.medium};
+
+  &:hover {
+    background-color: ${theme.colors.green.hover};
+  }
 `;

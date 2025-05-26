@@ -17,7 +17,6 @@ export const ChatPage = () => {
 const ChatContainer = styled.div`
     width: 100%;
     height: 100%;
-    background-color: ${theme.colors.gray[100]};
 `;
 
 const Wrapper = styled.div`
@@ -26,6 +25,5 @@ const Wrapper = styled.div`
     justify-content: center;
     align-items: center;
     width: 1440px;
-    height: 1024px;
     margin: 0 auto;
 `;

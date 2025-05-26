@@ -18,31 +18,32 @@ const SideBar = ({ isOpen, onClose }) => {
                 <SideBarButton active={false}/>
                 <SideBarButton active={false}/>
                 <SideBarButton active={false}/>
-                <SideBarButton active={false}/>
+                <SideBarButton active={false}/>      
             </SideBarContent>
         </SideBarContainer>
     );
 };
 
 const SideBarContainer = styled.div`
-    width: 316px;
+    width: 310px;
     height: 100%;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid ${theme.colors.gray[200]};
-    background-color: ${theme.colors.gray[200]};
+    border-right: 1px solid ${theme.colors.gray[400]};
+    background-color: ${theme.colors.other.white};
+        ::-webkit-scrollbar {
+        display: none;
+    }
 `;
 
 const SideBarHeader = styled.div`
     height: 120px;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid ${theme.colors.gray[500]};
 `;
 
 const MenuButton = styled.button`
     padding-left: 30px;
-    margin-top: 5px;
     background: none;
     border: none;
     cursor: pointer;
@@ -57,7 +58,7 @@ const SideBarContent = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    gap: 10px;
+    gap: 3px;
 `;
 
 export default SideBar;

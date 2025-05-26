@@ -42,7 +42,7 @@ const ProgressBar = ({ onProgressChange }) => {
 };
 
 const Container = styled.div`
-    width: 300px;
+    width: 450px; //상황에 따라 조절 가능
     height: 10px;
     background-color: ${theme.colors.gray[200]};
     border-radius: 5px;
@@ -60,7 +60,7 @@ const ProgressIndicator = styled.div`
     background-color: ${theme.colors.green.main};
     border-radius: 5px;
     width: ${(props) => props['data-progress']}%;
-    transition: width 0.3s ease-in-out;
+    transition: width 0.5s ease-in-out;
 `;
 
 const CountContainer = styled.div`
@@ -71,8 +71,9 @@ const CountContainer = styled.div`
 `;
 
 const Count = styled.p`
-    font-family: ${theme.fontFamily.pretendard};
-    font-size: ${theme.fontSize.small};
+    margin-top: 5px;
+    font-size: ${theme.fontSize.lgMd};
+    font-weight: ${theme.fontWeight.medium};
     color: ${theme.colors.black};
 `;
 

@@ -2,19 +2,21 @@ import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import { useNavigate } from 'react-router-dom';
 
-const WorryPost = ( {filteredPosts, onDeleteClick} ) => {
+const WorryPost = ( {filteredPosts, onDeleteClick, activeTab} ) => {
 
     const navigate = useNavigate();
 
     const handleClick = (id) => {
-        navigate(`/my/worry/${id}`);
+        navigate(`/report/${id}`);
+        
     }
 
     return (
         <PostsContainer>
                 {filteredPosts.map(post => (
                     <PostItem key={post.id} onClick={() => handleClick(post.id)}>
-                        <PostStatus data-category={post.category}>{post.category}</PostStatus>
+                        <PostStatus data-status={post.status}>{post.status}</PostStatus>
+                        {activeTab !== '고민해결' && <PostCategory data-category={post.category}>{post.category}</PostCategory>}
                         <PostTitle>{post.title}</PostTitle>
                         <PostInfo>
                             <PostDate>{post.date}</PostDate>
@@ -41,10 +43,11 @@ const PostsContainer = styled.div`
 
 const PostItem = styled.div`
     width: 100%;
-    height: 62px; 
+    height: 64px; 
     border-bottom: 1px solid #eee;
     padding: 15px 10px;
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: space-between;
     position: relative;
@@ -57,21 +60,31 @@ const PostItem = styled.div`
 `;
 
 const PostStatus = styled.span`
-    padding: 6px 14px;
-    border-radius: 4px;
-    font-size: 14px;
+    width: 60px;
+    font-size: ${theme.fontSize.smMd};
+    font-weight: ${theme.fontWeight.semibold};
+    color: ${theme.colors.green.main};
+    text-align: center;
     margin-right: 20px;
-    margin-left: 20px;
+    margin-left: 15px;
+`;
+
+const PostCategory = styled.span`
+    padding: 6px 20px;
+    border-radius: 20px;
+    margin-left: 35px;
     white-space: nowrap;
     background-color: ${(props) => theme.colors.category[props['data-category']]};
-    color: white;
-    font-family: ${theme.fontFamily.pretendard};
+    color: ${theme.colors.other.white};
+    font-weight: ${theme.fontWeight.semibold};
+    font-size: ${theme.fontSize.smMd};
 `;
 
 const PostTitle = styled.div`
     flex: 1;
-    font-weight: 500;
-    font-family: ${theme.fontFamily.pretendard};
+    font-weight: ${theme.fontWeight.semibold};
+    font-size: ${theme.fontSize.md};
+    margin-left: 40px;
 `;
 
 const PostInfo = styled.div`

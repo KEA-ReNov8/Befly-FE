@@ -49,7 +49,7 @@ const ModalContainer = styled.div`
     width: 344px;
     height: 513px;
     border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid ${theme.colors.gray[400]};
     background-color: white;
 `;
 
@@ -88,22 +88,24 @@ const AddButton = styled.button`
 const Input = styled.div`
     display: flex;
     position: relative;
-    width: 335.7px;
-    flex-direction: column;
+    width: 282px;
+    height: 53px;
     align-items: center;
     justify-content: center;
     margin-top: 1.5rem;
     gap: 1rem;
+    border: 1px solid ${theme.colors.gray[500]};
+    border-radius: 8px;
 `;
 
 const Nickname = styled.input`
     flex: 1;
-    width: 85%;
-    padding: 0.7rem 1rem;
-    border: 1px solid ${theme.colors.gray[500]};
-    border-radius: 4px;
-    font-size: 1rem;
-    
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.medium};
+
     &:focus {
         outline: none;
         border-color: ${theme.colors.green.main};
@@ -111,15 +113,15 @@ const Nickname = styled.input`
 `;
 
 const CheckButton = styled.button`
-    position: absolute;
-    top: 15%;
-    left: 70%;
+    margin-right: 10px;
     width: 66px;
     height: 30px;
     background-color: ${theme.colors.green.main};
     color: white;
     border: none;
     border-radius: 5px;
+    font-size: ${theme.fontSize.sm};
+    font-weight: ${theme.fontWeight.regular};
     cursor: pointer;
 
     &:hover {
@@ -141,8 +143,8 @@ const EditButton = styled.button`
     border: none;
     background-color: ${theme.colors.green.main};
     color: white;
-    font-family: ${theme.fontFamily.pretendard};
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.medium};
 
     &:hover {
         background-color: ${theme.colors.green.hover};
@@ -155,9 +157,9 @@ const ReturnButton = styled.button`
     border-radius: 10px;
     cursor: pointer;
     background-color: white;
-    border: 1px solid ${theme.colors.gray[500]};
-    font-family: ${theme.fontFamily.pretendard};
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid ${theme.colors.gray[400]};
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.medium};
 
     &:hover {
         background-color: ${theme.colors.gray[500]};

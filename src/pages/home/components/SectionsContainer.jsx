@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { LatestPosts } from './LatestPosts';
 import { freePosts, sharePosts } from '../mock/homeMockData';
+import theme from '@app/styles/theme';
 
 export const SectionsContainer = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export const SectionsContainer = () => {
           title="새로운 자유함"
           type="free"
           posts={freePosts}
-          bg="#fff"
+          bg={theme.colors.other.white}
           onMore={() => navigate('/free')}
         />
       </FirstSectionWrapper>
@@ -35,7 +36,7 @@ const SectionsBg = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #e6f6f3;
+  background: ${theme.colors.green.light};
   padding-bottom: 60px;
 `;
 
@@ -46,11 +47,10 @@ const FirstSectionWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #fff;
+  background: ${theme.colors.other.white};
   border-bottom-right-radius: 250px;
   padding: 20px;
   margin-bottom: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 `;
 
 const SecondSectionWrapper = styled.div`

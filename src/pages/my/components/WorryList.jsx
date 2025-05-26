@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import WorryPost from '@my/components/WorryPost';
 import DeleteModal from '@my/components/DeleteModal';
+import { SearchBar } from '@post/components/postlist/SearchBar';
+
 const WorryList = () => {
 
     const postsPerPage = 8;
@@ -51,15 +53,36 @@ const WorryList = () => {
 
     return (
         <Container>
-            <TabContainer>
-                    <TabButton data-isActive={activeTab === '전체'} onClick={() => handleTabChange('전체')}>전체</TabButton>
-                    <TabButton data-isActive={activeTab === '고민중'} onClick={() => handleTabChange('고민중')}>고민중</TabButton>
-                    <TabButton data-isActive={activeTab === '고민해결'} onClick={() => handleTabChange('고민해결')}>고민해결</TabButton>
-            </TabContainer>
-            <WorryPost filteredPosts={visiblePosts} onDeleteClick={handleDeleteClick}/>
+            <Header>
+                <TabContainer>
+                        <TabButton data-isActive={activeTab === '전체'} onClick={() => handleTabChange('전체')}>전체</TabButton>
+                        <TabButton data-isActive={activeTab === '고민중'} onClick={() => handleTabChange('고민중')}>고민중</TabButton>
+                        <TabButton data-isActive={activeTab === '고민해결'} onClick={() => handleTabChange('고민해결')}>고민해결</TabButton>
+                </TabContainer>
+                <SearchContainer>
+                    <SearchBar />
+                </SearchContainer>
+            </Header>
+            <CategoryContainer>
+                <CategoryStatus>진행여부</CategoryStatus>
+                {activeTab !== '고민해결' ? (
+                    <CategoryCategory>카테고리</CategoryCategory>
+                    ) : (
+                    <CategoryCategory style={{ visibility: 'hidden', opacity: 0 }}>카테고리</CategoryCategory>
+                    )}
+                <CategoryTitle>제목</CategoryTitle>
+                <CategoryDate>날짜</CategoryDate>
+            </CategoryContainer>
+            <WorryPost filteredPosts={visiblePosts} onDeleteClick={handleDeleteClick} activeTab={activeTab}/>
             <Pagination>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <PageButton key={page} data-isActive={page === currentPage} onClick={() => setCurrentPage(page)}> {page} </PageButton>
+                <PageButton
+                key={page}
+                data-isOn={page === currentPage}
+                onClick={() => setCurrentPage(page)}
+              >
+                {page}
+              </PageButton>
                 ))}
             </Pagination>
             {isModalOpen && <DeleteModal onClose={handleModalClose} />}
@@ -68,68 +91,118 @@ const WorryList = () => {
 };
 
 const Container = styled.div`
-    width: 1044px;
+    width: 1140px;
     height: 776px;
     display: flex;
     flex-direction: column;
     margin: 0 auto;
-    background-color: ${theme.colors.other.white};
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-    margin-bottom: 100px;
     align-items: center;
 `;
 
-const TabContainer = styled.div`
-    margin-top: 20px;
-    margin-right: 60%;
-    width: 282px;
-    height: 32px;
+const Header = styled.div`
+    width: 100%;
     display: flex;
-    background-color: ${theme.colors.gray[100]};
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+`;
+
+const SearchContainer = styled.div`
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-right: 75px;
+`;
+
+const TabContainer = styled.div`
+    margin-top: 30px;
+    width: 280px;
+    display: flex;
+    gap: 15px;
+    margin-left: 80px;
 `;
 
 const TabButton = styled.button`
     flex: 1;
     padding: 10px;
     border: none;
-    background-color: ${props => props['data-isActive'] ? '#00C192' : 'transparent'};
-    color: ${props => props['data-isActive'] ? theme.colors.other.white : theme.colors.gray[900]};
+    border-radius: 20px;
+    border: 1px solid ${theme.colors.gray[400]};
+    background-color: ${props => props['data-isActive'] ? theme.colors.green.hover : 'transparent'};
+    color: ${props => props['data-isActive'] ? theme.colors.other.black : theme.colors.gray[900]};
+    border: 1px solid ${props => props['data-isActive'] ? theme.colors.green.hover : theme.colors.gray[400]};
     cursor: pointer;
     transition: all 0.3s;
+    font-size: ${theme.fontSize.smMd};
+    font-weight: ${theme.fontWeight.medium};
     
     &:hover {
-        background-color: ${props => props['data-isActive'] ? '#00C192' : theme.colors.gray[300]};
+        background-color: ${props => props['data-isActive'] ? theme.colors.green.hover : theme.colors.gray[300]};
         transition: scale(1.05);
     }
+`;
+
+const CategoryContainer = styled.div`
+    width: 1140px;
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+    margin-left: 80px;
+`;
+
+const CategoryStatus = styled.div` 
+    width: 110px;
+    text-align: center;
+    margin-left: 5px;
+    font-size: ${theme.fontSize.lgMd};
+    font-weight: ${theme.fontWeight.semibold};
+    border-right: 1px solid ${theme.colors.gray[400]};
+`;
+
+const CategoryCategory = styled.div` 
+    width: 110px;
+    margin-left: 5px;
+    text-align: center;
+    font-size: ${theme.fontSize.lgMd};
+    font-weight: ${theme.fontWeight.semibold};
+    border-right: 1px solid ${theme.colors.gray[400]};
+`;
+
+const CategoryTitle = styled.div` 
+    width: 550px;
+    text-align: center;
+    font-size: ${theme.fontSize.lgMd};
+    font-weight: ${theme.fontWeight.semibold};
+    border-right: 1px solid ${theme.colors.gray[400]};
+`;
+
+const CategoryDate = styled.div`
+    width: 200px;
+    margin-left: 80px;
+    font-size: ${theme.fontSize.lgMd};
+    font-weight: ${theme.fontWeight.semibold};
 `;
 
 const Pagination = styled.div`
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 10px;
+    gap: 10px;
 `;
 
 const PageButton = styled.button`
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background-color: ${props => props['data-isActive'] ? '#00C192' : theme.colors.other.white};
-    color: ${props => props['data-isActive'] ? theme.colors.other.white : theme.colors.gray[900]};
-    margin: 0 5px;
-    border-radius: 4px;
-    cursor: pointer;
-    
-    &:hover {
-        background-color: ${props => props['data-isActive'] ? '#00C192' : theme.colors.gray[300]};
-    }
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.medium};
+  text-decoration: ${props => props['data-isOn'] ? 'underline' : 'none'};
+  text-decoration-color: ${theme.colors.green.main};
+  color: ${props => props['data-isOn'] ? theme.colors.green.main : theme.colors.gray[900]};
+  cursor: pointer;
 `;
 
 export default WorryList;

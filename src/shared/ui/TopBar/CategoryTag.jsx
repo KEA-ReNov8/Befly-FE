@@ -6,11 +6,9 @@ const CategoryTag = ({ category, onClick, isSelected }) => {
   return (
     <Wrapper
       onClick={onClick}
-      style={{
-        backgroundColor: categoryColor,
-        border: isSelected ? '2px solid #000' : 'none',
-        boxShadow: isSelected ? '0px 0px 2px rgba(0, 0, 0, 0.1)' : 'none',
-      }}
+      data-isSelected={isSelected}
+      data-borderColor={categoryColor}
+      data-bgColor={categoryColor}
     >
       {category}
     </Wrapper>
@@ -27,5 +25,16 @@ const Wrapper = styled.div`
   justify-content: center;
   border-radius: 20px;
   padding: 6px 4px;
-  font-size: 12px;
+  font-size: ${theme.fontSize.sm};
+  font-weight: ${theme.fontWeight.medium};
+  color: ${theme.colors.gray[800]};
+
+  background-color: ${(props) =>props['data-bgColor'] ? props['data-bgColor'] : 'transparent'};
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  transform: ${(props) => (props['data-isSelected'] ? 'scale(1.2)' : 'scale(1)')};
+
+  &:hover {
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+  }
 `;

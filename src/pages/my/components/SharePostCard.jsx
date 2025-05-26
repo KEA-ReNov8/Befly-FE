@@ -7,24 +7,142 @@ const SharePostCard = ( { post } ) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/shared-post/${post.id}`);
+        navigate(`/share/${post.id}`);
     };
 
     return (
-        <PostCardContainer onClick={handleClick}>
+    <CardContainer onClick={handleClick}>
+      <CardImage />
+      {post.type === '공유' && post.category && (
+        <CategoryPill color={theme.colors.category[post.category]}>{post.category}</CategoryPill>
+      )}
+      <CardContentContainer>
+        <CardTitle>{post.title}</CardTitle>
+        <CardFooter>
+          <LeftFooter>
+            <span>♡ {post.likes}</span>
+            <span>🗨️ {post.comments}</span>
+          </LeftFooter>
+          <RightFooter>
+            <span>{post.date}</span>
+          </RightFooter>
+        </CardFooter>
+      </CardContentContainer>
+    </CardContainer>
+    );
+};
+
+const CardContainer = styled.div`
+  width: 220px;
+  background: ${theme.colors.other.white};
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s;
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: none;
+  box-sizing: border-box;
+`;
+
+const CardImage = styled.div`
+  width: 100%;
+  height: 153px;
+  background: ${theme.colors.gray[300]};
+  border-radius: 8px 8px 0 0;
+`;
+
+const CategoryPill = styled.div`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 30px;
+  padding: 0 5px;
+  background: ${(props) => props.color || theme.colors.green.main};
+  color: ${theme.colors.gray[900]};
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.medium};
+  border-radius: 999px;
+  position: absolute;
+  left: 50%;
+  top: 140px;
+  transform: translateX(-50%);
+  z-index: 2;
+`;
+
+const CardContentContainer = styled.div`
+  width: 100%;
+  padding: 27px 20px 20px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+`;
+
+const CardTitle = styled.h3`
+  width: 100%;
+  height: 20px;
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.semibold};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 20px;
+  margin-bottom: 10px;
+`;
+
+const CardFooter = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const LeftFooter = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: ${theme.fontSize.sm};
+  font-weight: ${theme.fontWeight.regular};
+  color: ${theme.colors.gray[800]};
+`;
+
+const RightFooter = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: ${theme.fontSize.sm};
+  font-weight: ${theme.fontWeight.regular};
+  color: ${theme.colors.gray[800]};
+`;
+
+const Divider = styled.div`
+  width: 1px;
+  height: 10px;
+  background-color: ${theme.colors.gray[800]};
+`;
+
+export default SharePostCard;
+
+/*        <PostCardContainer onClick={handleClick}>
             <Category data-category={post.category}>{post.category}</Category>
             <Title>{post.title}</Title>
             <CardFooter>
                 <PostDate>{post.date}</PostDate>
                 <PostStat>
                 <span>♡&nbsp;{post.likes}</span>
-                <span>💬&nbsp;{post.comments}</span>
+                <span>🗨️&nbsp;{post.comments}</span>
                 </PostStat>
             </CardFooter>
         </PostCardContainer>
-    );
-};
-
 const PostCardContainer = styled.div`
     width: 230px;
     height: 160px;
@@ -56,7 +174,7 @@ const Category = styled.p`
     height: 28px;
     margin-bottom: 20px;
     background-color: ${(props) => theme.colors.category[props['data-category']]};
-    color: ${theme.colors.other.white};
+    font-weight: ${theme.fontWeight.regular};
     font-family: ${theme.fontFamily.pretendard};
 `;
 
@@ -96,4 +214,4 @@ const PostStat = styled.div`
     font-size: ${theme.fontSize.xsmall};
 `;
 
-export default SharePostCard;
+export default SharePostCard;*/

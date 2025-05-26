@@ -91,9 +91,9 @@ export const FreePostPage = () => {
   return (
     <Container>
       <TopBar />
+      <Line>자유함 글쓰기</Line>
       <EditorContainer>
         <Header>
-          <HeaderTitle>자유함 글쓰기</HeaderTitle>
           <ButtonContainer>
             <TempSaveButton onClick={handleTempSave}>임시저장</TempSaveButton>
             <WriteButton onClick={handleRegister} disabled={isSubmitting}>
@@ -123,19 +123,31 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #fff;
+  background-color: ${theme.colors.other.white};
+`;
+
+const Line = styled.div`
+    width: 100%;
+    height: 66px;
+    background-color: ${theme.colors.green.main};
+    display: flex;
+    align-items: center;
+    font-size: ${theme.fontSize.xl};
+    font-weight: ${theme.fontWeight.bold};
+    padding-left: 220px;
+    color: ${theme.colors.other.white};
 `;
 
 const EditorContainer = styled.div`
   width: 1044px;
   height: 610px;
-  margin-top: 40px;
-  border: 1px solid ${theme.colors.gray[200]};
+  border-top: none;
+  border: 1px solid ${theme.colors.gray[400]};
   padding: 40px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  border-radius: 10px;
+  border-radius: 0 0 10px 10px;
 `;
 const Header = styled.div`
   width: 100%;
@@ -145,19 +157,12 @@ const Header = styled.div`
   margin-bottom: 12px;
 `;
 
-const HeaderTitle = styled.div`
-  width: 110px;
-  height: 24px;
-  font-size: 20px;
-  font-weight: 700;
-  color: ${theme.colors.green.main};
-`;
-
 const ButtonContainer = styled.div`
   width: 170px;
   height: 32px;
   display: flex;
-  justify-content: space-between;
+  gap: 12px;
+  margin-left: auto;
   align-items: center;
 `;
 
@@ -166,12 +171,16 @@ const TempSaveButton = styled.button`
   height: 32px;
   paddding: 0 12px;
   border-radius: 6px;
-  background-color: #fff;
-  border: 1px solid ${theme.colors.gray[200]};
+  background-color: ${theme.colors.other.white};
+  border: 1px solid ${theme.colors.gray[400]};
   color: black;
-  font-size: 14px;
-  font-weight: 300;
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.regular};
   cursor: pointer;
+
+  &:hover {
+    background-color: ${theme.colors.gray[400]};
+  }
 `;
 
 const WriteButton = styled.button`
@@ -180,21 +189,32 @@ const WriteButton = styled.button`
   paddding: 0 12px;
   border-radius: 6px;
   background-color: ${theme.colors.green.main};
-  color: #fff;
-  font-size: 14px;
-  font-weight: 500;
+  color: ${theme.colors.other.white};
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.regular};
   cursor: pointer;
+
+  &:hover {
+    background-color: ${theme.colors.green.hover};
+  }
 `;
 
 const TitleInput = styled.input`
   width: 100%;
-  height: 40px;
+  height: 50px;
   padding: 0 12px;
   font-size: 15px;
   margin-botton: 16px;
   border-radius: 6px;
-  border: 1px solid ${theme.colors.gray[200]};
+  border: 1px solid ${theme.colors.gray[400]};
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.medium};
+
   &::placeholder {
-    color: ${theme.colors.gray[300]};
+    color: ${theme.colors.gray[500]};
+  }
+
+  &:focus {
+    outline: 1px solid ${theme.colors.green.main};
   }
 `;
