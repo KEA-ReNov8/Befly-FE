@@ -10,7 +10,7 @@ const DeleteModal = ( {onClose}) => {
     return (
         <ModalOverlay>
             <ModalContainer>
-                <Title>고민을 삭제하시겠습니까?</Title>
+                <Title>삭제하시겠습니까?</Title>
                 <ButtonContainer>
                     <ReturnButton onClick={onClose}>취소</ReturnButton>
                     <DeleteButton onClick={handleClick}>삭제하기</DeleteButton>
@@ -42,13 +42,13 @@ const ModalContainer = styled.div`
     width: 340px;
     height: 150px;
     border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid ${theme.colors.gray[400]};
     background-color: white;
 `;
 
 const Title = styled.div`
-    font-size: 20px;
-    font-weight: 600;
+    font-size: ${theme.fontSize.lg};
+    font-weight: ${theme.fontWeight.semibold};
     margin-top: 10px;
 `;
 
@@ -66,11 +66,11 @@ const DeleteButton = styled.button`
     border: none;
     background-color: ${theme.colors.red[400]};
     color: white;
-    font-family: ${theme.fontFamily.pretendard};
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.semibold};
 
     &:hover {
-        background-color: ${theme.colors.red[200]};
+        background-color: ${theme.colors.red.hover};
     }
 `;
 
@@ -80,9 +80,9 @@ const ReturnButton = styled.button`
     border-radius: 10px;
     cursor: pointer;
     background-color: white;
-    border: 1px solid ${theme.colors.gray[200]};
-    font-family: ${theme.fontFamily.pretendard};
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid ${theme.colors.gray[400]};
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.semibold};
 
     &:hover {
         background-color: ${theme.colors.gray[500]};
