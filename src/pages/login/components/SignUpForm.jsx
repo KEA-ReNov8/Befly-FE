@@ -30,20 +30,11 @@ const SignUpForm = ({ onSubmit }) => {
             </Profile>
             <Input>
                 <Email type="email" placeholder="이메일" required/>
-                {/*필요시 컨테이너 분리*/}
-                <Nickname type ="text" placeholder="닉네임" maxLength={10} required/>
-                <CheckButton>중복확인</CheckButton>
+                <NicknameContainer>
+                    <Nickname type ="text" placeholder="닉네임" maxLength={10} required/>
+                    <CheckButton>중복확인</CheckButton>
+                </NicknameContainer>
             </Input>
-            <Gender>
-                <GenderOption>
-                    <GenderButton type="radio" id="male" name="gender" required/>
-                    <GenderText htmlFor="male">남성</GenderText>
-                </GenderOption>
-                <GenderOption>
-                    <GenderButton type="radio" id="female" name="gender" />
-                    <GenderText htmlFor="female">여성</GenderText>
-                </GenderOption>
-            </Gender>
             <TermContainer>
                 <Term type="checkbox" id="term" required />
                 <TermText onClick={handleModalOpen}>이용약관 개인정보 수집 및 정보이용에 동의합니다.</TermText>
@@ -55,24 +46,25 @@ const SignUpForm = ({ onSubmit }) => {
 };
 
 const Container = styled.form`
+    width: 24.375rem;
     display: flex;
     flex-direction: column;
-    width: 24.375rem;
-    height: 42.3125rem;
     align-items: center;
-    border: 1px solid ${theme.colors.gray[500]};
-    border-radius: 1rem;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid ${theme.colors.gray.main};
+    margin-bottom: 80px;
+    padding-bottom: 30px;
 `;
 
 const Title = styled.h2`
+    line-height: 1.5;
     color: ${theme.colors.green.main};
-    font-size: ${theme.fontSize.medium};
-    font-family: ${theme.fontFamily.pretendard};
+    font-size: ${theme.fontSize.xl};
+    font-weight: ${theme.fontWeight.semibold};
     margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
-    margin-right: 8rem;
-    line-height: 1.3;
+    margin-bottom: 2.5rem;
+    margin-right: 9rem;
 `;
 
 const Profile = styled.div`
@@ -85,7 +77,7 @@ const ProfileImage = styled.img`
     width: 12rem;
     height: 12rem;
     border-radius: 50%;
-    background-color: ${theme.colors.gray[500]};
+    background-color: ${theme.colors.gray.main};
 `;
 
 const AddButton = styled.button`
@@ -94,23 +86,27 @@ const AddButton = styled.button`
     left: 78%;
     width: 40px;
     height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
-    background-color: ${theme.colors.green.main};
     border: none;
     cursor: pointer;
-    font-size: 1.5rem;
-    color: white;
-    padding-bottom: 0.2rem;
-
+    font-size: ${theme.fontSize.title};
+    font-weight: ${theme.fontWeight.medium};
+    color: ${theme.colors.other.white};
+    background-color: ${theme.colors.green.main};
+    padding-bottom: 0.35rem;
+    padding-left: 0.05rem;
+    
     &:hover {
         background-color: ${theme.colors.green.hover};
     }
 `;
 
 const Input = styled.div`
-    display: flex;
-    position: relative;
     width: 335.7px;
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -122,9 +118,10 @@ const Email = styled.input`
     flex: 1;
     width: 100%;
     padding: 0.7rem 1rem;
-    border: 1px solid ${theme.colors.gray[500]};
-    border-radius: 5px;
-    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid ${theme.colors.gray.main};
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.medium};
     
     &:focus {
         outline: none;
@@ -132,13 +129,24 @@ const Email = styled.input`
     }
 `;
 
+const NicknameContainer = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    gap: 1rem;
+    border: 1px solid ${theme.colors.gray.main};
+`;
+
 const Nickname = styled.input`
     flex: 1;
     width: 100%;
     padding: 0.7rem 1rem;
-    border: 1px solid ${theme.colors.gray[500]};
-    border-radius: 4px;
-    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.medium};
     
     &:focus {
         outline: none;
@@ -147,47 +155,25 @@ const Nickname = styled.input`
 `;
 
 const CheckButton = styled.button`
-    position: absolute;
-    top: 65%;
-    left: 78%;
     width: 66px;
     height: 30px;
-    background-color: ${theme.colors.green.main};
-    color: white;
+    margin-right: 10px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
+    background-color: ${theme.colors.green.main};
+    color: ${theme.colors.other.white};
+    font-size: ${theme.fontSize.sm};
+    font-weight: ${theme.fontWeight.medium};
 
     &:hover {
         background-color: ${theme.colors.green.hover};
     }
 `;
 
-const Gender = styled.div`
-    display: flex;
-    margin-top: 2rem;
-    gap: 5rem;
-`;
-
-const GenderOption = styled.div`
-    align-items: center;
-`;
-
-const GenderButton = styled.input`
-    appearance: auto;
-    accent-color: ${theme.colors.green.main};
-    margin-right: 0.5rem;
-    cursor: pointer;
-`;
-
-const GenderText = styled.label`
-    font-size: 1rem;
-    color: ${theme.colors.black};
-`;
-
 const TermContainer = styled.div`
     display: flex;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
 `;
 
 const Term = styled.input`
@@ -199,31 +185,32 @@ const Term = styled.input`
 `;
 
 const TermText = styled.p`
-    font-size: 0.875rem;
-    color: ${theme.colors.black};
+    cursor: pointer;
+    color: ${theme.colors.other.black};
+    font-size: ${theme.fontSize.sm};
+    font-weight: ${theme.fontWeight.medium};
     padding-top: 0.2rem;
     margin-left: 0.5rem;
-    cursor: pointer;
 
     &:hover {
-        color: ${theme.colors.green.main};
+        color: ${theme.colors.gray.sub};
     }
 `;
 
 const SubmitButton = styled.button`
     width: 335.7px;
     height: 59px;
-    padding 1rem;
     margin-top: 1.5rem;
-    background-color: ${theme.colors.green.main};
-    font-size: 1rem;
-    color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
+    background-color: ${theme.colors.green.main};
+    font-size: ${theme.fontSize.lgMd};
+    font-weight: ${theme.fontWeight.medium};
+    color: ${theme.colors.other.white};
 
     &:hover {
-        background-color: ${theme.colors.green[80]};
+        background-color: ${theme.colors.green.hover};
     }
 `;
 
