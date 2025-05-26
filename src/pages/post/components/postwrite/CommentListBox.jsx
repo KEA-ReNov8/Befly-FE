@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
+import Arrow from '@shared/assets/icons/arrow.svg';
+import DeleteModal from '@pages/my/components/DeleteModal';
+import { useState } from 'react';
 
+//삭제 안될 경우 삭제 모달 복제해서 새로 만들기
 export const CommentListBox = ({
   comments,
   replyInput,
@@ -9,7 +13,16 @@ export const CommentListBox = ({
   onReplyInputChange,
   onReplySubmit,
   userId,
-}) => (
+}) => {
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const handleDelete = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  return(
+    <>
   <CommentListSection>
     {comments.map((comment) => (
       <CommentBlock key={comment.id}>
@@ -27,7 +40,7 @@ export const CommentListBox = ({
                 <EditDeleteGroup>
                   <EditButton type="button">수정</EditButton>
                   <Divider>|</Divider>
-                  <DeleteButton type="button">삭제</DeleteButton>
+                  <DeleteButton type="button" onClick={handleDelete}>삭제</DeleteButton>
                 </EditDeleteGroup>
               )}
             </CommentInfoRow>
@@ -52,7 +65,10 @@ export const CommentListBox = ({
             {comment.replies.map((reply) => (
               <ReplyBlock key={reply.id}>
                 <ReplyRow>
-                  <ReplyProfileCircle />
+                  <Replybox>
+                    <img src={Arrow} alt="arrow" />
+                    <ReplyProfileCircle />
+                  </Replybox>
                   <ReplyRight>
                     <ReplyAuthor>{reply.author}</ReplyAuthor>
                     <ReplyContent>{reply.content}</ReplyContent>
@@ -62,7 +78,7 @@ export const CommentListBox = ({
                         <EditDeleteGroup>
                           <EditButton type="button">수정</EditButton>
                           <Divider>|</Divider>
-                          <DeleteButton type="button">삭제</DeleteButton>
+                          <DeleteButton type="button" onClick={handleDelete}>삭제</DeleteButton>
                         </EditDeleteGroup>
                       )}
                     </ReplyInfoRow>
@@ -74,22 +90,25 @@ export const CommentListBox = ({
         )}
       </CommentBlock>
     ))}
-  </CommentListSection>
-);
+    </CommentListSection>
+    {isDeleteModalOpen && <DeleteModal onClose={() => setIsDeleteModalOpen(false)} />}
+    </>
+  );
+};
 
 const CommentListSection = styled.div`
   width: 1044px;
   flex-shrink: 0;
   padding: 24px 24px 0 24px;
   box-sizing: border-box;
-  border-radius: 10px;
-  border: 1px solid ${theme.colors.gray[200]};
+  border-radius: 8px;
+  border: 1px solid ${theme.colors.gray[400]};
   margin-top: 30px;
 `;
 const CommentBlock = styled.div`
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   position: relative;
-  border-bottom: 1px solid ${theme.colors.gray[200]};
+  border-bottom: 1px solid ${theme.colors.gray[400]};
   &:last-child {
     border-bottom: none;
   }
@@ -104,41 +123,47 @@ const ProfileCircle = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #e6f2ef;
+  background: ${theme.colors.gray[400]};
+  border: 2px solid ${theme.colors.green.main};
   margin-top: 2px;
 `;
 const CommentRight = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 4px;
   flex: 1;
 `;
 const CommentAuthor = styled.div`
-  font-weight: 600;
-  font-size: 16px;
-  margin-bottom: 2px;
+  font-weight: ${theme.fontWeight.medium};
+  font-size: ${theme.fontSize.md};
+  margin-bottom: 4px;
 `;
 const CommentContent = styled.div`
-  font-size: 15px;
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.regular};
   margin-bottom: 6px;
 `;
 const CommentInfoRow = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 13px;
-  color: #b0b0b0;
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.regular};
+  color: ${theme.colors.gray[400]};
+  margin-bottom: 4px;
 `;
 const CommentDate = styled.div`
-  color: #b0b0b0;
-  font-size: 13px;
+  color: ${theme.colors.gray[600]};
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.regular};
 `;
 const ReplyButton = styled.button`
-  color: ${theme.colors.gray[500]};
+  color: ${theme.colors.gray[600]};
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.regular};
   padding: 0 4px;
 `;
 const EditDeleteGroup = styled.div`
@@ -149,49 +174,65 @@ const EditDeleteGroup = styled.div`
 const EditButton = styled.button`
   background: none;
   border: none;
-  color: ${theme.colors.gray[500]};
-  font-size: 13px;
+  color: ${theme.colors.gray[600]};
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.regular};
   cursor: pointer;
   padding: 0 2px;
+
+  &:hover {
+    color: ${theme.colors.gray[700]};
+  }
 `;
 const DeleteButton = styled.button`
   background: none;
   border: none;
-  color: ${theme.colors.gray[500]};
-  font-size: 13px;
+  color: ${theme.colors.gray[600]};
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.regular};
   cursor: pointer;
   padding: 0 2px;
+
+  &:hover {
+    color: ${theme.colors.gray[700]};
+  }
 `;
 const Divider = styled.span`
-  color: ${theme.colors.gray[400]};
-  font-size: 13px;
+  color: ${theme.colors.gray[500]};
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.regular};
 `;
 const ReplyInputRow = styled.div`
   margin-left: 56px;
-  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
   display: flex;
   align-items: center;
   gap: 8px;
-  border: 1px solid ${theme.colors.gray[200]};
+  border: 1px solid ${theme.colors.gray[400]};
   border-radius: 8px;
   padding: 8px 12px;
-  margin-bottom: 15px;
+
+  ::-webkit-scrollbar {
+    display: none;
+  } //스크롤바 여부
 `;
 const ReplyInput = styled.textarea`
   flex: 1;
   min-height: 32px;
   border-radius: 6px;
   border: none;
-  font-size: 14px;
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.regular};
   padding: 6px;
   resize: none;
   outline: none;
   &::placeholder {
-    color: ${theme.colors.gray[400]};
+    color: ${theme.colors.gray[600]};
   }
 `;
 const ReplyList = styled.div`
-  margin-left: 56px;
+  margin-left: 20px;
   margin-top: 4px;
 `;
 const ReplyBlock = styled.div`
@@ -201,47 +242,60 @@ const ReplyRow = styled.div`
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  margin-bottom: 15px;
+  border-top: 1px solid ${theme.colors.gray[400]};
+  padding-top: 15px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+`;
+const Replybox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;
 const ReplyProfileCircle = styled.div`
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #e6f2ef;
+  background: ${theme.colors.gray[400]};
+  border: 2px solid ${theme.colors.green.main};
   margin-top: 2px;
 `;
 const ReplyRight = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 4px;
   flex: 1;
 `;
 const ReplyAuthor = styled.div`
-  font-weight: 500;
-  font-size: 15px;
-  margin-bottom: 2px;
+  font-weight: ${theme.fontWeight.medium};
+  font-size: ${theme.fontSize.md};
+  margin-bottom: 4px;
 `;
 const ReplyContent = styled.div`
-  font-size: 14px;
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.regular};
   margin-bottom: 4px;
 `;
 const ReplyInfoRow = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 12px;
-  color: #b0b0b0;
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.regular};
+  color: ${theme.colors.gray[400]};
 `;
 const ReplyDate = styled.div`
-  color: #b0b0b0;
-  font-size: 12px;
+  color: ${theme.colors.gray[600]};
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.regular};
 `;
 const ReplyRegisterButton = styled.button`
   width: 50px;
   height: 32px;
-  background-color: #fff;
+  background-color: ${theme.colors.other.white};
   color: ${theme.colors.green.main};
-  font-size: 14px;
-  font-weight: 600;
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.medium};
   border: none;
   border-radius: 8px;
   cursor: pointer;
