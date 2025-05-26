@@ -1,6 +1,6 @@
-import React from 'react';
 import styled from 'styled-components';
 import PostCard from '@shared/ui/PostCard';
+import theme from '@app/styles/theme';
 
 export const LatestPosts = ({ title, type, posts, onMore, bg }) => {
   return (
@@ -39,23 +39,28 @@ const SectionHeader = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  margin: 0 auto 20px auto;
+  margin: 0 auto 30px auto;
 `;
 
 const SectionTitle = styled.h2`
-  color: #21c5a7;
-  font-size: 24px;
-  font-weight: bold;
+  color: ${theme.colors.green.main};
+  font-size: ${theme.fontSize.xl};
+  font-weight: ${theme.fontWeight.semibold};
 `;
 const MoreButton = styled.button`
   background: none;
   border: none;
-  color: #21c5a7;
-  font-size: 14px;
+  color: ${theme.colors.green.main};
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.medium};
   cursor: pointer;
   display: flex;
   align-items: center;
   margin-right: 30px;
+
+  &:hover {
+    color: ${theme.colors.green.hover};
+  }
 `;
 
 const CardsRow = styled.div`
