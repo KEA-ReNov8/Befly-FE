@@ -54,7 +54,6 @@ const TermModal = ( {onClose} ) => {
                     1. 수집하는 개인정보 항목
                     회사는 다음과 같은 정보를 수집할 수 있습니다:
                     - 필수항목: 이름, 이메일, 비밀번호
-                    - 선택항목: 닉네임, 생년월일, 성별 등
                     - 자동 수집 항목: IP 주소, 쿠키, 접속 기록 등
 
                     2. 개인정보 수집 및 이용 목적
@@ -82,14 +81,11 @@ const TermModal = ( {onClose} ) => {
                     - 마이페이지 또는 고객센터를 통해 언제든지 권리 행사 가능
 
                     7. 개인정보 보호책임자
-                    - 이름: 김동윤
+                    - 이름: 
                     - 이메일: contact@befly.ai
                     - 담당부서: 개인정보 보호팀
 
-                    8. 쿠키(cookie) 사용
-                    회사는 웹사이트 운영을 위해 쿠키를 사용하며, 브라우저 설정을 통해 거부할 수 있습니다.
-
-                    9. 정책 변경 고지
+                    8. 정책 변경 고지
                     이 개인정보처리방침은 법령이나 내부 정책 변경에 따라 수정될 수 있으며, 변경 시 서비스 내 공지사항을 통해 안내합니다.`,
         },  
     ];
@@ -124,17 +120,19 @@ const ModalOverlay = styled.div`
     height: 100%;
     z-index: 1000;
     background-color: rgba(0, 0, 0, 0.5);
+    ::-webkit-scrollbar {
+        display: none;
+    }
 `;
 
 const Container = styled.div`
-    height: 500px;
-    background-color: ${theme.colors.other.white};
+    height: 700px;
     display: flex;
     flex-direction: column;
-    padding: 30px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    padding: 50px;
     border-radius: 8px;
     position: relative;
+    background-color: ${theme.colors.other.white};
 `;
 
 const CloseButton = styled.button`
@@ -153,19 +151,19 @@ const ContentWrapper = styled.div`
 `;
 
 const Title = styled.h2`
+    font-size: ${theme.fontSize.lg};
+    font-weight: ${theme.fontWeight.medium};
+    color: ${theme.colors.other.black};
     margin-top: 10px;
-    font-family: ${theme.fontFamily.pretendard};
-    font-weight: 600;
-    font-size: 18px;
     margin-bottom: 10px;
 `;
 
 const ContentText = styled.p`
-    font-size: 14px;
     white-space: pre-wrap;
     line-height: 1.6;
-    font-family: ${theme.fontFamily.pretendard};
-    color: ${theme.colors.gray[800]};
+    font-size: ${theme.fontSize.smMd};
+    font-weight: ${theme.fontWeight.regular};
+    color: ${theme.colors.other.black};
 `;
 
 export default TermModal;
