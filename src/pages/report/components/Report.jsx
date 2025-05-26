@@ -12,7 +12,7 @@ const Report = ({ reportData }) => {
   const navigate = useNavigate();
 
   const handleReportClick = () => {
-    navigate('/post');
+    navigate('/share/create-share');
   };
 
   const handleListClick = () => {
@@ -36,7 +36,7 @@ const Report = ({ reportData }) => {
 };
 
 const ReportContainer = styled.div`
-  max-width: 1000px;
+  max-width: 1042px;
   margin: 0 auto;
   padding: 5px;
   margin-top: 50px;
@@ -68,24 +68,21 @@ const ReportHeader = styled.div`
   align-items: center;
   flex-direction: column;
   text-align: center;
-  margin-bottom: 20px;
 `;
 
 const ReportTitle = styled.h1`
   display: inline-block;
   padding: 20px 50px;
-  //border-radius: 50px;
-  background-color: ${theme.colors.other.white};
-  font-family: ${theme.fontFamily.pretendard};
-  font-weight: ${theme.font.semibold.fontWeight};
-  font-size: ${theme.fontSize.large};
+  background-color: transparent;
+  font-weight: ${theme.fontWeight.bold};
+  font-size: ${theme.fontSize.xl};
   color: ${theme.colors.green.main};
   margin-bottom: 20px;
   text-align: center;
 
   word-break: keep-all;
   white-space: normal;
-  max-width: 80%;
+  max-width: 75%;
   line-height: 1.4;
 `;
 
@@ -97,29 +94,32 @@ const ButtonContainer = styled.div`
 `;
 
 const ReportButton = styled.button`
-    width: 134px;
+    width: 148px;
     height: 40px;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
     border: none;
     cursor: pointer;
     color: white;
     background-color: ${theme.colors.green.main};
-    font-family: ${theme.fontFamily.pretendard};
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.regular};
     
     &:hover {
-        background-color: ${theme.colors.green[80]};
+        background-color: ${theme.colors.green.hover};
     }
 `;
 
 const ListButton = styled.button`
     width: 134px;
     height: 40px;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
     border: none;
     background-color: white;
-    font-family: ${theme.fontFamily.pretendard};
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.regular};
+    border: 1px solid ${theme.colors.gray[400]};
 
     &:hover {
         background-color: ${theme.colors.gray[500]};
