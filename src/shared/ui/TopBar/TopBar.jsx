@@ -47,20 +47,20 @@ const TopBar = () => {
 export default TopBar;
 
 const Container = styled.header`
-  width: 1440px;
+  width: 100%;
   height: 106px;
   padding: 0 190px;
   display: flex;
   align-items: center;
-  background-color: #fff;
-  border-bottom: 1px solid ${theme.colors.gray[200]};
+  background-color: ${theme.colors.other.white};
+  border-bottom: 1px solid ${theme.colors.gray[400]};
 `;
+
 const Logo = styled.div`
-  margin-right: 120px;
+  margin-right: 170px;
   color: ${theme.colors.green.main};
-  font-size: 40px;
-  font-family: ${theme.fontFamily.pretendard};
-  font-weight: 800;
+  font-size: ${theme.fontSize.title};
+  font-weight: ${theme.fontWeight.bold};
   cursor: pointer;
 `;
 const Nav = styled.nav`
@@ -71,20 +71,22 @@ const Nav = styled.nav`
 `;
 
 const NavButton = styled.button`
-  font-size: 20px;
+  font-size: ${theme.fontSize.lg};
   color: ${theme.colors.green.main};
-  font-family: ${theme.fontFamily.pretendard};
-  font-weight: 500;
+  font-weight: ${theme.fontWeight.semibold};
   border: none;
   cursor: pointer;
+  transition: color 0.3s ease;
+
   &:hover {
-    text-decoration: underline;
+    color: ${theme.colors.green.hover};
+    transition: color 0.3s ease;
   }
 `;
 
 const RightSection = styled.div`
   display: flex;
-  gap: 60px;
+  gap: 40px;
   align-items: center;
   justify-content: flex-end;
 `;
@@ -98,14 +100,15 @@ const NotificationWrapper = styled.div`
 `;
 
 const WorryButton = styled.button`
+  width: 98px;
+  height: 40px;
   background-color: ${theme.colors.green.main};
-  color: #fff;
-  font-family: ${theme.fontFamily.pretendard};
-  font-weight: 600;
+  color: ${theme.colors.other.white};
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.medium};
   border: none;
   cursor: pointer;
-  border-radius: 10px;
-  padding: 10px 20px;
+  border-radius: 30px;
 `;
 
 const NotificationButton = styled.div`
