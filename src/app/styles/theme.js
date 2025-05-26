@@ -1,9 +1,9 @@
 import { colors } from '@app/styles/colors.js';
-import { fontFamily,fontSize, font } from '@app/styles/fonts.js';
+import { fontFamily,fontSize, fontWeight } from '@app/styles/fonts.js';
 
 const theme = {
     colors,
-    font,
+    fontWeight,
     fontSize,
     fontFamily,
 };
