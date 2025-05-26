@@ -41,6 +41,7 @@ const ChatForm = ( { onSendMessage }) => {
 
 const Container = styled.form`
     display: flex;
+    height: 170px;
     align-items:flex-end;
     padding: 30px;
     gap: 20px;
@@ -53,6 +54,7 @@ const Container = styled.form`
 const InputContainer = styled.div`
     width: 100%;
     height: auto;
+    min-height: 80px;
     max-height: 200px;
     display: flex;
     justify-content: center;
@@ -60,6 +62,9 @@ const InputContainer = styled.div`
     border-radius: 15px;
     border: 1px solid ${theme.colors.gray[500]};
     background-color: white;
+    ::-webkit-scrollbar {
+        display: none;
+    }
 `;
 
 const TextArea = styled.textarea`
@@ -70,7 +75,8 @@ const TextArea = styled.textarea`
     resize: none;
     overflow-y: auto;
     line-height: 1.5;
-    font-size: ${theme.fontSize.small};
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.regular};
     color: ${theme.colors.black};
     background-color: transparent;
 
@@ -79,7 +85,7 @@ const TextArea = styled.textarea`
     height: auto;
 
     &::placeholder {
-        color: ${theme.colors.gray[400]};
+        color: ${theme.colors.gray[600]};
     }
 `;
 
@@ -93,8 +99,9 @@ const SendButton = styled.button`
     pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
     border-radius: 50%;
     background-color: ${theme.colors.green.main};
-    font-size: ${theme.fontSize.large};
-    color: white;
+    font-size: ${theme.fontSize.lg};
+    font-weight: ${theme.fontWeight.semibold};
+    color: ${theme.colors.other.white};
 
     &:hover {
         background-color: ${theme.colors.green.hover};
