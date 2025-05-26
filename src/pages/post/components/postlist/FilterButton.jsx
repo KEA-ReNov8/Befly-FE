@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
+
 export const FilterButton = ({ selected, onClick, children }) => {
   return (
     <StyledButton className={selected ? 'selected' : ''} onClick={onClick}>
@@ -13,9 +14,9 @@ const StyledButton = styled.button`
   height: 30px;
   border-radius: 50px;
   font-size: 14px;
-  background-color: #fff;
-  color: #222;
-  border: 1.5px solid #ddd;
+  background-color: ${theme.colors.other.white};
+  color: ${theme.colors.other.black};
+  border: 1px solid ${theme.colors.gray[300]};
   cursor: pointer;
   margin-right: 10px;
   transition:
@@ -23,9 +24,15 @@ const StyledButton = styled.button`
     color 0.2s,
     border 0.2s;
 
+  &:hover {
+    background-color: ${theme.colors.gray[300]};
+  }
+
   &.selected {
-    background-color: #d3f3ed;
-    color: #222;
-    border: 1.5px solid #3cc1a1;
+    background-color: ${theme.colors.green.light};
+    border: 1px solid ${theme.colors.green.light};
+    &:hover {
+      background-color: ${theme.colors.green.hover};
+    }
   }
 `;

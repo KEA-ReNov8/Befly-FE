@@ -1,3 +1,4 @@
+import { theme } from '@app/styles';
 import styled from 'styled-components';
 
 export const PagingButton = ({ page, isActive, onClick }) => {
@@ -19,8 +20,8 @@ const Wrapper = styled.button`
   height: 17px;
   background: none;
   border: none;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.medium};
   cursor: pointer;
   padding: 0;
   margin: 0;
