@@ -15,8 +15,8 @@ const FooterContainer = styled.footer`
   text-align: center;
   background-color: ${theme.colors.gray[300]};
   color: ${theme.colors.gray[600]};
-  font-family: ${theme.fontFamily.pretendard};
-  font-size: 14px;
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.regular};
   position: relative;
   bottom: 0;
 `;
