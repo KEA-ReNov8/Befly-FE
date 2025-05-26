@@ -5,7 +5,11 @@ import theme from '@app/styles/theme';
 const ScoreSection = ({ scores }) => {
   return (
     <ScoreSectionContainer>
-      <Title>점수 분석</Title>
+      <LegendContainer>
+        <LegendItem color={theme.colors.green.main}>양호</LegendItem>
+        <LegendItem color={theme.colors.other.yellow}>경계</LegendItem>
+        <LegendItem color={theme.colors.red.main}>주의</LegendItem>
+      </LegendContainer>
       <ScoresGrid>
         {scores && scores.length > 0 ? (
           scores.map((score, index) => (
@@ -21,30 +25,12 @@ const ScoreSection = ({ scores }) => {
           <p>점수 데이터를 불러오는 중입니다...</p>
         )}
       </ScoresGrid>
-      <LegendContainer>
-        <LegendItem color="#dc3545">0~29점</LegendItem>
-        <LegendItem color="#fd7e14">30~59점</LegendItem>
-        <LegendItem color="#ffc107">60~79점</LegendItem>
-        <LegendItem color="#28a745">80~100점</LegendItem>
-      </LegendContainer>
     </ScoreSectionContainer>
   );
 };
 
 const ScoreSectionContainer = styled.div`
-  padding: 40px;
-  background-color: ${theme.colors.gray[100]};
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-`;
-
-const Title = styled.h2`
-  font-weight: ${theme.font.semibold.fontWeight};
-  font-family: ${theme.fontFamily.pretendard};
-  font-size: 1.5rem;
-  color: black;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 `;
 
 const ScoresGrid = styled.div`
@@ -55,19 +41,20 @@ const ScoresGrid = styled.div`
 
 const LegendContainer = styled.div`
   display: flex;
-  justify-content: center;
+  width: 100%;
   align-items: center;
   margin-top: 40px;
-  gap: 20px;
+  gap: 40px;
   flex-wrap: wrap;
+  margin-bottom: 20px;
 `;
 
 const LegendItem = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: ${theme.fontSize.small};
-  font-family: ${theme.fontFamily.pretendard};
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.medium};
 
   &::before {
     content: '';
