@@ -41,8 +41,8 @@ const ScoreCard = ({ title, value, content, maxValue = 100 }) => {
     <Card>
       <CardHeader>
         <Stat>
-          <ScoreTitle>{title}</ScoreTitle>
-          <ScoreValue>{animatedValue}/{maxValue}</ScoreValue>
+          <ScoreTitle data-color={animatedPercentage}>{title}</ScoreTitle>
+          <ScoreValue data-color={animatedPercentage}>{animatedValue}</ScoreValue>
         </Stat>
         <ProgressBar>
           <Progress data-percentage={animatedPercentage} />
@@ -58,7 +58,7 @@ const Card = styled.div`
   height: 100%;
   background-color: ${theme.colors.other.white};
   border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -82,17 +82,26 @@ const Stat = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 10px;
-  font-weight: ${theme.font.semibold.fontWeight};
-  font-family: ${theme.fontFamily.pretendard};
+  font-weight: ${theme.fontWeight.bold};
+  font-size: ${theme.fontSize.md};
 `;
 
 const ScoreTitle = styled.h3`
-  color: ${theme.colors.green.main};
+  color: ${props => props['data-color'] >= 70
+    ? theme.colors.green.main        // 초록색
+    : props['data-color'] >= 30
+      ? theme.colors.other.yellow      // 노란색 
+        : theme.colors.red.main    // 빨간색 
+  };
 `;
 
-const ScoreValue = styled.div`
-  //color: #0066cc;
-  color: ${theme.colors.green.main};
+const ScoreValue = styled.div`  
+  color: ${props => props['data-color'] >= 70
+    ? theme.colors.green.main        // 초록색
+    : props['data-color'] >= 30
+      ? theme.colors.other.yellow      // 노란색 
+        : theme.colors.red.main    // 빨간색 
+  };
 `;
 
 const ProgressBar = styled.div`
@@ -107,13 +116,11 @@ const ProgressBar = styled.div`
 const Progress = styled.div.attrs(props => ({
   style: {
     width: `${props['data-percentage']}%`,
-    backgroundColor: props['data-percentage'] >= 80
-      ? '#28a745'        // 초록색
-      : props['data-percentage'] >= 60
-        ? '#ffc107'      // 노란색
-        : props['data-percentage'] >= 30
-          ? '#fd7e14'    // 주황색
-          : '#dc3545'    // 빨간색 
+    backgroundColor: props['data-percentage'] >= 70
+      ? theme.colors.green.main        // 초록색
+      : props['data-percentage'] >= 30
+        ? theme.colors.other.yellow      // 노란색
+          : theme.colors.red.main    // 빨간색 
   }
 }))`
   height: 100%;
@@ -125,10 +132,9 @@ const Content = styled.div`
   margin-bottom: 10px;
   padding: 5px;
   height: 100%;
-  color: ${theme.colors.gray[800]};
-  font-weight: ${theme.font.regular.fontWeight};
-  font-family: ${theme.fontFamily.pretendard};
-  font-size: 16px;
+  color: ${theme.colors.other.black};
+  font-weight: ${theme.fontWeight.regular};
+  font-size: ${theme.fontSize.md};
 `;
 
 export default ScoreCard;
