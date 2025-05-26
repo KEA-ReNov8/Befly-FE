@@ -49,16 +49,16 @@ export default WorryModal;
 
 const Container = styled.div`
   position: absolute;
-  top: 50px;
+  top: 55px;
   right: 45%;
   transform: translateX(50%);
 
   width: 344px;
   height: 342px;
   padding: 36px 28px 24px;
-  background-color: #fff;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  background-color: ${theme.colors.other.white};
+  border-radius: 8px;
+  border: 1px solid ${theme.colors.gray[400]};
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -69,8 +69,8 @@ const Container = styled.div`
 const Title = styled.h2`
   width: 100%;
   color: ${theme.colors.green.main};
-  font-size: 24px;
-  font-weight: 700;
+  font-size: ${theme.fontSize.xl};
+  font-weight: ${theme.fontWeight.bold};
   text-align: center;
   margin-bottom: 10px;
 `;
@@ -80,10 +80,17 @@ const Input = styled.input`
   height: 54px;
   padding: 0 16px;
   border: 1.5px solid ${theme.colors.gray[300]};
-  border-radius: 10px;
-  font-size: 16px;
+  border-radius: 8px;
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.medium};
+
+  &:focus {
+    outline: none;
+    border-color: ${theme.colors.green.main};
+  }
+
   &::placeholder {
-    color: ${theme.colors.gray[500]};
+    color: ${theme.colors.gray[600]};
   }
 `;
 
@@ -100,11 +107,15 @@ const CategoryList = styled.div`
 const SubmitButton = styled.button`
   width: 100%;
   height: 49px;
-  background-color: ${theme.colors.green.main};
   border: none;
   border-radius: 8px;
-  font-size: 15px;
-  font-weight: 500;
-  color: white;
+  background-color: ${theme.colors.green.main};
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.medium};
+  color: ${theme.colors.other.white};
   cursor: pointer;
+
+  &:hover {
+    background-color: ${theme.colors.green.hover};
+  }
 `;
