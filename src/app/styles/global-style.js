@@ -23,19 +23,19 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   html, body {
+    width: 1440px;
     font-size: 100%;
     -webkit-text-size-adjust: 100%; /* 텍스트 크기 조정 비활성화 (iOS 대응) */
     font-family: "Pretendard";
   }
 
   ::-webkit-scrollbar {
-    display: none;
+    //display: none;
   } //스크롤바 여부
 
   #root, body, html {
     margin: 0 auto;
     padding: 0;
-    //width:1440px;
   }
     
   input {
@@ -66,10 +66,19 @@ export const GlobalStyle = createGlobalStyle`
 
   @font-face {
     font-family: "Pretendard";
+    src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff")
+      format("woff");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Pretendard";
     src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
-        format("woff");
+      format("woff");
     font-weight: 400;
     font-style: normal;
+    font-display: swap;
   }
   @font-face {
     font-family: "Pretendard";
@@ -77,28 +86,32 @@ export const GlobalStyle = createGlobalStyle`
       format("woff");
     font-weight: 500;
     font-style: normal;
-    }
+    font-display: swap;
+  }
   @font-face {
     font-family: "Pretendard";
     src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-SemiBold.woff")
       format("woff");
     font-weight: 600;
     font-style: normal;
-    }
+    font-display: swap;
+  }
   @font-face {
     font-family: "Pretendard";
     src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff")
         format("woff");
     font-weight: 700;
     font-style: normal;
-    }
+    font-display: swap;
+  }
 
-  @font-face {
+  /*@font-face {
     font-family: 'Pretendard';
-    src: url('../../node_modules/pretendard/dist/web/variable/PretendardVariable.woff2')
+    src: url('../../public/fonts/PretendardVariable.woff2')
         format('woff2-variations');
     font-weight: 100 900;
-  } //npm 설치로 받은 Pretendard
+    font-display: swap;
+  } //npm 설치로 받은 Pretendard*/
 `;
 
 export default GlobalStyle;
