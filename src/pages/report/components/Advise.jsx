@@ -23,18 +23,17 @@ const AdviseContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 40px;
-  background-color: ${theme.colors.green.light};
+  background-color: ${theme.colors.green[800]};
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   margin-bottom: 20px;
 `;
 
 const Title = styled.h2`
-  font-weight: ${theme.font.semibold.fontWeight};
-  font-family: ${theme.fontFamily.pretendard};
-  font-size: 1.5rem;
-  color: black;
-  margin-bottom: 30px;
+  font-weight: ${theme.fontWeight.bold};
+  font-size: ${theme.fontSize.xl};
+  color: ${theme.colors.other.white};
+  margin-bottom: 20px;
 `;
 
 const AdviseItem = styled.div`
@@ -46,18 +45,16 @@ const AdviseItem = styled.div`
 `;
 
 const AdviseTitle = styled.h3`
-  font-weight: ${theme.font.regular.fontWeight};
-  font-family: ${theme.fontFamily.pretendard};
-  font-size: 1.1rem;
-  color: black;
+  font-weight: ${theme.fontWeight.medium};
+  font-size: ${theme.fontSize.lgMd};
+  color: ${theme.colors.other.white};
   margin-bottom: 8px;
 `;
 
 const AdviseContent = styled.p`
-  font-weight: ${theme.font.regular.fontWeight};
-  font-family: ${theme.fontFamily.pretendard};
-  font-size: 0.95rem;
-  color: ${theme.colors.gray[700]};
+  font-weight: ${theme.fontWeight.regular};
+  font-size: ${theme.fontSize.md};
+  color: ${theme.colors.other.white};
   line-height: 1.8;
 `;
 
