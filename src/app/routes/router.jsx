@@ -27,6 +27,10 @@ export const router = createBrowserRouter([
         element: <KakaoCallback />,
     },*/
   {
+    path: 'social-signup',
+    element: <SignupPage />,
+  },
+  {
     path: 'signup',
     element: <SelfSignupPage />,
   },
@@ -53,7 +57,7 @@ export const router = createBrowserRouter([
         element: <FreePostListPage />,
       },
       {
-        path: 'createfree',
+        path: 'create-free',
         element: <FreePostPage />,
       },
       {
@@ -71,7 +75,7 @@ export const router = createBrowserRouter([
         element: <SharePostListPage />,
       },
       {
-        path: 'createshare',
+        path: 'create-share',
         element: <SharePostPage />,
       },
       {
@@ -116,6 +120,12 @@ export const router = createBrowserRouter([
   },
   {
     path: 'chat',
-    element: <ChatPage />,
+    element: <RootLayout />,
+    children: [
+      {
+        index: true,
+        element: <ChatPage />,
+      },
+    ],
   },
 ]);
