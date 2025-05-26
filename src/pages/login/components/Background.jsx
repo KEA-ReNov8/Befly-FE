@@ -17,26 +17,24 @@ const Background= ({children}) => {
 };
 
 const Container = styled.div`
-  display: flex;
-  margin: 10px auto;
-  width: 74rem;
-  height: 53.5rem;
-  border-radius: 0.5rem;
-  background-color: #ffffff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-top: 30px;
-  margin-bottom: 50px;
-  perspective: 2000px; /* 3D 회전을 위한 시점 */
-  overflow: hidden;
+    width: 74rem;
+    height: 53.5rem;
+    display: flex;
+    overflow: hidden;
+    border-radius: 10px;
+    border: 1px solid ${theme.colors.gray.main};
+    background-color: ${theme.colors.other.white};
+    margin-top: 50px;
+    margin-bottom: 50px;
+    perspective: 2000px; /* 3D 회전을 위한 시점 */
 `;
 
 const Logo = styled.h1`
     margin-bottom: 4rem;
-    color: ${theme.colors.green.main};
     font-size: 80px;
-    font-family: ${theme.fontFamily.pretendard};
-    font-weight: 700;
-`;
+    font-weight: ${theme.fontWeight.bold};
+    color: ${theme.colors.green.main};
+`; //로고 대체 예정
 
 const LeftSide = styled.div`
     flex: 1;
@@ -60,21 +58,21 @@ const LeftSide = styled.div`
 
     h2 {
         color: white;
-        font-size: ${theme.fontSize.large};
-        font-family: ${theme.fontFamily.pretendard};
+        font-size: ${theme.fontSize.xl};
         line-height: 1.2;
         margin-left: 1.5rem;
         margin-top: 1.5rem;
-    }
+    } //배너 대체 예정
 `;
 
 const RightSide = styled.div`
+    width: 50%;
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 1rem;
     animation: openRightPage 0.8s ease-out forwards;
     transform-origin: left center;
 
@@ -89,31 +87,5 @@ const RightSide = styled.div`
         }
     }
 `;
-
-/*const LeftSide = styled.div`
-    flex: 1;
-    display: flex;
-    border-radius: 0.5rem 0 0 0.5rem;
-    flex-direction: column;
-    background-color: ${theme.colors.green.main};
-    
-    h2 {
-        color: white;
-        font-size: ${theme.fontSize.large};
-        font-family: ${theme.fontFamily.pretendard};
-        line-height: 1.2;
-        margin-left: 1.5rem;
-        margin-top: 1.5rem;
-    }
-`;
-
-const RightSide = styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-`;*/
 
 export default Background;
