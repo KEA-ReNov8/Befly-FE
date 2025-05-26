@@ -21,9 +21,14 @@ export const AIAnalysisPage = () => {
 const FullBox = styled.div`
   width: 100%;
   min-height: 470px;
+  max-height: 530px;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const ReportTitle = styled.div`
@@ -33,10 +38,10 @@ const ReportTitle = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  color: #3cc1a1;
-  font-weight: 700;
-  margin-top: 70px;
+  font-size: ${theme.fontSize.lg};
+  color: ${theme.colors.green.main};
+  font-weight: ${theme.fontWeight.bold};
+  margin-top: 10px;
   margin-bottom: 40px;
 `;
 
@@ -44,14 +49,17 @@ const TitleDivider = styled.div`
   width: 165px;
   height: 2px;
   background: ${theme.colors.green.main};
-  margin: 16px auto 0 auto;
+  margin: 20px auto 0 auto;
 `;
 
 const ReportContent = styled.div`
-  font-size: 14px;
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.regular};
   width: 900px;
   padding: 0 40px;
-  color: #222;
+  color: ${theme.colors.other.black};
   line-height: 1.7;
   text-align: flex-start;
+  overflow-y: auto;
+  padding-bottom: 20px;
 `;
