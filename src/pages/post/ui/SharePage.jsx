@@ -125,6 +125,7 @@ export const SharePage = () => {
     <PageContainer>
       <TopBarWrapper>
         <TopBar />
+        <Line>공유함</Line>
       </TopBarWrapper>
       {post && (
         <PostBox
@@ -133,7 +134,7 @@ export const SharePage = () => {
           date={post.createdAt}
           content={post.content}
           stats={{ like: post.likes, comment: post.comments }}
-          onEdit={() => {}}
+          postId={post.id}
           // MindReportSection을 PostBox 내부에 children으로 전달
         >
           <MindReportSection />
@@ -169,4 +170,16 @@ const PageContainer = styled.div`
 `;
 const TopBarWrapper = styled.div`
   flex-shrink: 0;
+`;
+
+const Line = styled.div`
+    width: 100%;
+    height: 66px;
+    background-color: ${theme.colors.green.main};
+    display: flex;
+    align-items: center;
+    font-size: ${theme.fontSize.xl};
+    font-weight: ${theme.fontWeight.bold};
+    padding-left: 220px;
+    color: ${theme.colors.other.white};
 `;
