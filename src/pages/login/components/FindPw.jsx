@@ -57,7 +57,7 @@ const FindPw = ( ) => {
                     <CheckCode type="text" placeholder="인증코드"/>
                     <CheckButton onClick={handleConfirmCode}>코드확인</CheckButton>
                 </CheckCodeContainer>
-                {isCodeConfirmed && <SuccessText>✔ 확인되었습니다.</SuccessText>}
+                {isCodeConfirmed && <SuccessText>확인되었습니다.</SuccessText>}
                 <Password type="password" placeholder="새 비밀번호 입력" />
                 <PasswordCheck type="password" placeholder="비밀번호 확인" />
             </Input>
@@ -67,34 +67,36 @@ const FindPw = ( ) => {
 }
 
 const Container = styled.form`
+    width: 390px;
+    height: 500px;
     display: flex;
     flex-direction: column;
-    width: 24.375rem;
-    height: 100%;
+    justify-content: center;
     align-items: center;
-    border: 1px solid ${theme.colors.gray[500]};
-    border-radius: 1rem;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    align-items: center;
+    border: 1px solid ${theme.colors.gray.main};
+    border-radius: 8px;
     margin-bottom: 100px;
     padding-bottom: 20px;
+    gap: 1rem;
 `;
 
 const Title = styled.h2`
     color: ${theme.colors.green.main};
-    font-size: ${theme.fontSize.medium};
-    font-family: ${theme.fontFamily.pretendard};
-    margin-top: 1.5rem;
-    margin-right: 5rem;
+    font-size: ${theme.fontSize.xl};
+    font-weight: ${theme.fontWeight.semibold};
+    margin-top: 30px;
+    margin-right: 80px;
+    margin-bottom: 15px;
 `;
 
 const Input = styled.div`
+    width: 335.7px;
     display: flex;
     position: relative;
-    width: 335.7px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 1.5rem;
     gap: 1rem;
 `;
 
@@ -104,8 +106,8 @@ const EmailContainer = styled.div`
     justify-content: center;
     width: 100%;
     gap: 1rem;
-    border: 1px solid ${theme.colors.gray[500]};
-    border-radius: 5px;
+    border: 1px solid ${theme.colors.gray.main};
+    border-radius: 8px;
 `;
 
 const Email = styled.input`
@@ -113,8 +115,10 @@ const Email = styled.input`
     width: 100%;
     padding: 0.7rem 1rem;
     border: none;
-    font-size: 1rem;
-    font-family: ${theme.fontFamily.pretendard};
+    border-radius: 8px;
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.medium};
+    color: ${theme.colors.other.black};
     
     &:focus {
         outline: none;
@@ -127,11 +131,12 @@ const SendButton = styled.button`
     height: 30px;
     cursor: pointer;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     margin-right: 10px;
-    font-family: ${theme.fontFamily.pretendard};
-    background-color: ${theme.colors.green.main};
+    font-size: ${theme.fontSize.smMd};
+    font-weight: ${theme.fontWeight.medium};
     color: ${theme.colors.other.white};
+    background-color: ${theme.colors.green.main};
 
     &:hover {
         background-color: ${theme.colors.green.hover};
@@ -144,17 +149,20 @@ const CheckCodeContainer = styled.div`
     justify-content: center;
     width: 100%;
     gap: 1rem;
-    border: 1px solid ${theme.colors.gray[500]};
-    border-radius: 5px;
+    border: 1px solid ${theme.colors.gray.main};
+    border-radius: 8px;
 `;
 
 const CheckCode = styled.input`
     flex: 1;
+    width: 100%;
     padding: 0.7rem 1rem;
     border: none;
-    font-size: 1rem;
-    font-family: ${theme.fontFamily.pretendard};
-
+    border-radius: 8px;
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.medium};
+    color: ${theme.colors.other.black};
+    
     &:focus {
         outline: none;
         border-color: ${theme.colors.green.main};
@@ -164,12 +172,14 @@ const CheckCode = styled.input`
 const CheckButton = styled.button`
     width: 66px;
     height: 30px;
-    margin-right: 10px;
-    background-color: ${theme.colors.green.main};
-    color: white;
-    border: none;
-    border-radius: 5px;
     cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    margin-right: 10px;
+    font-size: ${theme.fontSize.smMd};
+    font-weight: ${theme.fontWeight.medium};
+    color: ${theme.colors.other.white};
+    background-color: ${theme.colors.green.main};
 
     &:hover {
         background-color: ${theme.colors.green.hover};
@@ -179,12 +189,13 @@ const CheckButton = styled.button`
 const Password = styled.input`
     flex: 1;
     width: 100%;
-    width: 100%;
     padding: 0.7rem 1rem;
-    border: 1px solid ${theme.colors.gray[500]};
-    border-radius: 5px;
-    font-size: 1rem;
-
+    border: 1px solid ${theme.colors.gray.main};
+    border-radius: 8px;
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.medium};
+    color: ${theme.colors.other.black};
+    
     &:focus {
         outline: none;
         border-color: ${theme.colors.green.main};
@@ -194,12 +205,13 @@ const Password = styled.input`
 const PasswordCheck = styled.input`
     flex: 1;
     width: 100%;
-    width: 100%;
     padding: 0.7rem 1rem;
-    border: 1px solid ${theme.colors.gray[500]};
-    border-radius: 5px;
-    font-size: 1rem;
-
+    border: 1px solid ${theme.colors.gray.main};
+    border-radius: 8px;
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.medium};
+    color: ${theme.colors.other.black};
+    
     &:focus {
         outline: none;
         border-color: ${theme.colors.green.main};
@@ -209,14 +221,14 @@ const PasswordCheck = styled.input`
 const SubmitButton = styled.button`
     width: 335.7px;
     height: 40px;
-    padding 1rem;
-    margin-top: 1.5rem;
     background-color: ${theme.colors.green.main};
-    font-size: 1rem;
-    color: white;
+    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.medium};
+    color: ${theme.colors.other.white};
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
+    margin-top: 20px;
 
     &:hover {
         background-color: ${theme.colors.green[80]};
