@@ -23,23 +23,21 @@ const AnalysisContainer = styled.div`
   padding: 40px;
   background-color: ${theme.colors.other.white};
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 40px;
 `;
 
 const Title = styled.h2`
-  font-weight: ${theme.font.semibold.fontWeight};
-  font-family: ${theme.fontFamily.pretendard};
-  font-size: 1.5rem;
-  color: black;
-  margin-bottom: 15px;
+  font-weight: ${theme.fontWeight.semibold};
+  font-size: ${theme.fontSize.xl};
+  color: ${theme.colors.green.main};
+  margin-bottom: 20px;
 `;
 
 const Content = styled.div`
-  font-weight: ${theme.font.regular.fontWeight};
-  font-family: ${theme.fontFamily.pretendard};
-  font-size: 1rem;
-  color: ${theme.colors.gray[700]};
+  font-weight: ${theme.fontWeight.regular};
+  font-size: ${theme.fontSize.md};
+  color: ${theme.colors.gray[900]};
   border-radius: 8px;
   //border-left: 4px solid ${theme.colors.green.light};
   padding-left: 16px;
