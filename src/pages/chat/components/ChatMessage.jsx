@@ -34,7 +34,7 @@ const MessageBubble = styled.div`
   position: relative;
   max-width: 70%;
   padding: 16px 16px;
-  border-radius: 15px;
+  border-radius: 8px;
   border:none;
   word-wrap: break-word;
   line-height: 1.5;
