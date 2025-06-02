@@ -39,7 +39,7 @@ const ReportContainer = styled.div`
   max-width: 1042px;
   margin: 0 auto;
   padding: 5px;
-  margin-top: 50px;
+  margin-top: 25px;
   background-color: transparent;
 
   animation: unfoldReport 1.5s ease forwards;
@@ -77,7 +77,6 @@ const ReportTitle = styled.h1`
   font-weight: ${theme.fontWeight.bold};
   font-size: ${theme.fontSize.xl};
   color: ${theme.colors.green.main};
-  margin-bottom: 20px;
   text-align: center;
 
   word-break: keep-all;

@@ -41,6 +41,7 @@ export const PostBox = ({ title, author, date, content, stats, postId, children 
 };
 
 const PostContainer = styled.div`
+  position: relative;
   width: 1044px;
   padding: 30px;
   flex-shrink: 0;
