@@ -29,7 +29,8 @@ const StyledButton = styled.button`
   }
 
   &.selected {
-    background-color: ${theme.colors.green.light};
+    background-color: ${theme.colors.green.main};
+    color: ${theme.colors.other.white};
     border: 1px solid ${theme.colors.green.light};
     &:hover {
       background-color: ${theme.colors.green.hover};

@@ -27,7 +27,7 @@ const Wrapper = styled.div`
   padding: 6px 4px;
   font-size: ${theme.fontSize.sm};
   font-weight: ${theme.fontWeight.medium};
-  color: ${theme.colors.gray[800]};
+  color: ${theme.colors.other.white};
 
   background-color: ${(props) =>props['data-bgColor'] ? props['data-bgColor'] : 'transparent'};
   cursor: pointer;
