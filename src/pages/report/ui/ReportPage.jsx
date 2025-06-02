@@ -47,7 +47,7 @@ const Wrapper = styled.div`
     align-items: center;
     width: 1440px;
     margin: 0 auto;
-    background-color: ${theme.colors.gray.report};
+    background-color: ${theme.colors.other.white};
     padding-bottom: 110px;
 `;
 

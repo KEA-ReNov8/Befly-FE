@@ -43,7 +43,7 @@ const LegendContainer = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
-  margin-top: 40px;
+  margin-top: 5px;
   gap: 40px;
   flex-wrap: wrap;
   margin-bottom: 20px;
