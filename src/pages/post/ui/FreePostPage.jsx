@@ -141,8 +141,8 @@ const Line = styled.div`
 const EditorContainer = styled.div`
   width: 1044px;
   height: 610px;
-  border-top: none;
   border: 1px solid ${theme.colors.gray[400]};
+  border-top: none;
   padding: 40px;
   display: flex;
   flex-direction: column;

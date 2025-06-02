@@ -65,7 +65,7 @@ const CategoryPill = styled.div`
   height: 30px;
   padding: 0 5px;
   background: ${(props) => props.color || theme.colors.green.main};
-  color: ${theme.colors.gray[900]};
+  color: ${theme.colors.other.white};
   font-size: ${theme.fontSize.smMd};
   font-weight: ${theme.fontWeight.medium};
   border-radius: 999px;
