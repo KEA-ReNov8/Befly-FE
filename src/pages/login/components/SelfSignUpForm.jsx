@@ -1,10 +1,36 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TermModal from './TermModal';
-//reactform, zod, store 예정
+import Message from './Message';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { UserInfoSchema } from '@login/feature/schema';
+import { useSignupMutation } from '@login/feature/hooks/useSignupMutation';
+import { handleOnSubmitSelf } from '@login/feature/utils/handleOnSubmitSelf';
+//import { useSignupStore } from '@login/feature/store/useSignupStore';
+import defaultProfile from '@shared/assets/icons/defaultUser.svg';
 
-const SelfSignUpForm = ({ onSubmit }) => {
+const SelfSignUpForm = ({ onSuccess }) => {
+    //const { setClientId, setPassword, setNickName } = useSignupStore();
+
+    const { 
+        register, 
+        getValues,
+        watch,
+        setValue,
+        formState: { errors, isValid },
+    } = useForm({
+        resolver: zodResolver(UserInfoSchema),
+        mode: 'onChange',
+    });
+
+    const signupMutation = useSignupMutation({
+        onSuccess: () => {
+            if (onSuccess) onSuccess();
+        },
+    });
+
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleModalOpen = () => {
@@ -14,27 +40,33 @@ const SelfSignUpForm = ({ onSubmit }) => {
     const handleModalClose = () => {
         setIsModalOpen(false);
     }
-    
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        onSubmit(e);
-    }
 
     return(
-        <Container onSubmit = {handleSubmit}>
+        <Container onSubmit = {(e) => {
+            e.preventDefault();
+            handleOnSubmitSelf(e, getValues, signupMutation);
+        }}>
             <Title>회원가입을 위해 <br/> 정보를 입력해주세요.</Title>
             <Profile>
-                <ProfileImage />
-                <AddButton>+</AddButton>
+                {/*<ImageInput id="image-upload"type='file' accept="image/*" {...register('image')} />*/}
+                {/*<ProfileImage src="https://objectstorage.kr-central-2.kakaocloud.com/v1/af4c072eeaf845b5be29839350a03250/belfy-object-storage/profile_img/default-user-icon.png" />*/}
+                <img src={defaultProfile} alt="defaultProfile" />
+                {/*<AddLabel htmlFor="image-upload">+</AddLabel>*/} 
             </Profile>
             <Input>
-                <Email type="email" placeholder="이메일" required/>
+                <EmailContainer>
+                    <Email type="text" placeholder="이메일" {...register('clientId')} isValid={isValid || !errors.clientId} />
+                    {/*<CheckButton>중복확인</CheckButton>*/}
+                </EmailContainer>
+                <Message isValid={!errors.clientId} message={errors.clientId?.message} />
                 <NicknameContainer>
-                    <Nickname type ="text" placeholder="닉네임" maxLength={10} required/>
-                    <CheckButton>중복확인</CheckButton>
+                    <Nickname type ="text" placeholder="닉네임" maxLength={10} {...register('nickName')} isValid={isValid || !errors.nickName}/>
                 </NicknameContainer>
-                <Password type="password" placeholder="비밀번호" required/>
-                <PasswordCheck type="password" placeholder="비밀번호 확인" required/>
+                <Message isValid={!errors.nickName} message={errors.nickName?.message} />
+                <Password type="password" placeholder="비밀번호" {...register('password')} isValid={isValid || !errors.password}/>
+                <Message isValid={!errors.password} message={errors.password?.message} />
+                <PasswordCheck type="password" placeholder="비밀번호 확인" {...register('passwordConfirm')} isValid={isValid || !errors.passwordConfirm}/>
+                <Message isValid={!errors.passwordConfirm} message={errors.passwordConfirm?.message} />
             </Input>
             <TermContainer>
                 <Term type="checkbox" id="term" required />
@@ -71,17 +103,32 @@ const Title = styled.h2`
 const Profile = styled.div`
     position: relative;
     display: flex;
-    margin-bottom: 2rem;
+    align-items: center;
+    justify-content: center;
+    width: 12rem;
+    height: 12rem;
+    border-radius: 50%;
+    background-color: ${theme.colors.gray[100]};
+
+    img {
+        width: 60%;
+        height: 60%;
+    }
 `;
 
 const ProfileImage = styled.img`
     width: 12rem;
     height: 12rem;
     border-radius: 50%;
-    background-color: ${theme.colors.gray.main};
+    background-color: ${theme.colors.gray[100]};
+    padding: 40px 40px 40px 40px;
 `;
 
-const AddButton = styled.button`
+const ImageInput = styled.input`
+  display: none;
+`;
+
+const AddLabel = styled.label`
     position: absolute;
     top: 80%;
     left: 78%;
@@ -112,15 +159,28 @@ const Input = styled.div`
     align-items: center;
     justify-content: center;
     margin-top: 1.5rem;
-    gap: 1rem;
+    gap: 0.5rem;
 `;
 
+const EmailContainer = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    gap: 1rem;
+    border: 1px solid ${theme.colors.gray.main};
+
+    &:focus-within {
+        border-color: ${theme.colors.green.main};
+    }
+`;
 const Email = styled.input`
     flex: 1;
     width: 100%;
     padding: 0.7rem 1rem;
     border-radius: 8px;
-    border: 1px solid ${theme.colors.gray.main};
+    border: none;
     font-size: ${theme.fontSize.md};
     font-weight: ${theme.fontWeight.medium};
     
@@ -136,8 +196,11 @@ const NicknameContainer = styled.div`
     align-items: center;
     justify-content: center;
     border-radius: 8px;
-    gap: 1rem;
     border: 1px solid ${theme.colors.gray.main};
+
+    &:focus-within {
+        border-color: ${theme.colors.green.main};
+    }
 `;
 
 const Nickname = styled.input`
@@ -246,6 +309,22 @@ const SubmitButton = styled.button`
 `;
 
 export default SelfSignUpForm;
+
+   //이미지 변환 코드
+    /*const imgFile = watch('image');
+    const [imagePreview, setImagePreview] = useState(undefined);
+
+    useEffect(() => {
+        if(imgFile && imgFile[0]) {
+            const file = imgFile[0];
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+                setValue('previewImage', reader.result);
+            };
+        }
+    }, [imgFile]);*/
 
 /*const Gender = styled.div`
     display: flex;
