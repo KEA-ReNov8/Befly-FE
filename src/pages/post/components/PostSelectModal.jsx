@@ -30,8 +30,8 @@ const PostSelectModal = ({ postId }) => {
 
 const ModalContainer = styled.div`
     position: absolute;
-    top: 240px;
-    right: 260px;
+    top: 70px;
+    right: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -44,6 +44,7 @@ const ModalContainer = styled.div`
 `;
 
 const EditButton = styled.div`
+    width: 100%;
     background-color: ${theme.colors.other.white};
     font-size: ${theme.fontSize.md};
     font-weight: ${theme.fontWeight.bold};
@@ -52,9 +53,12 @@ const EditButton = styled.div`
     border-bottom: 1px solid ${theme.colors.gray[400]};
     margin-bottom: 10px;
     cursor: pointer;
+    text-align: center;
 `;
 
 const DeleteButton = styled.div`
+    width: 100%;
+    text-align: center;
     background-color: ${theme.colors.other.white};
     font-size: ${theme.fontSize.md};
     font-weight: ${theme.fontWeight.bold};
