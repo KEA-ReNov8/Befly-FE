@@ -126,6 +126,10 @@ const Container = styled.div`
   position: relative;
   overflow: hidden;
   background-color: ${theme.colors.other.white};
+  border-top: 1px solid ${theme.colors.gray[400]};
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const MenuButtonContainer = styled.div`
