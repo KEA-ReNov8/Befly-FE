@@ -7,7 +7,7 @@ const ConfirmModal = ( {onClose}) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate('/home');
+        navigate('/login');
     };
 
     return (
