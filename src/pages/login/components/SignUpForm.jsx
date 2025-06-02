@@ -5,14 +5,14 @@ import TermModal from './TermModal';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SocialUserInfoSchema } from '@login/feature/schema';
-import { useSocialSignupMutation } from '@login/feature/hooks/useSocialSignupMutataion';
+import { useSocialSignupMutation } from '@pages/login/feature/hooks/useSocialSignupMutation';
 import { handleOnSubmit } from '@login/feature/utils/handleOnSubmit';
 import Message from './Message';
 import defaultProfile from '@shared/assets/icons/defaultUser.svg';
 //import { useSocialSignupStore } from '@login/feature/store/useSocialSignupStore';
 
 const SignUpForm = ({ onSuccess }) => {
-    document.cookie = "tempClientId=4286064884; path=/; max-age=3600";
+    //document.cookie = "tempClientId=4286064884; path=/; max-age=3600";
 
     //const { setClientId, setNickname, setPhotoUrl } = useSocialSignupStore();
 
