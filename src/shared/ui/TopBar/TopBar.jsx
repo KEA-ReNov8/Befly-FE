@@ -4,6 +4,8 @@ import theme from '@app/styles/theme';
 import { useNavigate, useLocation } from 'react-router-dom';
 import WorryModal from './WorryModal';
 import NotificationModal from './NotificationModal';
+import logo from '@shared/assets/imgs/befly_logo.svg';
+import defaultProfile from '@shared/assets/icons/defaultUser.svg';
 
 const TopBar = () => {
   const navigate = useNavigate();
@@ -19,7 +21,9 @@ const TopBar = () => {
 
   return (
     <Container>
-      <Logo onClick={() => navigate('/home')}>Be, Fly</Logo>
+      <Logo onClick={() => navigate('/')}>
+        <img src={logo} alt="Be, Fly" />
+      </Logo>
       <Nav>
         <NavButton onClick={() => navigate('/free', { state: { from: location.pathname } })}>
           자유함
@@ -32,7 +36,9 @@ const TopBar = () => {
       </Nav>
       <RightSection>
         <NotificationWrapper>
-          <NotificationButton onClick={toggleNotificationModal} />
+          <NotificationButton onClick={toggleNotificationModal}>
+            <img src={defaultProfile} alt="defaultProfile" />
+          </NotificationButton>
           {isNotificationModalOpen && <NotificationModal />}
         </NotificationWrapper>
         <WorryWrapper>
@@ -53,14 +59,11 @@ const Container = styled.header`
   display: flex;
   align-items: center;
   background-color: ${theme.colors.other.white};
-  border-bottom: 1px solid ${theme.colors.gray[400]};
 `;
 
 const Logo = styled.div`
-  margin-right: 170px;
-  color: ${theme.colors.green.main};
-  font-size: ${theme.fontSize.title};
-  font-weight: ${theme.fontWeight.bold};
+  margin-right: 125px;
+  margin-left: 10px;
   cursor: pointer;
 `;
 const Nav = styled.nav`
@@ -116,6 +119,14 @@ const NotificationButton = styled.div`
   height: 41px;
   border: 2px solid ${theme.colors.green.main};
   border-radius: 50%;
-  background-color: ${theme.colors.gray[400]};
+  background-color: ${theme.colors.gray[100]};
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
 `;
