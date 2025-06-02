@@ -15,23 +15,45 @@ import { UserProfilePage } from '@pages/profile';
 import { ReportPage } from '@pages/report';
 import { ChatPage } from '@pages/chat';
 import { ErrorPage } from '@pages/error/ErrorPage';
+import { ProtectedRouter } from './ProtectedRouter';
 
 export const router = createBrowserRouter([
-  {
+  //작업 완료시 프로텍트 라우터로 전환 예정
+  /*{
     path: '/',
+    element: <ProtectedRouter />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        path: 'login',
+        element: <LoginPage />,
+      },
+      {
+        path: 'signup',
+        element: <SignupPage />,
+      },
+      {
+        path: 'common-signup',
+        element: <SelfSignupPage />,
+      },
+      {
+        path: 'find-pw',
+        element: <FindPwPage />,
+      },
+    ]
+  },*/
+  {
+    path: '/login',
     element: <LoginPage />,
     errorElement: <ErrorPage />,
   },
-  /*{
-        path: '/oauth/kakao/callback',
-        element: <KakaoCallback />,
-    },*/
   {
-    path: 'social-signup',
+    path: 'signup',
     element: <SignupPage />,
   },
   {
-    path: 'signup',
+    path: 'common-signup',
     element: <SelfSignupPage />,
   },
   {
@@ -39,7 +61,7 @@ export const router = createBrowserRouter([
     element: <FindPwPage />,
   },
   {
-    path: 'home',
+    path: '/',
     element: <RootLayout />,
     children: [
       {
