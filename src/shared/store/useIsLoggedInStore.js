@@ -11,6 +11,7 @@ const useIsLoggedInStore = create(
             logout: () => {
                 set({ isLoggedIn: false, isFirstMount: true});
                 localStorage.removeItem('is-logged-in-store');
+                localStorage.removeItem('myInfoStore');
             }
         }),
         {
