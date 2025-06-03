@@ -115,30 +115,35 @@ const SearchContainer = styled.div`
 `;
 
 const TabContainer = styled.div`
-    margin-top: 30px;
-    width: 280px;
+    width: 100%;
     display: flex;
-    gap: 15px;
-    margin-left: 80px;
+    align-items: center;    
+    margin-top: 30px;
+    margin-left: 100px;
+    gap: 30px;
 `;
 
 const TabButton = styled.button`
-    flex: 1;
+    width: 80px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     padding: 10px;
     border: none;
     border-radius: 20px;
     border: 1px solid ${theme.colors.gray[400]};
-    background-color: ${props => props['data-isActive'] ? theme.colors.green.hover : 'transparent'};
-    color: ${props => props['data-isActive'] ? theme.colors.other.black : theme.colors.gray[900]};
-    border: 1px solid ${props => props['data-isActive'] ? theme.colors.green.hover : theme.colors.gray[400]};
+    background-color: ${props => props['data-isActive'] ? theme.colors.green.main : 'transparent'};
+    color: ${props => props['data-isActive'] ? theme.colors.other.white : theme.colors.gray[900]};
+    border: 1px solid ${props => props['data-isActive'] ? theme.colors.green.light : theme.colors.gray[400]};
     cursor: pointer;
     transition: all 0.3s;
-    font-size: ${theme.fontSize.smMd};
+    font-size: ${theme.fontSize.md};
     font-weight: ${theme.fontWeight.medium};
     
     &:hover {
         background-color: ${props => props['data-isActive'] ? theme.colors.green.hover : theme.colors.gray[300]};
-        transition: scale(1.05);
     }
 `;
 

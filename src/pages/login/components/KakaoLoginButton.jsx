@@ -2,21 +2,17 @@ import styled from 'styled-components';
 import kakaobutton from '@shared/assets/icons/KakaoLoginButton.svg';
 
 const KakaoLoginButton = () => {
-    const link = 'none';//`${import.meta.env.VITE_API_URL}/oauth2/authorization/kakao`;
+    
+    const handleKakaoLogin = () => {
+        window.location.href = `${import.meta.env.VITE_SERVER_URL}/oauth2/authorization/kakao`;
+    };
 
     return (
-        <Link href={link}>
-            <Button>
-                <Img src={kakaobutton} alt='카카오 로그인' />
-            </Button>
-        </Link>
+         <Button onClick={handleKakaoLogin}>
+            <Img src={kakaobutton} alt='카카오 로그인' />
+        </Button>
     )
 };
-
-const Link = styled.a`
-    text-decoration: none;
-    cursor: pointer;
-`;
 
 const Button = styled.button`
     width: 28.375rem;

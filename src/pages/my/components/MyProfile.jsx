@@ -121,6 +121,9 @@ const ShareButton = styled.button`
     cursor: pointer;
     border: 1px solid ${ (props) => props['data-active'] ? theme.colors.green.main : theme.colors.gray[400]};
     transition: all 0.3s;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 
     &:hover {
         background-color: ${theme.colors.green.hover};
@@ -139,6 +142,9 @@ const FreeButton = styled.button`
     cursor: pointer;
     border: 1px solid ${ (props) => props['data-active'] ? theme.colors.green.main : theme.colors.gray[400]};
     transition: all 0.3s;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 
     &:hover {
         background-color: ${theme.colors.green.hover};

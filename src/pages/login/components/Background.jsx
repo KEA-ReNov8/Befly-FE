@@ -1,20 +1,54 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+import { useEffect, useState } from 'react';
 import theme from '@app/styles/theme';
+import logo from '@shared/assets/imgs/main_logo.svg';
+import door from '@shared/assets/imgs/door.svg';
+import door2 from '@shared/assets/imgs/door2.svg';
+import door3 from '@shared/assets/imgs/door3.svg';
+
+const doors = [door, door2, door3];
 
 const Background= ({children}) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+          setCurrentIndex((prev) => (prev + 1) % doors.length);
+        }, 6000); // 6초마다 전환
+    
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <Container>
             <LeftSide>
-                <h2>당신의 고민을 함께 나누고,</h2>
-                <h2>가벼운 마음으로 날아보세요.</h2>
+                {doors.map((door, index) => (
+                    <DoorImage 
+                    key={index}
+                    src={door}
+                    alt={`이미지 ${index + 1}`}
+                    $isVisible={index === currentIndex} />
+                ))}
             </LeftSide>
             <RightSide>
-                <Logo>Be, Fly</Logo>
+                <Logo>
+                    <img src={logo} alt="BeFly" />
+                </Logo>
                 {children}
             </RightSide>
         </Container>
     )
 };
+
+// 애니메이션 정의
+const fadeInOut = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
 
 const Container = styled.div`
     width: 74rem;
@@ -29,17 +63,25 @@ const Container = styled.div`
     perspective: 2000px; /* 3D 회전을 위한 시점 */
 `;
 
+const DoorImage = styled.img`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
+  transition: opacity 1s ease-in-out;
+  animation: ${({ $isVisible }) => ($isVisible ? fadeInOut : 'none')} 1s ease-in-out;
+`;
+
 const Logo = styled.h1`
     margin-bottom: 4rem;
-    font-size: 80px;
-    font-weight: ${theme.fontWeight.bold};
-    color: ${theme.colors.green.main};
-`; //로고 대체 예정
+`;
 
 const LeftSide = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
+    position: relative;
     border-radius: 0.5rem 0 0 0.5rem;
     background-color: ${theme.colors.green.main};
     animation: openLeftPage 0.8s ease-out forwards;

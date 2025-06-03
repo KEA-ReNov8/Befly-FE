@@ -68,7 +68,7 @@ const FindPw = ( ) => {
 
 const Container = styled.form`
     width: 390px;
-    height: 500px;
+    height: 400px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -76,7 +76,7 @@ const Container = styled.form`
     align-items: center;
     border: 1px solid ${theme.colors.gray.main};
     border-radius: 8px;
-    margin-bottom: 100px;
+    margin-bottom: 200px;
     padding-bottom: 20px;
     gap: 1rem;
 `;

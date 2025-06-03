@@ -1,10 +1,46 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TermModal from './TermModal';
-//reactform, zod, store 예정
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SocialUserInfoSchema } from '@login/feature/schema';
+import { useSocialSignupMutation } from '@pages/login/feature/hooks/useSocialSignupMutation';
+import { handleOnSubmit } from '@login/feature/utils/handleOnSubmit';
+import Message from './Message';
+import defaultProfile from '@shared/assets/icons/defaultUser.svg';
+//import { useSocialSignupStore } from '@login/feature/store/useSocialSignupStore';
 
-const SignUpForm = ({ onSubmit }) => {
+const SignUpForm = ({ onSuccess }) => {
+    //document.cookie = "tempClientId=4286064884; path=/; max-age=3600";
+
+    //const { setClientId, setNickname, setPhotoUrl } = useSocialSignupStore();
+
+    const { 
+        register, 
+        getValues,
+        setValue,
+        formState: { errors, isValid },
+    } = useForm({
+        resolver: zodResolver(SocialUserInfoSchema),
+        mode: 'onChange',
+    });
+
+    const signupMutation = useSocialSignupMutation({
+        onSuccess: () => {
+            if (onSuccess) onSuccess();
+        },
+    });
+
+    useEffect(() => {
+        const cookie = document.cookie
+          .split('; ')
+          .find((row) => row.startsWith('tempClientId='));
+        if (cookie) {
+          const clientId = cookie.split('=')[1];
+          setValue('clientId', clientId);
+        }
+      }, [setValue]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -15,25 +51,26 @@ const SignUpForm = ({ onSubmit }) => {
     const handleModalClose = () => {
         setIsModalOpen(false);
     }
-    
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        onSubmit(e);
-        }
 
     return(
-        <Container onSubmit = {handleSubmit}>
+        <Container onSubmit = {(e) => {
+            e.preventDefault();
+            handleOnSubmit(e, getValues, signupMutation);
+        }}>
             <Title>회원가입을 위해 <br/> 정보를 입력해주세요.</Title>
             <Profile>
-                <ProfileImage />
-                <AddButton>+</AddButton>
+                {/*<ImageInput id="image-upload"type='file' accept="image/*" {...register('image')} />*/}
+                {/*<ProfileImage src="https://objectstorage.kr-central-2.kakaocloud.com/v1/af4c072eeaf845b5be29839350a03250/belfy-object-storage/profile_img/default-user-icon.png" />*/}
+                <img src={defaultProfile} alt="defaultProfile" />
+                {/*<AddLabel htmlFor="image-upload">+</AddLabel>*/}
             </Profile>
             <Input>
-                <Email type="email" placeholder="이메일" required/>
+                <Email type="text" placeholder="Client ID" disabled {...register('clientId')} isValid={isValid || !errors.clientId}/>
                 <NicknameContainer>
-                    <Nickname type ="text" placeholder="닉네임" maxLength={10} required/>
-                    <CheckButton>중복확인</CheckButton>
+                    <Nickname type ="text" placeholder="닉네임" maxLength={10} {...register('nickName')} isValid={isValid || !errors.nickName}/>
+                    {/*<CheckButton>중복확인</CheckButton>*/}
                 </NicknameContainer>
+                <Message isValid={!errors.nickName} message={errors.nickName?.message} />
             </Input>
             <TermContainer>
                 <Term type="checkbox" id="term" required />
@@ -53,6 +90,7 @@ const Container = styled.form`
     justify-content: center;
     border-radius: 8px;
     border: 1px solid ${theme.colors.gray.main};
+    margin-top: 10%;
     margin-bottom: 80px;
     padding-bottom: 30px;
 `;
@@ -70,17 +108,34 @@ const Title = styled.h2`
 const Profile = styled.div`
     position: relative;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 12rem;
+    height: 12rem;
+    border-radius: 50%;
+    background-color: ${theme.colors.gray[100]};
     margin-bottom: 2rem;
+
+    img {
+        width: 60%;
+        height: 60%;
+    }
+`;
+
+const ImageInput = styled.input`
+  display: none;
 `;
 
 const ProfileImage = styled.img`
     width: 12rem;
     height: 12rem;
     border-radius: 50%;
-    background-color: ${theme.colors.gray.main};
+    background-color: ${theme.colors.gray[100]};
+    object-fit: cover;
+    padding: 40px 40px 40px 40px;
 `;
 
-const AddButton = styled.button`
+const AddLabel = styled.label`
     position: absolute;
     top: 80%;
     left: 78%;
@@ -110,8 +165,7 @@ const Input = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 1.5rem;
-    gap: 1rem;
+    gap: 0.5rem;
 `;
 
 const Email = styled.input`
@@ -122,6 +176,7 @@ const Email = styled.input`
     border: 1px solid ${theme.colors.gray.main};
     font-size: ${theme.fontSize.md};
     font-weight: ${theme.fontWeight.medium};
+    display: none;
     
     &:focus {
         outline: none;
@@ -137,6 +192,10 @@ const NicknameContainer = styled.div`
     border-radius: 8px;
     gap: 1rem;
     border: 1px solid ${theme.colors.gray.main};
+    
+    &:focus-within {
+        border-color: ${theme.colors.green.main};
+    }
 `;
 
 const Nickname = styled.input`
@@ -150,7 +209,6 @@ const Nickname = styled.input`
     
     &:focus {
         outline: none;
-        border-color: ${theme.colors.green.main};
     }
 `;
 

@@ -1,7 +1,14 @@
 {
     "compilerOptions": {
+        "target": "es2020",
+        "module": "es2020",
+        "moduleResolution": "bundler",
+        "allowJs": true,
         "jsx": "react-jsx",
-        "checkJs": true,
+        //"checkJs": true, // true로 하면 JS도 타입체크됨
+        "isolatedModules": true,
+        "moduleDetection": "force",
+        "allowSyntheticDefaultImports": true,
         "baseUrl": ".",
         "paths": {
             "@/*": ["src/*"],

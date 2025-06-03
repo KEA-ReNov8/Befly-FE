@@ -8,9 +8,7 @@ import Footer from '@shared/ui/Footer';
 export const SignupPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    //아마 훅으로 연결하면 될 듯
-    const handleFormSubmit = (e) => {
-        e.preventDefault();
+    const handleSignupSuccess = (e) => {
         setIsModalOpen(true);
     };
     
@@ -20,7 +18,7 @@ export const SignupPage = () => {
 
     return (
         <Wrapper>
-            <SignUpForm onSubmit={handleFormSubmit}/>
+            <SignUpForm onSuccess={handleSignupSuccess}/>
             <Footer />
             {isModalOpen && (
                 <ModalOverlay>
@@ -34,11 +32,11 @@ export const SignupPage = () => {
 };
 
 const Wrapper = styled.div`
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 5%;
 `;
 
 const ModalOverlay = styled.div`
