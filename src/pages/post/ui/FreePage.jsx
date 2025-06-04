@@ -5,14 +5,19 @@ import { useRef, useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { PostBox, CommentInputBox, CommentListBox, PageBottomBox } from '../components/index';
 import { mockFreePostData, dummyComments } from '../data/DummyPosts';
+import { useMyInfoStore } from '@shared/store/useMyInfoStore';
+import { useFreePostDetailQuery } from '@post/feature/hooks/useFreePostDetailQuery';
 
 export const FreePage = () => {
-  // 로그인한 유저의 id (실제 서비스에서는 context나 props로 받아올 수 있음)
-  const userId = 123;
   const navigate = useNavigate();
   const location = useLocation();
+
+  // 로그인한 유저의 id를 Zustand store에서 가져옴
+  const { myInfo } = useMyInfoStore();
+  const userId = myInfo?.clientId;
+
   const { postId } = useParams();
-  const [post, setPost] = useState(null);
+  const { data: post, isLoading, error } = useFreePostDetailQuery(postId);
 
   // 댓글 입력창의 값 상태
   const [commentInput, setCommentInput] = useState('');
@@ -25,27 +30,13 @@ export const FreePage = () => {
   // 댓글 입력창 textarea DOM 참조 (높이 자동 조절용)
   const commentRef = useRef(null);
 
-  useEffect(() => {
-    // postId에 해당하는 게시글 찾기
-    const foundPost = mockFreePostData.find((p) => p.id === parseInt(postId));
-    if (foundPost) {
-      setPost(foundPost);
-      // 임시로 dummyComments를 사용
-      setComments(
-        dummyComments.map((comment) => ({
-          id: comment.id,
-          author: comment.writer,
-          authorId: Math.floor(Math.random() * 1000), // 임시 authorId
-          content: comment.content,
-          date: comment.createdAt,
-          replies: [],
-        })),
-      );
-    } else {
-      // 게시글을 찾지 못한 경우 목록으로 이동
-      navigate('/free');
-    }
-  }, [postId, navigate]);
+  // 로딩/에러/데이터 없음 처리
+  if (isLoading) return <div>로딩중...</div>;
+  if (error) return <div>에러가 발생했습니다.</div>;
+  if (!post || !post.result) return <div>게시글이 없습니다.</div>;
+
+  // post.result에서 실제 데이터 추출
+  const postData = post.result;
 
   // 댓글 입력창 값 변경 핸들러 (textarea 높이 자동 조절 포함)
   const handleInputChange = (e) => {
@@ -142,17 +133,15 @@ export const FreePage = () => {
         <TopBar />
         <Line>자유함</Line>
       </TopBarWrapper>
-      {/* 게시글 본문 영역 */}
-      {post && (
-        <PostBox
-          title={post.title}
-          author={post.nickname}
-          date={post.createdAt}
-          content={post.content}
-          stats={{ like: post.likes, comment: post.comments }}
-          postId={post.id}
-        />
-      )}
+      {/* 게시글 상세 데이터 렌더링 */}
+      <PostBox
+        title={postData.freeTitle}
+        author={postData.userId} // 필요시 닉네임으로 변환
+        date={postData.createdAt || '-'}
+        content={postData.freeContent}
+        imageUrl={postData.imageUrl}
+        postId={postData.freeId}
+      />
       {/* 댓글 입력창 */}
       <CommentInputBox
         value={commentInput}
@@ -165,9 +154,9 @@ export const FreePage = () => {
         comments={comments}
         replyInput={replyInput}
         replyingTo={replyingTo}
-        onReplyToggle={handleReplyToggle}
-        onReplyInputChange={handleReplyInputChange}
-        onReplySubmit={handleReplySubmit}
+        onReplyToggle={setReplyingTo}
+        onReplyInputChange={setReplyInput}
+        onReplySubmit={() => {}}
         userId={userId}
       />
       {/* 하단 '목록으로 돌아가기' 버튼 */}
@@ -191,13 +180,13 @@ const TopBarWrapper = styled.div`
 `;
 
 const Line = styled.div`
-    width: 100%;
-    height: 66px;
-    background-color: ${theme.colors.green.main};
-    display: flex;
-    align-items: center;
-    font-size: ${theme.fontSize.xl};
-    font-weight: ${theme.fontWeight.bold};
-    padding-left: 220px;
-    color: ${theme.colors.other.white};
+  width: 100%;
+  height: 66px;
+  background-color: ${theme.colors.green.main};
+  display: flex;
+  align-items: center;
+  font-size: ${theme.fontSize.xl};
+  font-weight: ${theme.fontWeight.bold};
+  padding-left: 220px;
+  color: ${theme.colors.other.white};
 `;

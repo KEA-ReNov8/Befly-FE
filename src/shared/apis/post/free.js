@@ -1,5 +1,17 @@
 import { apiInstance } from '@shared/apis/instance';
 
+export const getFreePostDetail = async (freeId) => {
+  try {
+    const response = await apiInstance.get(`/community/free/${freeId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`/community/free/${freeId} 요청 실패:`, error);
+    console.error('에러 응답:', error.response?.data);
+    console.error('에러 상태:', error.response?.status);
+    throw error;
+  }
+};
+
 // 자유함 게시글 목록을 가져오는 API 함수
 // 각 게시글에 cardImage(대표 이미지) 필드를 추가하여 반환
 export const getFreePosts = async (page = 0) => {
