@@ -46,3 +46,49 @@ export const getMockSharePosts = async (page = 0) => {
     totalPages: 5, // 원하는 총 페이지 수
   };
 };
+// 최신 공유함 게시글을 가져오는 API 함수
+export const getLatestSharePosts = async () => {
+  try {
+    console.log('/community/solved/latest 요청 전송 중...');
+    const response = await apiInstance.get('/community/solved/latest');
+    console.log('/community/solved/latest 요청 응답:', response);
+    console.log('응답 데이터:', response.data);
+
+    // 각 게시글에 cardImage(대표 이미지) 필드 추가
+    return {
+      posts: response.data.result.map((post) => ({
+        ...post,
+        cardImage: post.imageUrl && post.imageUrl.length > 0 ? post.imageUrl[0] : null,
+      })),
+    };
+  } catch (error) {
+    console.error('/community/solved/latest 요청 실패:', error);
+    console.error('에러 응답:', error.response?.data);
+    console.error('에러 상태:', error.response?.status);
+    throw error;
+  }
+};
+
+// 최신 공유함 게시글을 가져오는 임시 목 함수
+export const getMockLatestSharePosts = async () => {
+  const dummyPosts = Array.from({ length: 4 }, (_, i) => ({
+    type: 'shared',
+    postId: i + 1,
+    title: `최신 공유함 제목 ${i + 1}`,
+    content: `최신 공유함 본문 ${i + 1}`,
+    likes: Math.floor(Math.random() * 10),
+    comments: Math.floor(Math.random() * 5),
+    time: `${Math.floor(Math.random() * 10 + 1)}분 전`,
+    userId: 1,
+    nickname: 'test',
+    categoryName: '학업',
+    imageUrl: [`https://via.placeholder.com/300x200.png?text=Share+Image+${i + 1}`],
+  }));
+
+  return {
+    posts: dummyPosts.map((post) => ({
+      ...post,
+      cardImage: post.imageUrl?.[0] ?? null,
+    })),
+  };
+};
