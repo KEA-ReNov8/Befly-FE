@@ -1,31 +1,32 @@
-import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import TopBar from '@shared/ui/TopBar/TopBar';
 import PostCard from '@shared/ui/PostCard';
 import { SearchBar, Pagination, FilterButton, SectionTitleBar } from '../components/index';
-import { SharedummyPosts } from '../data/DummyPosts';
 import theme from '@app/styles/theme';
+import { useSharePostsQuery } from '@post/feature/hooks/useSharePostsQuery';
 
 const categories = ['전체', '불안', '상처', '스트레스', '학업', '외로움', '우울', '관계', '진로'];
 
 export const SharePostListPage = () => {
+  const { page } = useParams();
+  const pageNum = Number(page) || 0;
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('전체');
-  const location = useLocation();
-  const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 8;
-  const startIndex = (currentPage - 1) * postsPerPage;
-  const endIndex = startIndex + postsPerPage;
-  const currentPosts = SharedummyPosts.slice(startIndex, endIndex);
 
-  const totalPages = Math.ceil(SharedummyPosts.length / postsPerPage);
+  const { data, isLoading, error } = useSharePostsQuery(pageNum);
+  const posts = data?.posts || [];
+  const totalPages = data?.totalPages || 1;
 
-  useEffect(() => {
-    // URL state에서 페이지 번호를 읽어와서 설정
-    if (location.state?.page) {
-      setCurrentPage(location.state.page);
-    }
-  }, [location.state]);
+  const handlePageChange = (page) => {
+    navigate(`/share/page/${page - 1}`);
+  };
+
+  if (isLoading) return <div>로딩 중...</div>;
+  if (error) return <div>에러 발생!</div>;
+  if (!posts.length) return <div>게시글이 없습니다.</div>;
+
   return (
     <Container>
       <TopBar />
@@ -45,11 +46,15 @@ export const SharePostListPage = () => {
         <SearchBar />
       </Wrapper>
       <BoardGrid>
-        {currentPosts.map((post) => (
-          <PostCard key={post.postId} {...post} currentPage={currentPage} />
+        {posts.map((post) => (
+          <PostCard key={post.postId} {...post} currentPage={pageNum} />
         ))}
       </BoardGrid>
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+      <Pagination
+        currentPage={pageNum + 1}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </Container>
   );
 };

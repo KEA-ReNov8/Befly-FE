@@ -16,7 +16,7 @@ export const FreePostListPage = () => {
   const totalPages = data?.totalPages || 1;
 
   const handlePageChange = (page) => {
-    navigate(`/free/page/${page}`);
+    navigate(`/free/page/${page - 1}`);
   };
 
   if (isLoading) return <div>로딩 중...</div>;
@@ -36,7 +36,11 @@ export const FreePostListPage = () => {
           <PostCard key={post.postId} {...post} currentPage={pageNum} />
         ))}
       </BoardGrid>
-      <Pagination currentPage={pageNum} totalPages={totalPages} onPageChange={handlePageChange} />
+      <Pagination
+        currentPage={pageNum + 1}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </Container>
   );
 };

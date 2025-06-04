@@ -23,3 +23,26 @@ export const getFreePosts = async (page = 0) => {
     throw error; // 에러를 다시 throw해서 호출하는 곳에서 catch할 수 있도록 한다.
   }
 };
+
+export const getMockFreePosts = async (page = 0) => {
+  const dummyPosts = Array.from({ length: 8 }, (_, i) => ({
+    type: 'free',
+    postId: page * 8 + i + 1,
+    title: `제목 ${page * 8 + i + 1}`,
+    content: `본문 ${page * 8 + i + 1}`,
+    likes: Math.floor(Math.random() * 10),
+    comments: Math.floor(Math.random() * 5),
+    time: `${Math.floor(Math.random() * 10 + 1)}분 전`,
+    userId: 1,
+    nickname: 'test',
+    imageUrl: [`https://via.placeholder.com/300x200.png?text=Image+${page * 8 + i + 1}`],
+  }));
+
+  return {
+    posts: dummyPosts.map((post) => ({
+      ...post,
+      cardImage: post.imageUrl?.[0] ?? null,
+    })),
+    totalPages: 5, // 원하는 총 페이지 수
+  };
+};

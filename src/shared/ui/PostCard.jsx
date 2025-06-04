@@ -4,16 +4,16 @@ import { useLocation } from 'react-router-dom';
 import theme from '@app/styles/theme';
 
 const PostCard = ({
-  type,
-  title,
-  content,
-  likes,
-  comments,
-  time,
-  nickname,
-  categoryName,
-  postId,
-  currentPage,
+  type, //자유글, 공유글
+  title, // 글제목
+  content, // 글 내용
+  likes, // 좋아요 수
+  comments, //댓글 수
+  time, // 작성 시간
+  nickname, //닉네임
+  categoryName, //공유글이라면 카테고리
+  postId, // 계시글 아이디
+  currentPage, //게시글이 있던 페이지 번호
 }) => {
   const categoryColor = theme.colors.category[categoryName];
 
