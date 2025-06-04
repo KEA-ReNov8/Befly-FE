@@ -5,7 +5,6 @@ import theme from '@app/styles/theme';
 import TopBar from '@shared/ui/TopBar/TopBar';
 import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
-import { createFreePost } from '../api/post'; // 실제 API 연동 시 활용될 POST 요청 함수 예시
 
 export const FreePostPage = () => {
   useEffect(() => {
@@ -29,18 +28,6 @@ export const FreePostPage = () => {
   const [htmlContent, setHtmlContent] = useState(''); // html state
   const [isSubmitting, setIsSubmitting] = useState(false); // 등록 중 상태 관리 - 중복 등록 방지
 
-  // 이미지 업로드 핸들러 (Mock)
-  const handleImageUpload = async (blob, callback) => {
-    const mockUrl = URL.createObjectURL(blob); // 로컬 Blob를 임시 URL로 변환
-    callback(mockUrl, '업로드 이미지');
-    // 실제 API가 준비되면 아래에 코드 추가
-    // const formData = new FormData();
-    // formData.append('image', blob);
-    // const res =await axios.post('/api/upload', formData);
-    // const imageUrl = res.data.url;
-    // callback(imageUrl, '업로드 이미지');
-  };
-
   const handleTempSave = () => {
     const editorInstance = editorRef.current.getInstance();
     const html = editorInstance.getHTML();
@@ -55,6 +42,18 @@ export const FreePostPage = () => {
     localStorage.setItem('temp_free_post_content', html);
 
     alert('임시 저장이 완료되었습니다!');
+  };
+
+  // 이미지 업로드 핸들러 (Mock)
+  const handleImageUpload = async (blob, callback) => {
+    const mockUrl = URL.createObjectURL(blob); // 로컬 Blob를 임시 URL로 변환
+    callback(mockUrl, '업로드 이미지');
+    // 실제 API가 준비되면 아래에 코드 추가
+    // const formData = new FormData();
+    // formData.append('image', blob);
+    // const res =await axios.post('/api/upload', formData);
+    // const imageUrl = res.data.url;
+    // callback(imageUrl, '업로드 이미지');
   };
 
   const handleRegister = async () => {
@@ -106,7 +105,8 @@ export const FreePostPage = () => {
           ref={editorRef}
           previewStyle="vertical"
           height="400px"
-          initialEditType="markdown"
+          initialEditType="wysiwyg"
+          hideModeSwitch={true}
           useCommandShortcut={true}
           hooks={{
             addImageBlobHook: handleImageUpload, // 이미지 업로드 hook 등록
@@ -127,15 +127,15 @@ const Container = styled.div`
 `;
 
 const Line = styled.div`
-    width: 100%;
-    height: 66px;
-    background-color: ${theme.colors.green.main};
-    display: flex;
-    align-items: center;
-    font-size: ${theme.fontSize.xl};
-    font-weight: ${theme.fontWeight.bold};
-    padding-left: 220px;
-    color: ${theme.colors.other.white};
+  width: 100%;
+  height: 66px;
+  background-color: ${theme.colors.green.main};
+  display: flex;
+  align-items: center;
+  font-size: ${theme.fontSize.xl};
+  font-weight: ${theme.fontWeight.bold};
+  padding-left: 220px;
+  color: ${theme.colors.other.white};
 `;
 
 const EditorContainer = styled.div`
