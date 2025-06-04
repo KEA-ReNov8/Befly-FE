@@ -14,7 +14,7 @@ export const SectionsContainer = () => {
           type="free"
           posts={freePosts}
           bg={theme.colors.other.white}
-          onMore={() => navigate('/free')}
+          onMore={() => navigate('/free/page/0')}
         />
       </FirstSectionWrapper>
       <SecondSectionWrapper>
@@ -23,7 +23,7 @@ export const SectionsContainer = () => {
           type="shared"
           posts={sharePosts}
           bg="transparent"
-          onMore={() => navigate('/share')}
+          onMore={() => navigate('/share/page/0')}
         />
       </SecondSectionWrapper>
     </SectionsBg>

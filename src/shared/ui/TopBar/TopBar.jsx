@@ -25,10 +25,12 @@ const TopBar = () => {
         <img src={logo} alt="Be, Fly" />
       </Logo>
       <Nav>
-        <NavButton onClick={() => navigate('/free', { state: { from: location.pathname } })}>
+        <NavButton onClick={() => navigate('/free/page/0', { state: { from: location.pathname } })}>
           자유함
         </NavButton>
-        <NavButton onClick={() => navigate('/share', { state: { from: location.pathname } })}>
+        <NavButton
+          onClick={() => navigate('/share/page/0', { state: { from: location.pathname } })}
+        >
           공유함
         </NavButton>
         <NavButton onClick={() => navigate('/my/myworry')}>고민함</NavButton>

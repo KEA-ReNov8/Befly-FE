@@ -93,7 +93,7 @@ export const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       {
-        index: true,
+        path: 'page/:page',
         element: <SharePostListPage />,
       },
       {
