@@ -4,24 +4,22 @@ import TopBar from '@shared/ui/TopBar/TopBar';
 import PostCard from '@shared/ui/PostCard';
 import { SearchBar, Pagination, SectionTitleBar } from '@/pages/post/components/index';
 import theme from '@app/styles/theme';
-import { useFreePostsQuery } from '@post/feature/hooks/useFreePostsQuery';
+import { useFreePostsByPageQuery } from '@/pages/post/feature/hooks/useFreePostsByPageQuery';
 
 export const FreePostListPage = () => {
   const { page } = useParams();
-  const pageNum = Number(page) || 0;
+  const pageNumFromParam = Number(page) || 1; // 사용자가 보는 페이지는 1부터 시작
+  const pageNum = pageNumFromParam - 1; // 서버에 보낼 실제 페이지 인덱스 (0부터 시작)
+
   const navigate = useNavigate();
 
-  const { data, isLoading, error } = useFreePostsQuery(pageNum);
+  const { data, isLoading, error } = useFreePostsByPageQuery(pageNum);
   const posts = data?.posts || [];
   const totalPages = data?.totalPages || 1;
 
   const handlePageChange = (page) => {
-    navigate(`/free/page/${page - 1}`);
+    navigate(`/free/page/${page}`);
   };
-
-  if (isLoading) return <div>로딩 중...</div>;
-  if (error) return <div>에러 발생!</div>;
-  if (!posts.length) return <div>게시글이 없습니다.</div>;
 
   return (
     <Container>
@@ -31,13 +29,18 @@ export const FreePostListPage = () => {
         <WriteButton onClick={() => navigate('/free/create-free')}>글쓰기</WriteButton>
         <SearchBar />
       </Wrapper>
-      <BoardGrid>
-        {posts.map((post) => (
-          <PostCard key={post.postId} {...post} currentPage={pageNum} />
-        ))}
-      </BoardGrid>
+      {isLoading && <div>로딩 중...</div>}
+      {error && <div>에러 발생!</div>}
+      {!isLoading && !error && !posts.length && <div>게시글이 없습니다.</div>}
+      {!isLoading && !error && posts.length > 0 && (
+        <BoardGrid>
+          {posts.map((post) => (
+            <PostCard key={post.postId} {...post} currentPage={pageNumFromParam} />
+          ))}
+        </BoardGrid>
+      )}
       <Pagination
-        currentPage={pageNum + 1}
+        currentPage={pageNumFromParam}
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
@@ -61,7 +64,7 @@ const BoardGrid = styled.div`
   grid-template-columns: repeat(4, 1fr);
   gap: 40px 20px;
   padding: 20px 0;
-  margin-botton: 20px;
+  margin-bottom: 20px;
 `;
 
 const Wrapper = styled.div`
