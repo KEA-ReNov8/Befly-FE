@@ -33,7 +33,8 @@ apiInstance.interceptors.response.use(
     const originalRequest = error.config;
     const statusCode = error.response.data.code;
     const message = error.response.data.message;
-    const { isFirstMount, setIsFirstMount } = useIsLoggedInStore().getState();
+    // const { isFirstMount, setIsFirstMount } = useIsLoggedInStore().getState();
+    const { isFirstMount, setIsFirstMount } = useIsLoggedInStore.getState();
 
     // refresh token 만료 -> 에러코드 세분화 refresh401 등
     if (

@@ -35,8 +35,28 @@ export const FreePage = () => {
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!post || !post.result) return <div>게시글이 없습니다.</div>;
 
-  // post.result에서 실제 데이터 추출
-  const postData = post.result;
+  useEffect(() => {
+    console.log('userId', userId);
+    // postId에 해당하는 게시글 찾기
+    const foundPost = mockFreePostData.find((p) => p.id === parseInt(postId));
+    if (foundPost) {
+      setPost(foundPost);
+      // 임시로 dummyComments를 사용
+      setComments(
+        dummyComments.map((comment) => ({
+          id: comment.id,
+          author: comment.writer,
+          authorId: Math.floor(Math.random() * 1000), // 임시 authorId
+          content: comment.content,
+          date: comment.createdAt,
+          replies: [],
+        })),
+      );
+    } else {
+      // 게시글을 찾지 못한 경우 목록으로 이동
+      navigate('/free');
+    }
+  }, [postId, navigate]);
 
   // 댓글 입력창 값 변경 핸들러 (textarea 높이 자동 조절 포함)
   const handleInputChange = (e) => {
@@ -133,15 +153,17 @@ export const FreePage = () => {
         <TopBar />
         <Line>자유함</Line>
       </TopBarWrapper>
-      {/* 게시글 상세 데이터 렌더링 */}
-      <PostBox
-        title={postData.freeTitle}
-        author={postData.userId} // 필요시 닉네임으로 변환
-        date={postData.createdAt || '-'}
-        content={postData.freeContent}
-        imageUrl={postData.imageUrl}
-        postId={postData.freeId}
-      />
+      {/* 게시글 본문 영역 */}
+      {post && (
+        <PostBox
+          title={post.title}
+          author={post.nickname}
+          date={post.createdAt}
+          content={post.content}
+          stats={{ like: post.likes, comment: post.comments }}
+          postId={post.id}
+        />
+      )}
       {/* 댓글 입력창 */}
       <CommentInputBox
         value={commentInput}
@@ -154,9 +176,9 @@ export const FreePage = () => {
         comments={comments}
         replyInput={replyInput}
         replyingTo={replyingTo}
-        onReplyToggle={setReplyingTo}
-        onReplyInputChange={setReplyInput}
-        onReplySubmit={() => {}}
+        onReplyToggle={handleReplyToggle}
+        onReplyInputChange={handleReplyInputChange}
+        onReplySubmit={handleReplySubmit}
         userId={userId}
       />
       {/* 하단 '목록으로 돌아가기' 버튼 */}

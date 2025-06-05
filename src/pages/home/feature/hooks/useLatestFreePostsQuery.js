@@ -1,11 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-// import { getLatestFreePosts } from '@shared/apis/post/free';
-import { getMockLatestFreePosts } from '@shared/apis/post/free';
+import { getLatestFreePosts } from '@shared/apis/post/free';
 
 export const useLatestFreePostsQuery = () => {
   return useQuery({
     queryKey: ['latestFreePosts'],
-    queryFn: () => getMockLatestFreePosts(),
+    queryFn: getLatestFreePosts,
     staleTime: 1000 * 60 * 1,
     refetchOnWindowFocus: false,
     retry: 1,

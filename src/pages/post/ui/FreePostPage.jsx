@@ -105,7 +105,7 @@ export const FreePostPage = () => {
           ref={editorRef}
           previewStyle="vertical"
           height="400px"
-          initialEditType="wysiwyg"
+          initialEditType="markdown"
           hideModeSwitch={true}
           useCommandShortcut={true}
           hooks={{

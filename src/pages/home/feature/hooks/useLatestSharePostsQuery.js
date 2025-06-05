@@ -1,11 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-// import { getLatestSharePosts } from '@shared/apis/post/share';
-import { getMockLatestSharePosts } from '@shared/apis/post/share';
+import { getLatestSharePosts } from '@shared/apis/post/share';
 
 export const useLatestSharePostsQuery = () => {
   return useQuery({
     queryKey: ['latestSharePosts'],
-    queryFn: () => getMockLatestSharePosts(),
+    queryFn: () => getLatestSharePosts(),
     staleTime: 1000 * 60 * 1,
     refetchOnWindowFocus: false,
     retry: 1,

@@ -68,27 +68,3 @@ export const getLatestSharePosts = async () => {
     throw error;
   }
 };
-
-// 최신 공유함 게시글을 가져오는 임시 목 함수
-export const getMockLatestSharePosts = async () => {
-  const dummyPosts = Array.from({ length: 4 }, (_, i) => ({
-    type: 'shared',
-    postId: i + 1,
-    title: `최신 공유함 제목 ${i + 1}`,
-    content: `최신 공유함 본문 ${i + 1}`,
-    likes: Math.floor(Math.random() * 10),
-    comments: Math.floor(Math.random() * 5),
-    time: `${Math.floor(Math.random() * 10 + 1)}분 전`,
-    userId: 1,
-    nickname: 'test',
-    categoryName: '학업',
-    imageUrl: [`https://via.placeholder.com/300x200.png?text=Share+Image+${i + 1}`],
-  }));
-
-  return {
-    posts: dummyPosts.map((post) => ({
-      ...post,
-      cardImage: post.imageUrl?.[0] ?? null,
-    })),
-  };
-};

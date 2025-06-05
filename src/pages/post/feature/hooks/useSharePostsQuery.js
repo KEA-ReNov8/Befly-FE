@@ -1,11 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-// import { getSharePosts } from '@shared/apis/post/share';
-import { getMockSharePosts } from '@shared/apis/post/share'; // 더미 데이터 사용 aPi연결되면 위로 대체
+import { getSharePosts } from '@shared/apis/post/share';
 
 export const useSharePostsQuery = (page = 0) => {
   return useQuery({
     queryKey: ['sharePosts', page],
-    queryFn: () => getMockSharePosts(page),
+    queryFn: () => getSharePosts(page),
     staleTime: 1000 * 60 * 1,
     refetchOnWindowFocus: false,
     retry: 1,
