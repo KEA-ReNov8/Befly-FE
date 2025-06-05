@@ -38,20 +38,22 @@ export const getFreePosts = async (page = 0) => {
 
 export const getLatestFreePosts = async () => {
   try {
-    console.log('Request headers:', apiInstance.defaults.headers);
-    console.log('Request config:', {
-      withCredentials: apiInstance.defaults.withCredentials,
-      baseURL: apiInstance.defaults.baseURL,
-    });
     const response = await apiInstance.get('/community/free/latest');
     const data = response.data.result;
     return data.map((post) => ({
-      ...post,
+      type: 'free',
+      title: post.title,
+      content: post.content,
+      likes: post.likes,
+      comments: post.comments,
+      time: post.time,
+      nickname: post.nickname,
+      categoryName: '', // 자유글엔 없음
+      postId: post.postId,
+      currentPage: 0, // 리스트 페이지 개념이 없으므로 0으로 설정
       cardImage: post.imageUrl?.[0] || null,
     }));
   } catch (error) {
-    console.error('/community/free/latest 요청 실패:', error);
-    console.error('Error config:', error.config);
     throw error;
   }
 };

@@ -46,25 +46,26 @@ export const getMockSharePosts = async (page = 0) => {
     totalPages: 5, // 원하는 총 페이지 수
   };
 };
-// 최신 공유함 게시글을 가져오는 API 함수
+
 export const getLatestSharePosts = async () => {
   try {
-    console.log('/community/solved/latest 요청 전송 중...');
     const response = await apiInstance.get('/community/solved/latest');
-    console.log('/community/solved/latest 요청 응답:', response);
-    console.log('응답 데이터:', response.data);
+    const data = response.data.result;
 
-    // 각 게시글에 cardImage(대표 이미지) 필드 추가
-    return {
-      posts: response.data.result.map((post) => ({
-        ...post,
-        cardImage: post.imageUrl && post.imageUrl.length > 0 ? post.imageUrl[0] : null,
-      })),
-    };
+    return data.map((post) => ({
+      type: 'shared', // 공유글
+      title: post.solvedTitle,
+      content: post.solvedContent,
+      likes: post.likeCount,
+      comments: post.commentCount,
+      time: post.createdAt, // createdAt 사용
+      nickname: post.nickname,
+      categoryName: post.category || post.worry_category || '', // category 우선, 없으면 걱정글 category
+      postId: post.solvedId,
+      currentPage: 0, // 리스트 페이지가 없다면 기본값
+      cardImage: post.imageUrls?.[0] ?? null,
+    }));
   } catch (error) {
-    console.error('/community/solved/latest 요청 실패:', error);
-    console.error('에러 응답:', error.response?.data);
-    console.error('에러 상태:', error.response?.status);
     throw error;
   }
 };

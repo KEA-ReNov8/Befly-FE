@@ -4,7 +4,7 @@ import { getLatestSharePosts } from '@shared/apis/post/share';
 export const useLatestSharePostsQuery = () => {
   return useQuery({
     queryKey: ['latestSharePosts'],
-    queryFn: () => getLatestSharePosts(),
+    queryFn: getLatestSharePosts,
     staleTime: 1000 * 60 * 1,
     refetchOnWindowFocus: false,
     retry: 1,

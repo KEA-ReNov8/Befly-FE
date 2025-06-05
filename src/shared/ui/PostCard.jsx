@@ -14,6 +14,7 @@ const PostCard = ({
   categoryName, //공유글이라면 카테고리
   postId, // 계시글 아이디
   currentPage, //게시글이 있던 페이지 번호
+  cardImage, // 카드 이미지
 }) => {
   const categoryColor = theme.colors.category[categoryName];
 
@@ -31,7 +32,8 @@ const PostCard = ({
 
   return (
     <CardContainer onClick={handleClick}>
-      <CardImage />
+      {/* <CardImage src={cardImage || '/default-thumbnail.png'} alt="게시글 이미지" /> */}
+      <CardImage src={cardImage} alt="게시글 이미지" />
       {type === 'shared' && categoryName && (
         <CategoryPill color={categoryColor}>{categoryName}</CategoryPill>
       )}
@@ -75,11 +77,12 @@ const CardContainer = styled.div`
   box-sizing: border-box;
 `;
 
-const CardImage = styled.div`
+const CardImage = styled.img`
   width: 100%;
   height: 153px;
-  background: ${theme.colors.gray[300]};
+  object-fit: cover;
   border-radius: 8px 8px 0 0;
+  background-color: ${theme.colors.gray[300]};
 `;
 
 const CategoryPill = styled.div`

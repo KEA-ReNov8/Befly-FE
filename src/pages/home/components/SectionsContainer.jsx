@@ -3,10 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { LatestPosts } from './LatestPosts';
 import theme from '@app/styles/theme';
 import { useLatestFreePostsQuery } from '@home/feature/hooks/useLatestFreePostsQuery';
+import { useLatestSharePostsQuery } from '@home/feature/hooks/useLatestSharePostsQuery';
 
 export const SectionsContainer = () => {
   const navigate = useNavigate();
   const { data: freeData, isLoading: freeLoading, error: freeError } = useLatestFreePostsQuery();
+  const {
+    data: shareData,
+    isLoading: shareLoading,
+    error: shareError,
+  } = useLatestSharePostsQuery();
   return (
     <SectionsBg>
       <FirstSectionWrapper>
@@ -22,17 +28,19 @@ export const SectionsContainer = () => {
           />
         )}
       </FirstSectionWrapper>
-      {/* <SecondSectionWrapper>
-        <LatestPosts
-          title="새로운 공유함"
-          type="shared"
-          posts={shareData?.posts || []}
-          bg="transparent"
-          onMore={() => navigate('/share/page/0')}
-        />
+      <SecondSectionWrapper>
         {shareLoading && <div>로딩 중...</div>}
         {shareError && <div>에러가 발생했습니다.</div>}
-      </SecondSectionWrapper> */}
+        {!shareLoading && !shareError && (
+          <LatestPosts
+            title="새로운 공유함"
+            type="shared"
+            posts={shareData}
+            bg="transparent"
+            onMore={() => navigate('/share/page/0')}
+          />
+        )}
+      </SecondSectionWrapper>
     </SectionsBg>
   );
 };
