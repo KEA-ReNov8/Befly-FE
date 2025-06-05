@@ -5,27 +5,25 @@ import TopBar from '@shared/ui/TopBar/TopBar';
 import PostCard from '@shared/ui/PostCard';
 import { SearchBar, Pagination, FilterButton, SectionTitleBar } from '../components/index';
 import theme from '@app/styles/theme';
-import { useSharePostsQuery } from '@post/feature/hooks/useSharePostsQuery';
+import { useSharePostsByPageQuery } from '@/pages/post/feature/hooks/useSharePostsByPageQuery';
 
 const categories = ['전체', '불안', '상처', '스트레스', '학업', '외로움', '우울', '관계', '진로'];
 
 export const SharePostListPage = () => {
-  const { page } = useParams();
-  const pageNum = Number(page) || 0;
-  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('전체');
+  const { page } = useParams();
+  const pageNumFromParam = Number(page) || 1; // 사용자가 보는 페이지는 1부터 시작
+  const pageNum = pageNumFromParam - 1; // 서버에 보낼 실제 페이지 인덱스 (0부터 시작)
 
-  const { data, isLoading, error } = useSharePostsQuery(pageNum);
+  const navigate = useNavigate();
+
+  const { data, isLoading, error } = useSharePostsByPageQuery(pageNum);
   const posts = data?.posts || [];
   const totalPages = data?.totalPages || 1;
 
   const handlePageChange = (page) => {
-    navigate(`/share/page/${page - 1}`);
+    navigate(`/share/page/${page}`);
   };
-
-  if (isLoading) return <div>로딩 중...</div>;
-  if (error) return <div>에러 발생!</div>;
-  if (!posts.length) return <div>게시글이 없습니다.</div>;
 
   return (
     <Container>
@@ -45,13 +43,18 @@ export const SharePostListPage = () => {
         </CategoryBar>
         <SearchBar />
       </Wrapper>
-      <BoardGrid>
-        {posts.map((post) => (
-          <PostCard key={post.postId} {...post} currentPage={pageNum} />
-        ))}
-      </BoardGrid>
+      {isLoading && <div>로딩 중...</div>}
+      {error && <div>에러 발생!</div>}
+      {!isLoading && !error && !posts.length && <div>게시글이 없습니다.</div>}
+      {!isLoading && !error && posts.length > 0 && (
+        <BoardGrid>
+          {posts.map((post) => (
+            <PostCard key={post.postId} {...post} currentPage={pageNumFromParam} />
+          ))}
+        </BoardGrid>
+      )}
       <Pagination
-        currentPage={pageNum + 1}
+        currentPage={pageNumFromParam}
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
@@ -75,7 +78,7 @@ const BoardGrid = styled.div`
   grid-template-columns: repeat(4, 1fr);
   gap: 40px 20px;
   padding: 20px 0;
-  margin-botton: 20px;
+  margin-bottom: 20px;
 `;
 
 const Wrapper = styled.div`
