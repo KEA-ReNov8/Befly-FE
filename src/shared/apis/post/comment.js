@@ -49,3 +49,8 @@ export const postFreeComment = async ({ freeId, postId, pcommentId, comment }) =
   });
   return response.data.result;
 };
+
+export const deleteFreeComment = async (freeId, commentId) => {
+  const response = await apiInstance.delete(`/community/free/${freeId}/comment/${commentId}`);
+  return response.data.result;
+};
