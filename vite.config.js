@@ -7,16 +7,6 @@ import fs from 'fs';
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/',
-  server: {
-    historyApiFallback: true,
-    https: {
-      key: fs.readFileSync('.cert/befly.blog-key.pem'),
-      cert: fs.readFileSync('.cert/befly.blog.pem'),
-    },
-    host: 'befly.blog',
-  },
-
   plugins: [react(), svgr()],
   assetsInclude: ['**/*.JPG', '**/*.jpg', '**/*.png', '**/*.jpeg', '**/*.gif'], // 이미지 파일 포함
   resolve: {
