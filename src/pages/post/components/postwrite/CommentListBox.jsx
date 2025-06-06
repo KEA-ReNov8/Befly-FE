@@ -1,10 +1,13 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import Arrow from '@shared/assets/icons/arrow.svg';
-import DeleteModal from '@pages/my/components/DeleteModal';
+import CommentDeleteModal from '@pages/post/components/CommentDeleteModal';
 import { useState } from 'react';
+import { formatDate } from '@shared/utils/date';
+import { useDeleteFreeCommentMutation } from '@post/feature/hooks/useDeleteFreeCommentMutation';
+import { useUpdateFreeCommentMutation } from '@post/feature/hooks/useUpdateFreeCommentMutation';
+import { useParams } from 'react-router-dom';
 
-//삭제 안될 경우 삭제 모달 복제해서 새로 만들기
 export const CommentListBox = ({
   comments,
   replyInput,
@@ -12,86 +15,231 @@ export const CommentListBox = ({
   onReplyToggle,
   onReplyInputChange,
   onReplySubmit,
-  userId,
+  userNickname,
 }) => {
+  const { postId } = useParams();
+  const [deleteModalState, setDeleteModalState] = useState({
+    isOpen: false,
+    commentId: null,
+    isReply: false,
+  });
+  const [editingComment, setEditingComment] = useState({
+    id: null,
+    content: '',
+    isReply: false,
+    originalContent: '',
+  });
 
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const { mutate: deleteComment } = useDeleteFreeCommentMutation(postId);
+  const { mutate: updateComment } = useUpdateFreeCommentMutation(postId);
 
-  const handleDelete = () => {
-    setIsDeleteModalOpen(true);
+  const handleDeleteClick = (commentId, isReply = false) => {
+    setDeleteModalState({
+      isOpen: true,
+      commentId,
+      isReply,
+    });
   };
 
-  return(
+  const handleDeleteConfirm = (commentId) => {
+    deleteComment(commentId, {
+      onSuccess: () => {
+        setDeleteModalState({ isOpen: false, commentId: null, isReply: false });
+        alert('댓글이 삭제되었습니다.');
+      },
+      onError: () => {
+        alert('댓글 삭제에 실패했습니다.');
+      },
+    });
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalState({ isOpen: false, commentId: null, isReply: false });
+  };
+
+  const handleEditClick = (comment, isReply = false) => {
+    setEditingComment({
+      id: comment.id,
+      content: comment.content,
+      isReply,
+      originalContent: comment.content,
+    });
+  };
+
+  const handleEditSave = () => {
+    if (!editingComment.content.trim()) {
+      alert('댓글 내용을 입력해주세요.');
+      return;
+    }
+
+    const comment = comments.find(
+      (c) => c.id === editingComment.id || c.replies?.some((r) => r.id === editingComment.id),
+    );
+
+    let parentCommentId = null;
+    if (editingComment.isReply) {
+      const parentComment = comments.find((c) =>
+        c.replies?.some((r) => r.id === editingComment.id),
+      );
+      parentCommentId = parentComment?.id || null;
+    }
+
+    updateComment(
+      {
+        commentId: editingComment.id,
+        postId: Number(postId),
+        pcommentId: parentCommentId,
+        comment: editingComment.content,
+      },
+      {
+        onSuccess: () => {
+          setEditingComment({ id: null, content: '', isReply: false, originalContent: '' });
+          alert('댓글이 수정되었습니다.');
+        },
+        onError: () => {
+          alert('댓글 수정에 실패했습니다.');
+        },
+      },
+    );
+  };
+
+  const handleEditCancel = () => {
+    setEditingComment({ id: null, content: '', isReply: false, originalContent: '' });
+  };
+
+  return (
     <>
-  <CommentListSection>
-    {comments.map((comment) => (
-      <CommentBlock key={comment.id}>
-        <CommentRow>
-          <ProfileCircle />
-          <CommentRight>
-            <CommentAuthor>{comment.author}</CommentAuthor>
-            <CommentContent>{comment.content}</CommentContent>
-            <CommentInfoRow>
-              <CommentDate>{comment.date}</CommentDate>
-              <ReplyButton type="button" onClick={() => onReplyToggle(comment.id)}>
-                답글쓰기
-              </ReplyButton>
-              {userId === comment.authorId && (
-                <EditDeleteGroup>
-                  <EditButton type="button">수정</EditButton>
-                  <Divider>|</Divider>
-                  <DeleteButton type="button" onClick={handleDelete}>삭제</DeleteButton>
-                </EditDeleteGroup>
-              )}
-            </CommentInfoRow>
-          </CommentRight>
-        </CommentRow>
-        {/* 답글 입력창 */}
-        {replyingTo === comment.id && (
-          <ReplyInputRow>
-            <ReplyInput
-              placeholder="답글을 입력하세요"
-              value={replyInput[comment.id] || ''}
-              onChange={(e) => onReplyInputChange(e, comment.id)}
-            />
-            <ReplyRegisterButton type="button" onClick={() => onReplySubmit(comment.id)}>
-              등록
-            </ReplyRegisterButton>
-          </ReplyInputRow>
-        )}
-        {/* 답글 리스트 */}
-        {comment.replies && comment.replies.length > 0 && (
-          <ReplyList>
-            {comment.replies.map((reply) => (
-              <ReplyBlock key={reply.id}>
-                <ReplyRow>
-                  <Replybox>
-                    <img src={Arrow} alt="arrow" />
-                    <ReplyProfileCircle />
-                  </Replybox>
-                  <ReplyRight>
-                    <ReplyAuthor>{reply.author}</ReplyAuthor>
-                    <ReplyContent>{reply.content}</ReplyContent>
-                    <ReplyInfoRow>
-                      <ReplyDate>{reply.date}</ReplyDate>
-                      {userId === reply.authorId && (
-                        <EditDeleteGroup>
-                          <EditButton type="button">수정</EditButton>
-                          <Divider>|</Divider>
-                          <DeleteButton type="button" onClick={handleDelete}>삭제</DeleteButton>
-                        </EditDeleteGroup>
-                      )}
-                    </ReplyInfoRow>
-                  </ReplyRight>
-                </ReplyRow>
-              </ReplyBlock>
-            ))}
-          </ReplyList>
-        )}
-      </CommentBlock>
-    ))}
-    </CommentListSection>
-    {isDeleteModalOpen && <DeleteModal onClose={() => setIsDeleteModalOpen(false)} />}
+      <CommentListSection>
+        {comments.map((comment) => (
+          <CommentBlock key={comment.id}>
+            <CommentRow>
+              <ProfileCircle />
+              <CommentRight>
+                <CommentAuthor>{comment.author}</CommentAuthor>
+                {editingComment.id === comment.id ? (
+                  <EditInputContainer>
+                    <EditInput
+                      value={editingComment.content}
+                      onChange={(e) =>
+                        setEditingComment({ ...editingComment, content: e.target.value })
+                      }
+                      placeholder="댓글을 수정하세요"
+                    />
+                    <EditButtonGroup>
+                      <SaveButton onClick={handleEditSave}>저장</SaveButton>
+                      <CancelButton onClick={handleEditCancel}>취소</CancelButton>
+                    </EditButtonGroup>
+                  </EditInputContainer>
+                ) : (
+                  <CommentContent>
+                    {comment.isDeleted ? '(삭제된 댓글입니다)' : comment.content}
+                  </CommentContent>
+                )}
+                <CommentInfoRow>
+                  <CommentDate>{formatDate(comment.date)}</CommentDate>
+                  {!comment.isDeleted && (
+                    <ReplyButton type="button" onClick={() => onReplyToggle(comment.id)}>
+                      답글쓰기
+                    </ReplyButton>
+                  )}
+                  {userNickname === comment.author &&
+                    !comment.isDeleted &&
+                    editingComment.id !== comment.id && (
+                      <EditDeleteGroup>
+                        <EditButton type="button" onClick={() => handleEditClick(comment)}>
+                          수정
+                        </EditButton>
+                        <Divider>|</Divider>
+                        <DeleteButton type="button" onClick={() => handleDeleteClick(comment.id)}>
+                          삭제
+                        </DeleteButton>
+                      </EditDeleteGroup>
+                    )}
+                </CommentInfoRow>
+              </CommentRight>
+            </CommentRow>
+            {/* 답글 입력창 */}
+            {replyingTo === comment.id && (
+              <ReplyInputRow>
+                <ReplyInput
+                  placeholder="답글을 입력하세요"
+                  value={replyInput[comment.id] || ''}
+                  onChange={(e) => onReplyInputChange(e, comment.id)}
+                />
+                <ReplyRegisterButton type="button" onClick={() => onReplySubmit(comment.id)}>
+                  등록
+                </ReplyRegisterButton>
+              </ReplyInputRow>
+            )}
+            {/* 답글 리스트 */}
+            {comment.replies && comment.replies.length > 0 && (
+              <ReplyList>
+                {comment.replies.map((reply) => (
+                  <ReplyBlock key={reply.id}>
+                    <ReplyRow>
+                      <Replybox>
+                        <img src={Arrow} alt="arrow" />
+                        <ReplyProfileCircle />
+                      </Replybox>
+                      <ReplyRight>
+                        <ReplyAuthor>{reply.author}</ReplyAuthor>
+                        {editingComment.id === reply.id ? (
+                          <EditInputContainer>
+                            <EditInput
+                              value={editingComment.content}
+                              onChange={(e) =>
+                                setEditingComment({ ...editingComment, content: e.target.value })
+                              }
+                              placeholder="답글을 수정하세요"
+                            />
+                            <EditButtonGroup>
+                              <SaveButton onClick={handleEditSave}>저장</SaveButton>
+                              <CancelButton onClick={handleEditCancel}>취소</CancelButton>
+                            </EditButtonGroup>
+                          </EditInputContainer>
+                        ) : (
+                          <ReplyContent>
+                            {reply.isDeleted ? '(삭제된 댓글입니다)' : reply.content}
+                          </ReplyContent>
+                        )}
+                        <ReplyInfoRow>
+                          <ReplyDate>{formatDate(reply.date)}</ReplyDate>
+                          {userNickname === reply.author &&
+                            !reply.isDeleted &&
+                            editingComment.id !== reply.id && (
+                              <EditDeleteGroup>
+                                <EditButton
+                                  type="button"
+                                  onClick={() => handleEditClick(reply, true)}
+                                >
+                                  수정
+                                </EditButton>
+                                <Divider>|</Divider>
+                                <DeleteButton
+                                  type="button"
+                                  onClick={() => handleDeleteClick(reply.id, true)}
+                                >
+                                  삭제
+                                </DeleteButton>
+                              </EditDeleteGroup>
+                            )}
+                        </ReplyInfoRow>
+                      </ReplyRight>
+                    </ReplyRow>
+                  </ReplyBlock>
+                ))}
+              </ReplyList>
+            )}
+          </CommentBlock>
+        ))}
+      </CommentListSection>
+      {deleteModalState.isOpen && (
+        <CommentDeleteModal
+          commentId={deleteModalState.commentId}
+          onConfirm={handleDeleteConfirm}
+          onClose={handleDeleteCancel}
+        />
+      )}
     </>
   );
 };
@@ -299,4 +447,67 @@ const ReplyRegisterButton = styled.button`
   border: none;
   border-radius: 8px;
   cursor: pointer;
+`;
+
+const EditInputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+`;
+
+const EditInput = styled.textarea`
+  width: 100%;
+  min-height: 60px;
+  padding: 12px;
+  border: 1px solid ${theme.colors.gray[400]};
+  border-radius: 8px;
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.regular};
+  resize: vertical;
+  outline: none;
+
+  &:focus {
+    border-color: ${theme.colors.green.main};
+  }
+
+  &::placeholder {
+    color: ${theme.colors.gray[600]};
+  }
+`;
+
+const EditButtonGroup = styled.div`
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+`;
+
+const SaveButton = styled.button`
+  padding: 6px 16px;
+  background-color: ${theme.colors.green.main};
+  color: ${theme.colors.other.white};
+  border: none;
+  border-radius: 6px;
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.medium};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${theme.colors.green.dark};
+  }
+`;
+
+const CancelButton = styled.button`
+  padding: 6px 16px;
+  background-color: ${theme.colors.other.white};
+  color: ${theme.colors.gray[600]};
+  border: 1px solid ${theme.colors.gray[400]};
+  border-radius: 6px;
+  font-size: ${theme.fontSize.smMd};
+  font-weight: ${theme.fontWeight.medium};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${theme.colors.gray[100]};
+  }
 `;

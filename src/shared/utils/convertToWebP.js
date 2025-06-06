@@ -9,7 +9,7 @@ export const options = {
 };
 
 const convertSingleImgToWebP = async ({ img }) => {
-  let targetImage= img;
+  let targetImage = img;
 
   if (img.name.toLowerCase().endsWith('.heic')) {
     const heicToJpegBlob = await HeicToJpeg({ img });
@@ -25,7 +25,7 @@ const convertSingleImgToWebP = async ({ img }) => {
   try {
     const webpBlob = await imageCompression(targetImage, options);
     return URL.createObjectURL(webpBlob);
-  } catch ( error ) {
+  } catch (error) {
     console.error('이미지 압축/변환 실패:', error);
     return undefined;
   }

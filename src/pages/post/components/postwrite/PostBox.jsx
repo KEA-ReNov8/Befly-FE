@@ -2,13 +2,28 @@ import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import PostSelectModal from '@pages/post/components/PostSelectModal';
 import { useState } from 'react';
+import { formatDate } from '@shared/utils/date';
+import { useMyInfoStore } from '@shared/store/useMyInfoStore';
 
-export const PostBox = ({ title, author, date, content, stats, postId, children = null }) => {
-
+export const PostBox = ({
+  title,
+  author,
+  date,
+  content,
+  stats,
+  postId,
+  isLiked,
+  onToggleLike,
+  children = null,
+}) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const { myInfo } = useMyInfoStore();
+
+  // 현재 로그인된 유저가 게시글 작성자인지 확인
+  const isAuthor = myInfo?.nickName === author;
 
   const handleDelete = () => {
-    setIsDeleteModalOpen(prev => !prev); // 이전 상태를 반전
+    setIsDeleteModalOpen((prev) => !prev); // 이전 상태를 반전
   };
 
   const onCloseDeleteModal = () => {
@@ -16,27 +31,29 @@ export const PostBox = ({ title, author, date, content, stats, postId, children 
   };
 
   return (
-  <PostContainer>
-    <PostHeader>
-      <HeaderWrapper>
-        <PostTitle>{title}</PostTitle>
-        <Meta>
-          <span>{author}</span>
-          <Divider>|</Divider>
-          <span>{date}</span>
-        </Meta>
-      </HeaderWrapper>
-      <EditButton onClick={handleDelete}>...</EditButton>
-    </PostHeader>
-    {/* MindReportSection 등 children이 들어갈 위치 */}
-    {children}
-    <PostContent dangerouslySetInnerHTML={{ __html: content }} />
-    <PostStats>
-      <span>♡ {stats.like}</span>
-      <span>🗨️ {stats.comment}</span>
-    </PostStats>
-    {isDeleteModalOpen && <PostSelectModal postId={postId} />}
-  </PostContainer>
+    <PostContainer>
+      <PostHeader>
+        <HeaderWrapper>
+          <PostTitle>{title}</PostTitle>
+          <Meta>
+            <span>{author}</span>
+            <Divider>|</Divider>
+            <span>{formatDate(date)}</span>
+          </Meta>
+        </HeaderWrapper>
+        {isAuthor && <EditButton onClick={handleDelete}>...</EditButton>}
+      </PostHeader>
+      {/* MindReportSection 등 children이 들어갈 위치 */}
+      {children}
+      <PostContent dangerouslySetInnerHTML={{ __html: content }} />
+      <PostStats>
+        <LikeButton onClick={onToggleLike}>
+          {isLiked ? '❤️' : '🤍'} {stats.like}
+        </LikeButton>
+        <span>🗨️ {stats.comment}</span>
+      </PostStats>
+      {isDeleteModalOpen && <PostSelectModal postId={postId} onClose={onCloseDeleteModal} />}
+    </PostContainer>
   );
 };
 
@@ -117,9 +134,27 @@ const PostContent = styled.div`
 `;
 const PostStats = styled.div`
   display: flex;
+  align-items: center; /* 세로 중앙 정렬 추가 */
   gap: 16px;
   font-size: ${theme.fontSize.md};
   font-weight: ${theme.fontWeight.medium};
   color: ${theme.colors.gray[900]};
   margin-left: 10px;
+`;
+
+const LikeButton = styled.button`
+  display: flex; // 아이콘과 숫자 나란히 정렬
+  align-items: center; // 세로 중앙 정렬
+  gap: 4px; // 아이콘과 숫자 간격
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: ${theme.colors.gray[900]};
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.medium};
+  padding: 0; // 버튼 기본 패딩 제거
+
+  &:hover {
+    color: ${theme.colors.green.main};
+  }
 `;

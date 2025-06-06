@@ -2,23 +2,33 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import theme from '@app/styles/theme';
+import defaultImage from '@shared/assets/imgs/defaultImage.svg';
 
 const PostCard = ({
-  type,
-  title,
-  content,
-  likes,
-  comments,
-  time,
-  nickname,
-  categoryName,
-  postId,
-  currentPage,
+  type, //자유글, 공유글
+  title, // 글제목
+  content, // 글 내용
+  likes, // 좋아요 수
+  comments, //댓글 수
+  time, // 작성 시간
+  nickname, //닉네임
+  categoryName, //공유글이라면 카테고리
+  postId, // 계시글 아이디
+  currentPage, //게시글이 있던 페이지 번호
+  cardImage, // 카드 이미지
 }) => {
   const categoryColor = theme.colors.category[categoryName];
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  // HTML 태그를 제거하고 텍스트만 추출하는 함수
+  const stripHtmlTags = (html) => {
+    if (!html) return '';
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+    return temp.textContent || temp.innerText || '';
+  };
 
   const handleClick = () => {
     // 클릭 시 해당 계시글로 이동
@@ -31,13 +41,13 @@ const PostCard = ({
 
   return (
     <CardContainer onClick={handleClick}>
-      <CardImage />
+      <CardImage src={cardImage || defaultImage} alt="게시글 이미지" />
       {type === 'shared' && categoryName && (
         <CategoryPill color={categoryColor}>{categoryName}</CategoryPill>
       )}
       <CardContentContainer>
         <CardTitle>{title}</CardTitle>
-        <CardContent>{content}</CardContent>
+        <CardContent>{stripHtmlTags(content)}</CardContent>
         <CardFooter>
           <LeftFooter>
             <span>♡ {likes}</span>
@@ -75,11 +85,12 @@ const CardContainer = styled.div`
   box-sizing: border-box;
 `;
 
-const CardImage = styled.div`
+const CardImage = styled.img`
   width: 100%;
   height: 153px;
-  background: ${theme.colors.gray[300]};
+  object-fit: cover;
   border-radius: 8px 8px 0 0;
+  background-color: ${theme.colors.gray[300]};
 `;
 
 const CategoryPill = styled.div`

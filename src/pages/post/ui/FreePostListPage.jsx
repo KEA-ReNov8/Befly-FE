@@ -1,33 +1,24 @@
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import TopBar from '@shared/ui/TopBar/TopBar';
 import PostCard from '@shared/ui/PostCard';
 import { SearchBar, Pagination, SectionTitleBar } from '@/pages/post/components/index';
-import { FreedummyPosts } from '@post/data/DummyPosts';
 import theme from '@app/styles/theme';
+import { useFreePostsByPageQuery } from '@/pages/post/feature/hooks/useFreePostsByPageQuery';
 
 export const FreePostListPage = () => {
-  const location = useLocation();
+  const { page } = useParams();
+  const pageNumFromParam = Number(page) || 1; // 사용자가 보는 페이지는 1부터 시작
+  const pageNum = pageNumFromParam - 1; // 서버에 보낼 실제 페이지 인덱스 (0부터 시작)
+
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 8;
-  const startIndex = (currentPage - 1) * postsPerPage;
-  const endIndex = startIndex + postsPerPage;
-  const currentPosts = FreedummyPosts.slice(startIndex, endIndex);
 
-  const totalPages = Math.ceil(FreedummyPosts.length / postsPerPage);
+  const { data, isLoading, error } = useFreePostsByPageQuery(pageNum);
+  const posts = data?.posts || [];
+  const totalPages = data?.totalPages || 1;
 
-  useEffect(() => {
-    // URL state에서 페이지 번호를 읽어와서 설정
-    if (location.state?.page) {
-      setCurrentPage(location.state.page);
-    }
-  }, [location.state]);
-
-  // 자유글 작성 버튼 클릭 시 FreePostPage로 이동
-  const handleWriteClick = () => {
-    navigate('/free/create-free');
+  const handlePageChange = (page) => {
+    navigate(`/free/page/${page}`);
   };
 
   return (
@@ -35,15 +26,24 @@ export const FreePostListPage = () => {
       <TopBar />
       <SectionTitleBar title="자유함" />
       <Wrapper>
-        <WriteButton onClick={handleWriteClick}>글쓰기</WriteButton>
+        <WriteButton onClick={() => navigate('/free/create-free')}>글쓰기</WriteButton>
         <SearchBar />
       </Wrapper>
-      <BoardGrid>
-        {currentPosts.map((post) => (
-          <PostCard key={post.postId} {...post} currentPage={currentPage} />
-        ))}
-      </BoardGrid>
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+      {isLoading && <div>로딩 중...</div>}
+      {error && <div>에러 발생!</div>}
+      {!isLoading && !error && !posts.length && <div>게시글이 없습니다.</div>}
+      {!isLoading && !error && posts.length > 0 && (
+        <BoardGrid>
+          {posts.map((post) => (
+            <PostCard key={post.postId} {...post} currentPage={pageNumFromParam} />
+          ))}
+        </BoardGrid>
+      )}
+      <Pagination
+        currentPage={pageNumFromParam}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </Container>
   );
 };
@@ -64,7 +64,7 @@ const BoardGrid = styled.div`
   grid-template-columns: repeat(4, 1fr);
   gap: 40px 20px;
   padding: 20px 0;
-  margin-botton: 20px;
+  margin-bottom: 20px;
 `;
 
 const Wrapper = styled.div`

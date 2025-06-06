@@ -1,31 +1,30 @@
-import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import TopBar from '@shared/ui/TopBar/TopBar';
 import PostCard from '@shared/ui/PostCard';
 import { SearchBar, Pagination, FilterButton, SectionTitleBar } from '../components/index';
-import { SharedummyPosts } from '../data/DummyPosts';
 import theme from '@app/styles/theme';
+import { useSharePostsByPageQuery } from '@/pages/post/feature/hooks/useSharePostsByPageQuery';
 
 const categories = ['전체', '불안', '상처', '스트레스', '학업', '외로움', '우울', '관계', '진로'];
 
 export const SharePostListPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('전체');
-  const location = useLocation();
-  const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 8;
-  const startIndex = (currentPage - 1) * postsPerPage;
-  const endIndex = startIndex + postsPerPage;
-  const currentPosts = SharedummyPosts.slice(startIndex, endIndex);
+  const { page } = useParams();
+  const pageNumFromParam = Number(page) || 1; // 사용자가 보는 페이지는 1부터 시작
+  const pageNum = pageNumFromParam - 1; // 서버에 보낼 실제 페이지 인덱스 (0부터 시작)
 
-  const totalPages = Math.ceil(SharedummyPosts.length / postsPerPage);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    // URL state에서 페이지 번호를 읽어와서 설정
-    if (location.state?.page) {
-      setCurrentPage(location.state.page);
-    }
-  }, [location.state]);
+  const { data, isLoading, error } = useSharePostsByPageQuery(pageNum);
+  const posts = data?.posts || [];
+  const totalPages = data?.totalPages || 1;
+
+  const handlePageChange = (page) => {
+    navigate(`/share/page/${page}`);
+  };
+
   return (
     <Container>
       <TopBar />
@@ -44,12 +43,21 @@ export const SharePostListPage = () => {
         </CategoryBar>
         <SearchBar />
       </Wrapper>
-      <BoardGrid>
-        {currentPosts.map((post) => (
-          <PostCard key={post.postId} {...post} currentPage={currentPage} />
-        ))}
-      </BoardGrid>
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+      {isLoading && <div>로딩 중...</div>}
+      {error && <div>에러 발생!</div>}
+      {!isLoading && !error && !posts.length && <div>게시글이 없습니다.</div>}
+      {!isLoading && !error && posts.length > 0 && (
+        <BoardGrid>
+          {posts.map((post) => (
+            <PostCard key={post.postId} {...post} currentPage={pageNumFromParam} />
+          ))}
+        </BoardGrid>
+      )}
+      <Pagination
+        currentPage={pageNumFromParam}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </Container>
   );
 };
@@ -70,7 +78,7 @@ const BoardGrid = styled.div`
   grid-template-columns: repeat(4, 1fr);
   gap: 40px 20px;
   padding: 20px 0;
-  margin-botton: 20px;
+  margin-bottom: 20px;
 `;
 
 const Wrapper = styled.div`

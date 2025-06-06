@@ -75,11 +75,15 @@ export const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       {
-        index: true,
+        path: 'page/:page',
         element: <FreePostListPage />,
       },
       {
         path: 'create-free',
+        element: <FreePostPage />,
+      },
+      {
+        path: 'edit/:postId',
         element: <FreePostPage />,
       },
       {
@@ -93,7 +97,7 @@ export const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       {
-        index: true,
+        path: 'page/:page',
         element: <SharePostListPage />,
       },
       {
