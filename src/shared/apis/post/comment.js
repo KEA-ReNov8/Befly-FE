@@ -54,3 +54,13 @@ export const deleteFreeComment = async (freeId, commentId) => {
   const response = await apiInstance.delete(`/community/free/${freeId}/comment/${commentId}`);
   return response.data.result;
 };
+
+export const updateFreeComment = async (freeId, commentId, { postId, pcommentId, comment }) => {
+  const response = await apiInstance.patch(`/community/free/${freeId}/comment/${commentId}`, {
+    postId,
+    notificationType: 'FREELIKE',
+    pcommentId,
+    comment,
+  });
+  return response.data.result;
+};
