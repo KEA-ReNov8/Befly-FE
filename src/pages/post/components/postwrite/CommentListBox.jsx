@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import Arrow from '@shared/assets/icons/arrow.svg';
-import DeleteModal from '@pages/my/components/DeleteModal';
+import CommentDeleteModal from '@pages/post/components/CommentDeleteModal';
 import { useState } from 'react';
 import { formatDate } from '@shared/utils/date';
+import { useDeleteFreeCommentMutation } from '@post/feature/hooks/useDeleteFreeCommentMutation';
+import { useParams } from 'react-router-dom';
 
-//삭제 안될 경우 삭제 모달 복제해서 새로 만들기
 export const CommentListBox = ({
   comments,
   replyInput,
@@ -15,10 +16,37 @@ export const CommentListBox = ({
   onReplySubmit,
   userNickname,
 }) => {
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const { postId } = useParams();
+  const [deleteModalState, setDeleteModalState] = useState({
+    isOpen: false,
+    commentId: null,
+    isReply: false,
+  });
 
-  const handleDelete = () => {
-    setIsDeleteModalOpen(true);
+  const { mutate: deleteComment } = useDeleteFreeCommentMutation(postId);
+
+  const handleDeleteClick = (commentId, isReply = false) => {
+    setDeleteModalState({
+      isOpen: true,
+      commentId,
+      isReply,
+    });
+  };
+
+  const handleDeleteConfirm = (commentId) => {
+    deleteComment(commentId, {
+      onSuccess: () => {
+        setDeleteModalState({ isOpen: false, commentId: null, isReply: false });
+        alert('댓글이 삭제되었습니다.');
+      },
+      onError: () => {
+        alert('댓글 삭제에 실패했습니다.');
+      },
+    });
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalState({ isOpen: false, commentId: null, isReply: false });
   };
 
   return (
@@ -35,14 +63,16 @@ export const CommentListBox = ({
                 </CommentContent>
                 <CommentInfoRow>
                   <CommentDate>{formatDate(comment.date)}</CommentDate>
-                  <ReplyButton type="button" onClick={() => onReplyToggle(comment.id)}>
-                    답글쓰기
-                  </ReplyButton>
+                  {!comment.isDeleted && (
+                    <ReplyButton type="button" onClick={() => onReplyToggle(comment.id)}>
+                      답글쓰기
+                    </ReplyButton>
+                  )}
                   {userNickname === comment.author && (
                     <EditDeleteGroup>
                       <EditButton type="button">수정</EditButton>
                       <Divider>|</Divider>
-                      <DeleteButton type="button" onClick={handleDelete}>
+                      <DeleteButton type="button" onClick={() => handleDeleteClick(comment.id)}>
                         삭제
                       </DeleteButton>
                     </EditDeleteGroup>
@@ -82,7 +112,10 @@ export const CommentListBox = ({
                             <EditDeleteGroup>
                               <EditButton type="button">수정</EditButton>
                               <Divider>|</Divider>
-                              <DeleteButton type="button" onClick={handleDelete}>
+                              <DeleteButton
+                                type="button"
+                                onClick={() => handleDeleteClick(reply.id, true)}
+                              >
                                 삭제
                               </DeleteButton>
                             </EditDeleteGroup>
@@ -97,7 +130,13 @@ export const CommentListBox = ({
           </CommentBlock>
         ))}
       </CommentListSection>
-      {isDeleteModalOpen && <DeleteModal onClose={() => setIsDeleteModalOpen(false)} />}
+      {deleteModalState.isOpen && (
+        <CommentDeleteModal
+          commentId={deleteModalState.commentId}
+          onConfirm={handleDeleteConfirm}
+          onClose={handleDeleteCancel}
+        />
+      )}
     </>
   );
 };
