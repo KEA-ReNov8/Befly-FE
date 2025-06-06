@@ -83,6 +83,10 @@ export const router = createBrowserRouter([
         element: <FreePostPage />,
       },
       {
+        path: 'edit/:postId',
+        element: <FreePostPage />,
+      },
+      {
         path: ':postId',
         element: <FreePage />,
       },

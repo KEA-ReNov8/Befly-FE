@@ -15,7 +15,7 @@ const PostSelectModal = ({ postId, onClose }) => {
   };
 
   const handleEdit = () => {
-    navigate(`/post/${postId}`);
+    navigate(`/free/edit/${postId}`);
   };
 
   return (
