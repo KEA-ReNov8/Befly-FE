@@ -1,34 +1,36 @@
 import styled from 'styled-components';
 import TopBar from '@shared/ui/TopBar/TopBar';
 import theme from '@app/styles/theme';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { PostBox, CommentInputBox, CommentListBox, PageBottomBox } from '../components/index';
 import { useMyInfoStore } from '@shared/store/useMyInfoStore';
 import { useFreePostDetailQuery } from '@post/feature/hooks/useFreePostDetailQuery';
 import { useFreeCommentsQuery } from '@post/feature/hooks/useFreeCommentsQuery';
+import { useCreateFreeCommentMutation } from '@post/feature/hooks/useCreateFreeCommentMutation';
+import {
+  useCheckFreeEmpathyQuery,
+  useToggleFreeEmpathyMutation,
+} from '@post/feature/hooks/useFreeEmpathy';
 
 export const FreePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  // 로그인한 유저의 id를 Zustand store에서 가져옴
+
   const { myInfo } = useMyInfoStore();
   const userId = myInfo?.clientId;
   const { postId } = useParams();
 
   const { data: post, isLoading, error } = useFreePostDetailQuery(postId);
   const { data: commentData } = useFreeCommentsQuery(postId);
-  // commentData는 [{id, author, content, date, replies: [...]}, ...] 형태
+  const { data: isLiked } = useCheckFreeEmpathyQuery(postId);
+  const { mutate: createComment } = useCreateFreeCommentMutation(postId);
+  const { mutate: toggleLike } = useToggleFreeEmpathyMutation(postId, isLiked);
 
-  console.log('commentData', commentData);
-  // 댓글 입력창의 값 상태
-  const [commentInput, setCommentInput] = useState('');
-  // 답글 입력창의 값 상태 (댓글 id별로 관리)
-  const [replyInput, setReplyInput] = useState({});
-  // 현재 답글 입력창이 열려있는 댓글 id (하나만 열림)
-  const [replyingTo, setReplyingTo] = useState(null);
-  // 댓글 입력창 textarea DOM 참조 (높이 자동 조절용)
-  const commentRef = useRef(null);
+  const [commentInput, setCommentInput] = useState(''); // 댓글 입력창의 값 상태
+  const [replyInput, setReplyInput] = useState({}); // 답글 입력창의 값 상태 (댓글 id별로 관리)
+  const [replyingTo, setReplyingTo] = useState(null); // 현재 답글 입력창이 열려있는 댓글 id (하나만 열림)
+  const commentRef = useRef(null); // 댓글 입력창 textarea DOM 참조 (높이 자동 조절용)
 
   // 댓글 입력창 값 변경 핸들러 (textarea 높이 자동 조절 포함)
   const handleInputChange = (e) => {
@@ -42,9 +44,22 @@ export const FreePage = () => {
   // 댓글 등록 버튼 클릭 시 실행되는 함수
   const handleCommentSubmit = () => {
     if (!commentInput.trim()) return;
-    // 댓글 등록 API 필요
-    setCommentInput('');
-    if (commentRef.current) commentRef.current.style.height = '40px';
+    createComment(
+      {
+        freeId: Number(postId), // path variable
+        postId: Number(postId), // request body 내부 postId
+        pcommentId: null, // 최상위 댓글 (부모 없음)
+        comment: commentInput, // 실제 댓글 내용
+      },
+      {
+        onSuccess: () => {
+          setCommentInput('');
+          if (commentRef.current) {
+            commentRef.current.style.height = '40px';
+          }
+        },
+      },
+    );
   };
 
   // 답글 입력창 토글 함수 (같은 댓글을 다시 누르면 닫힘)
@@ -61,9 +76,21 @@ export const FreePage = () => {
   const handleReplySubmit = (commentId) => {
     const input = replyInput[commentId];
     if (!input || !input.trim()) return;
-    // 대댓글 등록 API 필요
-    setReplyInput({ ...replyInput, [commentId]: '' });
-    setReplyingTo(null);
+    createComment(
+      {
+        freeId: Number(postId),
+        postId: Number(postId),
+        pcommentId: commentId,
+        comment: input,
+      },
+      {
+        onSuccess: () => {
+          // 입력창 초기화 및 답글창 닫기
+          setReplyInput({ ...replyInput, [commentId]: '' });
+          setReplyingTo(null);
+        },
+      },
+    );
   };
 
   // '목록으로 돌아가기' 버튼 클릭 시 실행 (진입 경로가 있으면 해당 경로로, 없으면 /free로 이동)
@@ -73,6 +100,10 @@ export const FreePage = () => {
     } else {
       navigate('/free');
     }
+  };
+
+  const handleLikeClick = () => {
+    toggleLike();
   };
 
   return (
@@ -92,6 +123,8 @@ export const FreePage = () => {
           content={post.content}
           stats={{ like: post.likes, comment: post.comments }}
           postId={post.freeId}
+          isLiked={isLiked}
+          onToggleLike={handleLikeClick}
         />
       )}
 

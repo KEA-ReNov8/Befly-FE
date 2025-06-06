@@ -21,17 +21,6 @@ export const getFreePostDetail = async (freeId) => {
   }
 };
 
-// export const getFreePostDetail = async (freeId) => {
-//   try {
-//     const response = await apiInstance.get(`/community/free/${freeId}`);
-//     return response.data;
-//   } catch (error) {
-//     console.error(`/community/free/${freeId} 요청 실패:`, error);
-//     console.error('에러 응답:', error.response?.data);
-//     console.error('에러 상태:', error.response?.status);
-//     throw error;
-//   }
-// };
 export const getFreePostsByPage = async (page = 0) => {
   try {
     const response = await apiInstance.get(`/community/free/page/${page}`);

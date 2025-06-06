@@ -39,3 +39,13 @@ export const getFreeComments = async (freeId) => {
     throw error;
   }
 };
+
+export const postFreeComment = async ({ freeId, postId, pcommentId, comment }) => {
+  const response = await apiInstance.post(`/community/free/${freeId}/comment`, {
+    postId,
+    notificationType: 'FREELIKE',
+    pcommentId,
+    comment,
+  });
+  return response.data.result;
+};
