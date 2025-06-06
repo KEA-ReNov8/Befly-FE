@@ -71,3 +71,13 @@ export const getLatestFreePosts = async () => {
     throw error;
   }
 };
+
+export const createFreePost = async ({ title, content, imageKeys }) => {
+  const response = await apiInstance.post('/community/free', {
+    freeTitle: title, // ✅ API 스펙에 맞게 수정
+    freeContent: content, // ✅ "contnet" 오타 수정
+    imageKeys: imageKeys,
+  });
+
+  return response.data.result;
+};

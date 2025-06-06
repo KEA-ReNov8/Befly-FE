@@ -5,6 +5,8 @@ import theme from '@app/styles/theme';
 import TopBar from '@shared/ui/TopBar/TopBar';
 import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
+import { useCreateFreePostMutation } from '@post/feature/hooks/useCreateFreePostMutation';
+import { useUploadImageMutation } from '@shared/hooks/useUploadImageMutation';
 
 export const FreePostPage = () => {
   useEffect(() => {
@@ -24,9 +26,13 @@ export const FreePostPage = () => {
 
   const navigate = useNavigate();
   const editorRef = useRef(null);
+  const imageKeysRef = useRef([]);
+
   const [title, setTitle] = useState('');
-  const [htmlContent, setHtmlContent] = useState(''); // html state
   const [isSubmitting, setIsSubmitting] = useState(false); // 등록 중 상태 관리 - 중복 등록 방지
+
+  const { mutateAsync: uploadImage } = useUploadImageMutation();
+  const { mutate: createFreePost } = useCreateFreePostMutation();
 
   const handleTempSave = () => {
     const editorInstance = editorRef.current.getInstance();
@@ -44,47 +50,60 @@ export const FreePostPage = () => {
     alert('임시 저장이 완료되었습니다!');
   };
 
-  // 이미지 업로드 핸들러 (Mock)
   const handleImageUpload = async (blob, callback) => {
-    const mockUrl = URL.createObjectURL(blob); // 로컬 Blob를 임시 URL로 변환
-    callback(mockUrl, '업로드 이미지');
-    // 실제 API가 준비되면 아래에 코드 추가
-    // const formData = new FormData();
-    // formData.append('image', blob);
-    // const res =await axios.post('/api/upload', formData);
-    // const imageUrl = res.data.url;
-    // callback(imageUrl, '업로드 이미지');
+    const imageKey = `${Date.now()}-${blob.name || 'image'}`;
+
+    try {
+      const result = await uploadImage({ image: blob, imageKey });
+
+      if (result && result.imageUrl) {
+        imageKeysRef.current.push(result.imageKey);
+        // 쿼리 파라미터(? 이후)를 제거하여 깔끔한 URL로 만들기
+        const cleanImageUrl = result.imageUrl.split('?')[0];
+        callback(cleanImageUrl, '업로드 이미지');
+      } else {
+        throw new Error('업로드 결과가 올바르지 않습니다.');
+      }
+    } catch (error) {
+      alert(`이미지 업로드에 실패했습니다: ${error.message}`);
+      callback('', '업로드 실패');
+    }
   };
 
-  const handleRegister = async () => {
-    if (isSubmitting) return; // 중복 방지
+  const handleRegister = () => {
+    if (isSubmitting) return;
     setIsSubmitting(true);
 
     const editorInstance = editorRef.current.getInstance();
     const html = editorInstance.getHTML();
-    const markdown = editorInstance.getMarkdown(); // 마크다운 추출
+    const markdown = editorInstance.getMarkdown();
 
-    // 제목과 내용이 모두 입력되지 않았다면 경고 메시지 표시
-    const isContentEmpty = !markdown.trim(); // 공백 포함 여부 제거
-    if (!title.trim() || isContentEmpty) {
+    if (!title.trim() || !markdown.trim()) {
       alert('제목과 내용을 모두 입력해주세요.');
+      setIsSubmitting(false);
       return;
     }
 
-    try {
-      // 나중에 API 준비되면 아래 주석 제거
-      // await createFreePost({ title, content: html });
-
-      console.log('✅ 등록 완료. title:', title);
-      console.log('✅ 등록 완료. content:', html);
-
-      // 게시글 등록 후 목록 페이지로 이동 처리
-      navigate('/free');
-    } catch (err) {
-      alert('등록 실패. 나중에 다시 시도해주세요.');
-    } finally {
-      setIsSubmitting(false); // 등록 완료 후 상태 초기화
-    }
+    createFreePost(
+      {
+        title: title,
+        content: html,
+        imageKeys: imageKeysRef.current,
+      },
+      {
+        onSuccess: () => {
+          localStorage.removeItem('temp_free_post_title');
+          localStorage.removeItem('temp_free_post_content');
+          navigate('/free');
+        },
+        onError: () => {
+          alert('게시글 등록에 실패했습니다.');
+        },
+        onSettled: () => {
+          setIsSubmitting(false);
+        },
+      },
+    );
   };
 
   return (
