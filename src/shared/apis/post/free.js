@@ -74,11 +74,20 @@ export const getLatestFreePosts = async () => {
 
 export const createFreePost = async ({ title, content, imageKeys }) => {
   const response = await apiInstance.post('/community/free', {
-    freeTitle: title, // ✅ API 스펙에 맞게 수정
-    freeContent: content, // ✅ "contnet" 오타 수정
+    freeTitle: title,
+    freeContent: content,
     imageKeys: imageKeys,
   });
 
+  return response.data.result;
+};
+
+export const updateFreePost = async (freeId, { title, content, imageKeys }) => {
+  const response = await apiInstance.patch(`/community/free/${freeId}`, {
+    freeTitle: title,
+    freeContent: content,
+    imageKeys: imageKeys,
+  });
   return response.data.result;
 };
 

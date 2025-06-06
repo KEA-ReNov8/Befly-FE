@@ -11,7 +11,7 @@ const DeleteModal = ({ onClose, postId }) => {
     deleteFreePost(postId, {
       onSuccess: () => {
         alert('게시글이 삭제되었습니다.');
-        navigate('/free'); // 자유게시판 목록으로 이동
+        navigate('/free/page/1'); // 자유게시판 목록으로 이동
       },
       onError: (error) => {
         console.error('삭제 실패:', error);
