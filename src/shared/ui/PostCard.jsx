@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import theme from '@app/styles/theme';
+import defaultImage from '@shared/assets/imgs/defaultImage.svg';
 
 const PostCard = ({
   type, //자유글, 공유글
@@ -20,6 +21,7 @@ const PostCard = ({
 
   const navigate = useNavigate();
   const location = useLocation();
+  console.log('🔍 cardImage:', cardImage);
 
   const handleClick = () => {
     // 클릭 시 해당 계시글로 이동
@@ -32,8 +34,7 @@ const PostCard = ({
 
   return (
     <CardContainer onClick={handleClick}>
-      {/* <CardImage src={cardImage || '/default-thumbnail.png'} alt="게시글 이미지" /> */}
-      <CardImage src={cardImage} alt="게시글 이미지" />
+      <CardImage src={cardImage || defaultImage} alt="게시글 이미지" />
       {type === 'shared' && categoryName && (
         <CategoryPill color={categoryColor}>{categoryName}</CategoryPill>
       )}

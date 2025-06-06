@@ -26,7 +26,7 @@ export const FreePostPage = () => {
 
   const navigate = useNavigate();
   const editorRef = useRef(null);
-  const imageKeysRef = useRef([]);
+  const imageUrlsRef = useRef([]);
 
   const [title, setTitle] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false); // 등록 중 상태 관리 - 중복 등록 방지
@@ -37,9 +37,9 @@ export const FreePostPage = () => {
   const handleTempSave = () => {
     const editorInstance = editorRef.current.getInstance();
     const html = editorInstance.getHTML();
-    const markdown = editorInstance.getMarkdown();
+    // const markdown = editorInstance.getMarkdown();
 
-    if (!title.trim() && !markdown.trim()) {
+    if (!title.trim() && !html.trim()) {
       alert('임시 저장할 내용이 없습니다.');
       return;
     }
@@ -57,9 +57,9 @@ export const FreePostPage = () => {
       const result = await uploadImage({ image: blob, imageKey });
 
       if (result && result.imageUrl) {
-        imageKeysRef.current.push(result.imageKey);
         // 쿼리 파라미터(? 이후)를 제거하여 깔끔한 URL로 만들기
         const cleanImageUrl = result.imageUrl.split('?')[0];
+        imageUrlsRef.current.push(result.imageUrl);
         callback(cleanImageUrl, '업로드 이미지');
       } else {
         throw new Error('업로드 결과가 올바르지 않습니다.');
@@ -76,9 +76,9 @@ export const FreePostPage = () => {
 
     const editorInstance = editorRef.current.getInstance();
     const html = editorInstance.getHTML();
-    const markdown = editorInstance.getMarkdown();
+    // const markdown = editorInstance.getMarkdown();
 
-    if (!title.trim() || !markdown.trim()) {
+    if (!title.trim() || !html.trim()) {
       alert('제목과 내용을 모두 입력해주세요.');
       setIsSubmitting(false);
       return;
@@ -88,7 +88,7 @@ export const FreePostPage = () => {
       {
         title: title,
         content: html,
-        imageKeys: imageKeysRef.current,
+        imageKeys: imageUrlsRef.current,
       },
       {
         onSuccess: () => {
