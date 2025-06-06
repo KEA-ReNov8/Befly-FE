@@ -3,39 +3,35 @@ import { apiInstance } from '@shared/apis/instance';
 export const getFreePostDetail = async (freeId) => {
   try {
     const response = await apiInstance.get(`/community/free/${freeId}`);
-    return response.data;
+    const result = response.data.result;
+
+    return {
+      postId: result.freeId,
+      title: result.freeTitle,
+      content: result.freeContent,
+      nickname: result.nickname,
+      imageUrls: result.imageUrl ?? [], // null이면 빈 배열로 처리
+      likes: result.likes,
+      comments: result.comments,
+      createdAt: result.createdAt,
+      updatedAt: result.updatedAt,
+    };
   } catch (error) {
-    console.error(`/community/free/${freeId} 요청 실패:`, error);
-    console.error('에러 응답:', error.response?.data);
-    console.error('에러 상태:', error.response?.status);
     throw error;
   }
 };
 
-// // 자유함 게시글 목록을 가져오는 API 함수
-// // 각 게시글에 cardImage(대표 이미지) 필드를 추가하여 반환
-// export const getFreePosts = async (page = 0) => {
+// export const getFreePostDetail = async (freeId) => {
 //   try {
-//     console.log('/community/free/page/ 요청 전송 중...');
-//     const response = await apiInstance.get(`/community/free/page/${page}`);
-//     console.log('/community/free/page/ 요청 응답:', response);
-//     console.log('응답 데이터:', response.data);
-//     // 각 게시글에 cardImage(대표 이미지) 필드 추가
-//     return {
-//       posts: response.data.result.content.map((post) => ({
-//         ...post,
-//         cardImage: post.imageUrl && post.imageUrl.length > 0 ? post.imageUrl[0] : null,
-//       })),
-//       totalPages: response.data.result.totalPages,
-//     };
+//     const response = await apiInstance.get(`/community/free/${freeId}`);
+//     return response.data;
 //   } catch (error) {
-//     console.error('/community/free 요청 실패:', error);
+//     console.error(`/community/free/${freeId} 요청 실패:`, error);
 //     console.error('에러 응답:', error.response?.data);
 //     console.error('에러 상태:', error.response?.status);
-//     throw error; // 에러를 다시 throw해서 호출하는 곳에서 catch할 수 있도록 한다.
+//     throw error;
 //   }
 // };
-
 export const getFreePostsByPage = async (page = 0) => {
   try {
     const response = await apiInstance.get(`/community/free/page/${page}`);

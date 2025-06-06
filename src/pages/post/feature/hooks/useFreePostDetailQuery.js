@@ -12,5 +12,8 @@ export const useFreePostDetailQuery = (freeId) => {
     onError: (error) => {
       console.error('에러 발생:', error);
     },
+    onSuccess: (data) => {
+      console.log('자유함 게시글 상세 정보 패칭 성공:', data);
+    },
   });
 };

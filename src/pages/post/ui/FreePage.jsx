@@ -4,59 +4,40 @@ import theme from '@app/styles/theme';
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { PostBox, CommentInputBox, CommentListBox, PageBottomBox } from '../components/index';
-import { mockFreePostData, dummyComments } from '../data/DummyPosts';
+import { dummyComments } from '../data/DummyPosts';
 import { useMyInfoStore } from '@shared/store/useMyInfoStore';
 import { useFreePostDetailQuery } from '@post/feature/hooks/useFreePostDetailQuery';
 
 export const FreePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
   // 로그인한 유저의 id를 Zustand store에서 가져옴
   const { myInfo } = useMyInfoStore();
   const userId = myInfo?.clientId;
-
   const { postId } = useParams();
-  const { data: post, isLoading, error } = useFreePostDetailQuery(postId);
+
+  const { data, isLoading, error } = useFreePostDetailQuery(postId);
+  const post = data;
 
   // 댓글 입력창의 값 상태
   const [commentInput, setCommentInput] = useState('');
   // 댓글 및 답글(대댓글) 전체 리스트 상태
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState(() =>
+    dummyComments.map((comment) => ({
+      id: comment.id,
+      author: comment.writer,
+      authorId: Math.floor(Math.random() * 1000),
+      content: comment.content,
+      date: comment.createdAt,
+      replies: [],
+    })),
+  );
   // 답글 입력창의 값 상태 (댓글 id별로 관리)
   const [replyInput, setReplyInput] = useState({});
   // 현재 답글 입력창이 열려있는 댓글 id (하나만 열림)
   const [replyingTo, setReplyingTo] = useState(null);
   // 댓글 입력창 textarea DOM 참조 (높이 자동 조절용)
   const commentRef = useRef(null);
-
-  // 로딩/에러/데이터 없음 처리
-  if (isLoading) return <div>로딩중...</div>;
-  if (error) return <div>에러가 발생했습니다.</div>;
-  if (!post || !post.result) return <div>게시글이 없습니다.</div>;
-
-  useEffect(() => {
-    console.log('userId', userId);
-    // postId에 해당하는 게시글 찾기
-    const foundPost = mockFreePostData.find((p) => p.id === parseInt(postId));
-    if (foundPost) {
-      setPost(foundPost);
-      // 임시로 dummyComments를 사용
-      setComments(
-        dummyComments.map((comment) => ({
-          id: comment.id,
-          author: comment.writer,
-          authorId: Math.floor(Math.random() * 1000), // 임시 authorId
-          content: comment.content,
-          date: comment.createdAt,
-          replies: [],
-        })),
-      );
-    } else {
-      // 게시글을 찾지 못한 경우 목록으로 이동
-      navigate('/free');
-    }
-  }, [postId, navigate]);
 
   // 댓글 입력창 값 변경 핸들러 (textarea 높이 자동 조절 포함)
   const handleInputChange = (e) => {
@@ -148,22 +129,24 @@ export const FreePage = () => {
 
   return (
     <PageContainer>
-      {/* 상단 네비게이션 바 */}
       <TopBarWrapper>
         <TopBar />
         <Line>자유함</Line>
       </TopBarWrapper>
-      {/* 게시글 본문 영역 */}
-      {post && (
+      {isLoading && <div>로딩중...</div>}
+      {error && <div>에러가 발생했습니다.</div>}
+      {!isLoading && !error && !post && <div>게시글이 없습니다.</div>}
+      {!isLoading && !error && post && (
         <PostBox
           title={post.title}
           author={post.nickname}
           date={post.createdAt}
           content={post.content}
           stats={{ like: post.likes, comment: post.comments }}
-          postId={post.id}
+          postId={post.freeId}
         />
       )}
+
       {/* 댓글 입력창 */}
       <CommentInputBox
         value={commentInput}
