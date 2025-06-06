@@ -1,5 +1,6 @@
 // 공유글 관련 api 함수
 import { apiInstance } from '@shared/apis/instance';
+import { formatTimeAgo } from '@shared/utils/date';
 
 export const getSolvedPostsByPage = async (page = 0) => {
   try {
@@ -12,7 +13,7 @@ export const getSolvedPostsByPage = async (page = 0) => {
       content: post.solvedContent,
       likes: post.likeCount,
       comments: post.commentCount,
-      time: post.createdAt,
+      time: formatTimeAgo(post.createdAt),
       nickname: post.nickname,
       categoryName: post.category,
       postId: post.solvedId,
@@ -41,14 +42,15 @@ export const getLatestSharePosts = async () => {
       content: post.solvedContent,
       likes: post.likeCount,
       comments: post.commentCount,
-      time: post.createdAt, // createdAt 사용
+      time: formatTimeAgo(post.createdAt),
       nickname: post.nickname,
-      categoryName: post.category || post.worry_category || '', // category 우선, 없으면 걱정글 category
+      categoryName: post.category || '', // API 명세에 맞춰 수정
       postId: post.solvedId,
-      currentPage: 0, // 리스트 페이지가 없다면 기본값
+      currentPage: 0, // 메인페이지용이므로 0
       cardImage: post.imageUrls?.[0] ?? null,
     }));
   } catch (error) {
+    console.error('최신 공유글 조회 실패:', error);
     throw error;
   }
 };
