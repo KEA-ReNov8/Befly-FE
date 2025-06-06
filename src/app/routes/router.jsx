@@ -135,7 +135,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: 'report',
+    path: 'report/:sessionId',
     element: <RootLayout />,
     children: [
       {
@@ -145,7 +145,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: 'chat',
+    path: 'chat/:sessionId',
     element: <RootLayout />,
     children: [
       {

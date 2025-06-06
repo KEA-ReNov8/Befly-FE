@@ -1,10 +1,29 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
+import { useDeleteChatSession } from '@chat/feature/hooks/mutate/useDeleteChatSession';
 
-const DeleteModal = ( {onClose}) => {
+const DeleteModal = ( {onClose, sessionToDelete}) => {
 
-    const handleClick = () => {
-        window.location.reload();
+    const deleteSessionMutation = useDeleteChatSession();
+
+    const handleClick = async () => {
+        if(!sessionToDelete) {
+            alert('삭제할 세션 정보가 없습니다.');
+            return;
+        }
+
+        try {
+            const statusField = sessionToDelete.status === '고민중' ? 'true' : 'false';
+            await deleteSessionMutation.mutateAsync({
+                statusField,
+                sessionId: sessionToDelete.session_id
+            });
+
+            alert('세션이 성공적으로 삭제되었습니다.');
+            onClose();
+        } catch (error) {
+            console.error('삭제 실패:', error);
+        }
     };
 
     return (
@@ -12,8 +31,8 @@ const DeleteModal = ( {onClose}) => {
             <ModalContainer>
                 <Title>삭제하시겠습니까?</Title>
                 <ButtonContainer>
-                    <ReturnButton onClick={onClose}>취소</ReturnButton>
-                    <DeleteButton onClick={handleClick}>삭제하기</DeleteButton>
+                    <ReturnButton onClick={onClose} disabled={deleteSessionMutation.isPending}>취소</ReturnButton>
+                    <DeleteButton onClick={handleClick} disabled={deleteSessionMutation.isPending}>삭제하기</DeleteButton>
                 </ButtonContainer>
             </ModalContainer>
         </ModalOverlay>
@@ -72,6 +91,11 @@ const DeleteButton = styled.button`
     &:hover {
         background-color: ${theme.colors.red.hover};
     }
+
+    &:disabled {
+        background-color: ${theme.colors.gray[200]};
+        cursor: not-allowed;
+    }
 `;
 
 const ReturnButton = styled.button`
@@ -86,6 +110,11 @@ const ReturnButton = styled.button`
 
     &:hover {
         background-color: ${theme.colors.gray[500]};
+    }
+
+    &:disabled {
+        background-color: ${theme.colors.gray[200]};
+        cursor: not-allowed;
     }
 `;
 

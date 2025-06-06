@@ -3,8 +3,33 @@ import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import ChatMenu from '@shared/assets/icons/ChatMenuicon.svg';
 import SideBarButton from '@chat/components/SideBarButton';
+import { useChatSessionListQuery } from '@chat/feature/hooks/query/useChatSessionListQuery';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 const SideBar = ({ isOpen, onClose }) => {
+    const navigate = useNavigate();
+    const { sessionId: currentSessionId } = useParams();
+    const location = useLocation();
+
+    // 현재 세션 ID 추출 (URL에서)
+    const getCurrentSessionId = () => {
+        if (currentSessionId) return currentSessionId;
+        
+        const pathParts = location.pathname.split('/');
+        const lastPart = pathParts[pathParts.length - 1];
+        return lastPart !== 'chat' ? lastPart : null;
+    };
+
+    const activeSessionId = getCurrentSessionId();
+
+    const { data: chatList, error, isLoading } = useChatSessionListQuery('true', isOpen);
+
+    const chatSessions = chatList?.result || [];
+
+    const handleChatClick = (sessionId) => {
+        navigate(`/chat/${sessionId}`);
+    };
+
     return (
         <SideBarContainer data-isOpen={isOpen}>
             <SideBarHeader>
@@ -13,12 +38,17 @@ const SideBar = ({ isOpen, onClose }) => {
                 </MenuButton>
             </SideBarHeader>
             <SideBarContent>
-                <SideBarButton active/>
-                <SideBarButton active={false}/>
-                <SideBarButton active={false}/>
-                <SideBarButton active={false}/>
-                <SideBarButton active={false}/>
-                <SideBarButton active={false}/>      
+                {chatSessions.map((session) => (
+                    <SideBarButton
+                        key={session.session_id}
+                        sessionId={session.session_id}
+                        title={session.chat_title}
+                        status={session.status}
+                        category={session.category}
+                        active={session.session_id === activeSessionId}
+                        onClick={() => handleChatClick(session.session_id)}
+                    />
+                ))}
             </SideBarContent>
         </SideBarContainer>
     );

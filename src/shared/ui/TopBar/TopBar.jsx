@@ -19,6 +19,20 @@ const TopBar = () => {
     setNotificationModalOpen((prev) => !prev);
   };
 
+  const getUserInfo = () => {
+    try {
+      const myInfoStore = localStorage.getItem('myInfoStore');
+      if (myInfoStore) {
+        const parsed = JSON.parse(myInfoStore);
+        return parsed?.state?.myInfo || null;
+      }
+      return null;
+    } catch (error) {
+      console.error('로컬스토리지 파싱 오류:', error);
+      return null;
+    }
+  };
+
   return (
     <Container>
       <Logo onClick={() => navigate('/')}>
@@ -39,7 +53,7 @@ const TopBar = () => {
       <RightSection>
         <NotificationWrapper>
           <NotificationButton onClick={toggleNotificationModal}>
-            <img src={defaultProfile} alt="defaultProfile" />
+            <img src={getUserInfo()?.profileImage || defaultProfile} alt="defaultProfile" />
           </NotificationButton>
           {isNotificationModalOpen && <NotificationModal />}
         </NotificationWrapper>

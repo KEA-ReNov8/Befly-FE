@@ -2,13 +2,13 @@ import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import { useState, useRef, useEffect } from 'react';
 
-const ChatForm = ( { onSendMessage }) => {
+const ChatForm = ( { onSendMessage, isLoading = false }) => {
     const [message, setMessage] = useState('');
     const textareaRef = useRef(null);
 
     const handleSubmit = (e) => {
         e && e.preventDefault();
-        if (message.trim()) {
+        if (message.trim() && !isLoading) {
           onSendMessage(message);
           setMessage('');
         }
@@ -31,10 +31,24 @@ const ChatForm = ( { onSendMessage }) => {
     return (
         <Container onSubmit={handleSubmit}>
             <InputContainer>
-                <TextArea ref={textareaRef} value={message} placeholder="나래에게 마음을 털어놔요..." 
-                onKeyDown={handleKeyDown} onChange={(e) => setMessage(e.target.value)} rows={1} />
+                <TextArea 
+                ref={textareaRef} 
+                value={message} 
+                //placeholder={isLoading ? "AI가 응답 중입니다..." : "나래에게 마음을 털어놔요..."}
+                placeholder="나래에게 마음을 털어놔요..."
+                onKeyDown={handleKeyDown} 
+                onChange={(e) => setMessage(e.target.value)} 
+                rows={1} 
+                //disabled={isLoading}
+                />
             </InputContainer>
-            <SendButton type="button" disabled={!message.trim()} onClick={handleSubmit}>↑</SendButton>
+            <SendButton 
+            type="button" 
+            disabled={!message.trim() || isLoading} 
+            onClick={handleSubmit}
+            >
+                {isLoading ? '...' : '↑'}
+            </SendButton>
         </Container>
     );
 };
@@ -87,6 +101,12 @@ const TextArea = styled.textarea`
     &::placeholder {
         color: ${theme.colors.gray[600]};
     }
+    
+   /* &:disabled {
+        color: ${theme.colors.gray[600]};
+        cursor: not-allowed;
+    }
+    */
 `;
 
 const SendButton = styled.button`

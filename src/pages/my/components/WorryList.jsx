@@ -4,6 +4,7 @@ import theme from '@app/styles/theme';
 import WorryPost from '@my/components/WorryPost';
 import DeleteModal from '@my/components/DeleteModal';
 import { SearchBar } from '@post/components/postlist/SearchBar';
+import { useChatSessionListQuery } from '@chat/feature/hooks/query/useChatSessionListQuery';
 
 const WorryList = () => {
 
@@ -11,53 +12,58 @@ const WorryList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [activeTab, setActiveTab] = useState('전체');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    
-    // 이 부분은 실제 데이터를 가져오는 API 호출 부분으로 대체될 수 있습니다
-    const dummyPosts = [
-        { id: 1, category: '불안', status: '고민중', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/24', time: '12:00' },
-        { id: 2, category: '진로', status: '고민해결', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/23', time: '12:00' },
-        { id: 3, category: '진로', status: '고민중', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/22', time: '12:00' },
-        { id: 4, category: '진로', status: '고민해결', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/21', time: '12:00' },
-        { id: 5, category: '진로', status: '고민중', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/20', time: '12:00' },
-        { id: 6, category: '진로', status: '고민중', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/19', time: '12:00' },
-        { id: 7, category: '진로', status: '고민해결', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/18', time: '12:00' },
-        { id: 8, category: '진로', status: '고민중', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/17', time: '12:00' },
-        { id: 9, category: '진로', status: '고민해결', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/16', time: '12:00' },
-        { id: 10, category: '진로', status: '고민중', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/15', time: '12:00' },
-        { id: 11, category: '진로', status: '고민중', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/14', time: '12:00' },
-        { id: 12, category: '진로', status: '고민중', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/13', time: '12:00' },
-        { id: 13, category: '진로', status: '고민중', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/12', time: '12:00' },
-        { id: 14, category: '진로', status: '고민중', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/11', time: '12:00' },
-        { id: 15, category: '진로', status: '고민중', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/10', time: '12:00' },
-    ];
+    const [sessionToDelete, setSessionToDelete] = useState(null);
 
-    const filteredPosts = activeTab === '전체' 
-        ? dummyPosts 
-        : dummyPosts.filter(post => post.status === activeTab);
+    const getStatusForQuery = (tab) => {
+        switch (tab) {
+            case '고민중': return 'true';
+            case '고민해결': return 'false';
+            default: return 'all';
+        }
+    };
 
-    const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+    const { data: chatList, isLoading, error } = useChatSessionListQuery(getStatusForQuery(activeTab));
+
+    const chatSessions = chatList?.result || [];
+
+    const transformedPosts = chatSessions.map(session => ({
+        id: session.session_id,
+        session_id: session.session_id,
+        category: session.category || '기타',
+        status: session.status ? '고민중' : '고민해결',
+        title: session.chat_title || '제목 없음',
+        date: session.created_at ? new Date(session.created_at).toLocaleDateString('ko-KR') : '날짜 없음',
+        time: session.created_at ? new Date(session.created_at).toLocaleTimeString('ko-KR', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        }) : '시간 없음'
+    }));
+
+    const totalPages = Math.ceil(transformedPosts.length / postsPerPage);
     const startIndex = (currentPage - 1) * postsPerPage;
     const endIndex = startIndex + postsPerPage;
-    const visiblePosts = filteredPosts.slice(startIndex, endIndex);
+    const visiblePosts = transformedPosts.slice(startIndex, endIndex);
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
         setCurrentPage(1);
     };
-    const handleDeleteClick = () => {
+    const handleDeleteClick = (post) => {
         setIsModalOpen(true);
+        setSessionToDelete(post);
     };
     const handleModalClose = () => {
         setIsModalOpen(false);
+        setSessionToDelete(null);
     };
 
     return (
         <Container>
             <Header>
                 <TabContainer>
-                        <TabButton data-isActive={activeTab === '전체'} onClick={() => handleTabChange('전체')}>전체</TabButton>
-                        <TabButton data-isActive={activeTab === '고민중'} onClick={() => handleTabChange('고민중')}>고민중</TabButton>
-                        <TabButton data-isActive={activeTab === '고민해결'} onClick={() => handleTabChange('고민해결')}>고민해결</TabButton>
+                    <TabButton data-isActive={activeTab === '전체'} onClick={() => handleTabChange('전체')}>전체</TabButton>
+                    <TabButton data-isActive={activeTab === '고민중'} onClick={() => handleTabChange('고민중')}>고민중</TabButton>
+                    <TabButton data-isActive={activeTab === '고민해결'} onClick={() => handleTabChange('고민해결')}>고민해결</TabButton>
                 </TabContainer>
                 <SearchContainer>
                     <SearchBar />
@@ -65,27 +71,27 @@ const WorryList = () => {
             </Header>
             <CategoryContainer>
                 <CategoryStatus>진행여부</CategoryStatus>
-                {activeTab !== '고민해결' ? (
-                    <CategoryCategory>카테고리</CategoryCategory>
-                    ) : (
-                    <CategoryCategory style={{ visibility: 'hidden', opacity: 0 }}>카테고리</CategoryCategory>
-                    )}
+                <CategoryCategory>카테고리</CategoryCategory>
                 <CategoryTitle>제목</CategoryTitle>
                 <CategoryDate>날짜</CategoryDate>
             </CategoryContainer>
-            <WorryPost filteredPosts={visiblePosts} onDeleteClick={handleDeleteClick} activeTab={activeTab}/>
+            <WorryPost 
+                filteredPosts={visiblePosts} 
+                onDeleteClick={handleDeleteClick} 
+                activeTab={activeTab}
+            />
             <Pagination>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <PageButton
-                key={page}
-                data-isOn={page === currentPage}
-                onClick={() => setCurrentPage(page)}
-              >
-                {page}
-              </PageButton>
+                    <PageButton
+                        key={page}
+                        data-isOn={page === currentPage}
+                        onClick={() => setCurrentPage(page)}
+                    >
+                        {page}
+                    </PageButton>
                 ))}
             </Pagination>
-            {isModalOpen && <DeleteModal onClose={handleModalClose} />}
+            {isModalOpen && <DeleteModal onClose={handleModalClose} sessionToDelete={sessionToDelete} />}
         </Container>
     );
 };

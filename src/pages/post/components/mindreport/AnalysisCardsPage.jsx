@@ -2,18 +2,7 @@ import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import ScoreSection from '@report/components/ScoreSection'
 
-export const AnalysisCardsPage = () => {
-  const scores = [
-    { title: '분석카드 1', value: 100, maxValue: 100, content: '분석카드 1 내용' },
-    { title: '분석카드 2', value: 100, maxValue: 100, content: '분석카드 2 내용' },
-    { title: '분석카드 3', value: 100, maxValue: 100, content: '분석카드 3 내용' },
-    { title: '분석카드 4', value: 100, maxValue: 100, content: '분석카드 4 내용' },
-    { title: '분석카드 1', value: 100, maxValue: 100, content: '분석카드 1 내용' },
-    { title: '분석카드 2', value: 100, maxValue: 100, content: '분석카드 2 내용' },
-    { title: '분석카드 3', value: 100, maxValue: 100, content: '분석카드 3 내용' },
-    { title: '분석카드 4', value: 100, maxValue: 100, content: '분석카드 4 내용' },
-  ];
-  
+export const AnalysisCardsPage = ({ scores }) => {
   return (
     <FullBox>
       <ReportTitle>

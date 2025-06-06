@@ -3,19 +3,47 @@ import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import CategoryTag from './CategoryTag';
 import { useNavigate } from 'react-router-dom';
-const WorryModal = () => {
+import { useCreateNewChatMutation } from '@chat/feature/hooks/mutate/useCreateNewChatMutation';
 
+const WorryModal = () => {
   const navigate = useNavigate();
   // 나중에 고민생성하기 버튼 누르면 데이터 넘겨주는 과정 추가하면 될듯
   const [worryTitle, setWorryTitle] = useState(''); // 고민 제목
   const [selectedCategory, setSelectedCategory] = useState(''); // 고민카테고리
+
+  const createNewChatMutation = useCreateNewChatMutation(
+    (sessionInfo) => {
+      console.log('세션 정보:', sessionInfo);
+      navigate(`/chat/${sessionInfo.session_id}`);
+    },
+    (error) => {
+      console.log('세션 생성 실패:', error);
+    }
+  );
+
   const handleCategoryClick = (cat) => {
     setSelectedCategory(cat);
     console.log('선택된 카테고리:', cat);
   };
 
   const handleSubmit = () => {
-    navigate('/chat');
+    // 필수 필드 검증
+    if (!worryTitle.trim()) {
+      alert('고민 제목을 입력해주세요.');
+      return;
+    }
+
+    if (!selectedCategory) {
+      alert('고민 카테고리를 선택해주세요.');
+      return;
+    }
+
+    const requestData = {
+      chat_title: worryTitle.trim(),
+      worry_category: selectedCategory,
+    };
+
+    createNewChatMutation.mutate(requestData);
   };
 
   return (
@@ -40,7 +68,11 @@ const WorryModal = () => {
           ),
         )}
       </CategoryList>
-      <SubmitButton onClick={handleSubmit}>고민 생성하기</SubmitButton>
+      <SubmitButton 
+      onClick={handleSubmit} 
+      disabled={createNewChatMutation.isPending || !worryTitle.trim() || !selectedCategory}>
+        고민 생성하기
+      </SubmitButton>
     </Container>
   );
 };

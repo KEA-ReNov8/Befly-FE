@@ -7,12 +7,12 @@ import theme from '@app/styles/theme';
 
 const Report = ({ reportData }) => {
 
-  const { analysisData, scores, adviseItems, title, createdAt } = reportData || {};
+  const { analysisData, scores, adviseItems, title } = reportData || {};
 
   const navigate = useNavigate();
 
   const handleReportClick = () => {
-    navigate('/share/create-share');
+    navigate('/share/create-share', { state: { reportData } });
   };
 
   const handleListClick = () => {
