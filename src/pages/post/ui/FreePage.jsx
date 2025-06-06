@@ -18,7 +18,7 @@ export const FreePage = () => {
   const location = useLocation();
 
   const { myInfo } = useMyInfoStore();
-  const userId = myInfo?.clientId;
+  const userNickname = myInfo?.nickName;
   const { postId } = useParams();
 
   const { data: post, isLoading, error } = useFreePostDetailQuery(postId);
@@ -143,7 +143,7 @@ export const FreePage = () => {
         onReplyToggle={handleReplyToggle}
         onReplyInputChange={handleReplyInputChange}
         onReplySubmit={handleReplySubmit}
-        userId={userId}
+        userNickname={userNickname}
       />
       {/* 하단 '목록으로 돌아가기' 버튼 */}
       <PageBottomBox onClick={handleGoList} />

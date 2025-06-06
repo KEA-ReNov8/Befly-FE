@@ -13,7 +13,7 @@ export const CommentListBox = ({
   onReplyToggle,
   onReplyInputChange,
   onReplySubmit,
-  userId,
+  userNickname,
 }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -38,7 +38,7 @@ export const CommentListBox = ({
                   <ReplyButton type="button" onClick={() => onReplyToggle(comment.id)}>
                     답글쓰기
                   </ReplyButton>
-                  {userId === comment.authorId && (
+                  {userNickname === comment.author && (
                     <EditDeleteGroup>
                       <EditButton type="button">수정</EditButton>
                       <Divider>|</Divider>
@@ -78,7 +78,7 @@ export const CommentListBox = ({
                         <ReplyContent>{reply.content}</ReplyContent>
                         <ReplyInfoRow>
                           <ReplyDate>{formatDate(reply.date)}</ReplyDate>
-                          {userId === reply.authorId && (
+                          {userNickname === reply.author && (
                             <EditDeleteGroup>
                               <EditButton type="button">수정</EditButton>
                               <Divider>|</Divider>
