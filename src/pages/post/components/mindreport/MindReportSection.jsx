@@ -5,7 +5,23 @@ import { AnalysisCardsPage } from './AnalysisCardsPage';
 import { AIAnalysisPage } from './AIAnalysisPage';
 import { AIOpinionPage } from './AIOpinionPage';
 
-export const MindReportSection = () => {
+export const MindReportSection = ({ reportData }) => {
+  const getUserInfo = () => {
+    try {
+      const myInfoStore = localStorage.getItem('myInfoStore');
+      if (myInfoStore) {
+        const parsed = JSON.parse(myInfoStore);
+        return parsed?.state?.myInfo || null;
+      }
+      return null;
+    } catch (error) {
+      console.error('로컬스토리지 파싱 오류:', error);
+      return null;
+    }
+  };
+
+  const userInfo = getUserInfo();
+
   const [page, setPage] = useState(0);
 
   const handlePrev = () => {
@@ -15,23 +31,25 @@ export const MindReportSection = () => {
     setPage((prev) => (prev < 2 ? prev + 1 : prev));
   };
 
+  const { analysisData, scores, adviseItems, title } = reportData || {};
+
   return (
     <SectionWrapper>
       <LeftNavButton onClick={handlePrev} disabled={page === 0}>
         &lt;
       </LeftNavButton>
       <ContentArea>
-        <ReportHeader>OOO님의 분석 리포트</ReportHeader>
+        <ReportHeader>{userInfo?.nickName}님의 분석 리포트</ReportHeader>
         <SliderContainer>
           <SliderWrapper style={{ transform: `translateX(-${page * 33.333}%)` }}>
             <SliderPage>
-              <AnalysisCardsPage />
+              <AnalysisCardsPage scores={scores} />
             </SliderPage>
             <SliderPage>
-              <AIAnalysisPage />
+              <AIAnalysisPage analysisData={analysisData} />
             </SliderPage>
             <SliderPage>
-              <AIOpinionPage />
+              <AIOpinionPage adviseItems={adviseItems} />
             </SliderPage>
           </SliderWrapper>
         </SliderContainer>

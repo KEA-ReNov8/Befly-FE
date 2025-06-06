@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
-export const AIAnalysisPage = () => {
+export const AIAnalysisPage = ({ analysisData }) => {
   return (
     <FullBox>
       <ReportTitle>
@@ -8,18 +8,20 @@ export const AIAnalysisPage = () => {
         <TitleDivider />
       </ReportTitle>
       <ReportContent>
-        AI가 분석한 결과, 최근 감정의 변화가 뚜렷하게 나타나고 있습니다.
-        <br />
-        불안과 스트레스 지수가 높으며, 긍정적인 감정은 다소 낮은 편입니다.
-        <br />
-        일상에서의 작은 성공 경험을 쌓는 것이 도움이 될 수 있습니다.
+      {analysisData ? (
+          <p>{analysisData}</p>
+        ) : (
+          <p>분석 데이터를 불러오는 중입니다...</p>
+        )}
       </ReportContent>
     </FullBox>
   );
 };
 
 const FullBox = styled.div`
-  width: 100%;
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 20px;
   min-height: 470px;
   max-height: 530px;
   display: flex;
@@ -62,4 +64,5 @@ const ReportContent = styled.div`
   text-align: flex-start;
   overflow-y: auto;
   padding-bottom: 20px;
+  white-space: pre-wrap;
 `;

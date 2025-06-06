@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
+import aiLogo from '../../../../public/favicon.svg';
 
 const ChatMessage = ( {message} ) => {
     const { text, isUser } = message;
 
     return (
         <Container data-isUser={isUser}>
-            {!isUser && <ProfileMark />}
+            {!isUser && <ProfileMark src={aiLogo} />}
             <MessageBubble data-isUser={isUser}>
                 { text }
             </MessageBubble>
@@ -22,12 +23,12 @@ const Container = styled.div`
     margin-bottom: 16px;
 `;
 
-const ProfileMark = styled.div`
+const ProfileMark = styled.img`
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background-color: ${theme.colors.green.main};
-`; //src: url('/images/profile.png'); AI 이미지
+    object-fit: cover;
+`;
 
 const MessageBubble = styled.div`
   white-space: pre-wrap;

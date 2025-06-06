@@ -6,25 +6,34 @@ const WorryPost = ( {filteredPosts, onDeleteClick, activeTab} ) => {
 
     const navigate = useNavigate();
 
-    const handleClick = (id) => {
-        navigate(`/report/${id}`);
-        
-    }
-
+    const handleClick = (post) => {
+        if (post.status === '고민중'){
+            navigate(`/chat/${post.session_id}`);
+        } else {
+            navigate(`/report/${post.session_id}`);
+        }
+    };
     return (
         <PostsContainer>
                 {filteredPosts.map(post => (
-                    <PostItem key={post.id} onClick={() => handleClick(post.id)}>
-                        <PostStatus data-status={post.status}>{post.status}</PostStatus>
-                        {activeTab !== '고민해결' && <PostCategory data-category={post.category}>{post.category}</PostCategory>}
-                        <PostTitle>{post.title}</PostTitle>
+                    <PostItem key={post.id} onClick={() => handleClick(post)}>
+                        <StatusContainer>
+                            <PostStatus data-status={post.status}>{post.status}</PostStatus>
+                        </StatusContainer>
+                        <CategoryContainer>
+                            <PostCategory data-category={post.category}>{post.category}</PostCategory>
+                        </CategoryContainer>
+                        <TitleContainer>
+                            <PostTitle>{post.title}</PostTitle>
+                        </TitleContainer>
                         <PostInfo>
                             <PostDate>{post.date}</PostDate>
                             <PostTime>{post.time}</PostTime>
                         </PostInfo>
                     <DeleteButton onClick={(e) => {
                         e.stopPropagation();
-                        onDeleteClick(post.id)}}>×</DeleteButton>
+                        onDeleteClick(post);
+                        }}>×</DeleteButton>
                 </PostItem>
             ))}
         </PostsContainer>
@@ -49,7 +58,6 @@ const PostItem = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
     position: relative;
     cursor: pointer;
     transition: background-color 0.2s ease;
@@ -59,20 +67,30 @@ const PostItem = styled.div`
     }
 `;
 
+const StatusContainer = styled.div`
+    width: 100px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+`;
+
 const PostStatus = styled.span`
-    width: 60px;
     font-size: ${theme.fontSize.smMd};
     font-weight: ${theme.fontWeight.semibold};
     color: ${theme.colors.green.main};
+`;
+
+const CategoryContainer = styled.div`
+    width: 132px;
     text-align: center;
-    margin-right: 20px;
-    margin-left: 15px;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
 `;
 
 const PostCategory = styled.span`
     padding: 6px 20px;
     border-radius: 20px;
-    margin-left: 35px;
     white-space: nowrap;
     background-color: ${(props) => theme.colors.category[props['data-category']]};
     color: ${theme.colors.other.white};
@@ -80,19 +98,24 @@ const PostCategory = styled.span`
     font-size: ${theme.fontSize.smMd};
 `;
 
+const TitleContainer = styled.div`
+    width: 540px;
+    align-items: center;
+    justify-content: center;
+`;
+
 const PostTitle = styled.div`
     flex: 1;
     font-weight: ${theme.fontWeight.semibold};
     font-size: ${theme.fontSize.md};
-    margin-left: 40px;
 `;
 
 const PostInfo = styled.div`
-    display: flex;
-    gap: 10px;
-    justify-content: center;
+    width: 132px;
+    text-align: center;
     align-items: center;
-    margin-right: 20px;
+    justify-content: center;
+    display: flex;
 `;
 
 const PostDate = styled.span`
@@ -107,13 +130,15 @@ const PostTime = styled.span`
 `;
 
 const DeleteButton = styled.button`
+    align-items: center;
+    justify-content: center;
     background: none;
     border: none;
     font-size: 18px;
+    margin-left: 25px;
+    margin-bottom: 3px;
     color: ${theme.colors.gray[600]};
     cursor: pointer;
-    margin-left: 10px;
-    margin-right: 15px;
     
     &:hover {
         color: ${theme.colors.red.main};

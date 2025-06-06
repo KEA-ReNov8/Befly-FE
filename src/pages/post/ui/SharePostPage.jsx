@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import TopBar from '@shared/ui/TopBar/TopBar';
@@ -9,6 +9,11 @@ import { MindReportSection } from '../components/mindreport/MindReportSection';
 // import { createSharePost } from '../api/post'; // 실제 API 연동 시 활용될 POST 요청 함수 예시
 
 export const SharePostPage = () => {
+  const location = useLocation();
+  const reportData = location.state?.reportData;
+
+  console.log('SharePostPage - received reportData:', reportData);
+
   useEffect(() => {
     const savedTitle = localStorage.getItem('temp_share_post_title');
     const savedContent = localStorage.getItem('temp_share_post_content');
@@ -99,7 +104,7 @@ export const SharePostPage = () => {
           </ButtonContainer>
         </Header>
         <TitleInput placeholder="제목" value={title} onChange={(e) => setTitle(e.target.value)} />
-        <MindReportSection />
+        <MindReportSection reportData={reportData} />
         <Editor
           ref={editorRef}
           previewStyle="vertical"

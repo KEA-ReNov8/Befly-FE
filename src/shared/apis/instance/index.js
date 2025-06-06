@@ -1,5 +1,5 @@
 import axios from 'axios';
-import useIsLoggedInStore from '@/shared/store/useIsLoggedInStore';
+import useIsLoggedInStore from '@shared/store/useIsLoggedInStore';
 
 export const apiInstance = axios.create({
     baseURL: `${import.meta.env.VITE_SERVER_URL}`,
@@ -13,7 +13,6 @@ const nonToken = [
     '/auth/signup', //자체
     '/auth/refresh', //토큰 재발급
     '/auth/logout', //로그아웃
-    //'/auth/email/verify/send', //비밀번호 찾기 이메일 인증
 ];
 
 apiInstance.interceptors.request.use((config) => {

@@ -48,7 +48,9 @@ const ScoreCard = ({ title, value, content, maxValue = 100 }) => {
           <Progress data-percentage={animatedPercentage} />
         </ProgressBar>
       </CardHeader>
-      <Content>{content}</Content>
+      <ContentContainer>
+        <Content>{content}</Content>
+      </ContentContainer>
     </Card>
   );
 };
@@ -74,8 +76,6 @@ const Card = styled.div`
 const CardHeader = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
-  height: 100%;
 `;
 
 const Stat = styled.div`
@@ -127,14 +127,21 @@ const Progress = styled.div.attrs(props => ({
   transition: width 0.5s ease;
 `;
 
+const ContentContainer = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
 const Content = styled.div`
   margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 5px;
+  padding: 3px;
   height: 100%;
+  line-height: 1.5;
   color: ${theme.colors.other.black};
-  font-weight: ${theme.fontWeight.regular};
-  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.light};
+  font-size: ${theme.fontSize.smMd};
 `;
 
 export default ScoreCard;

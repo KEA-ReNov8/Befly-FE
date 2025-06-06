@@ -1,27 +1,8 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
-const ProgressBar = ({ onProgressChange }) => {
-  const [progress, setProgress] = useState(0);
-  //test
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prevProgress) => {
-        const newProgress = prevProgress + 10;
-        if (newProgress >= 100) {
-          clearInterval(timer);
-          return 100;
-        }
-        return newProgress;
-      });
-    }, 1000);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-
+const ProgressBar = ({ progress = 0, onProgressChange }) => {
   // progress 값이 변경될 때마다 부모 컴포넌트에 알림
   useEffect(() => {
     if (onProgressChange) {

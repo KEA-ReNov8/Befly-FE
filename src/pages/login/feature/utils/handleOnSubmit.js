@@ -13,7 +13,7 @@ export const handleOnSubmit = async (e, getValues, signupMutation) => {
             if (convertedImage) photoUrl = await uploadImage(image, convertedImage);
         }*/
         const photoUrl = null;
-        const password = null;
+        const password = "1234!@#$";
         const body = { clientId, password, nickName, photoUrl };
 
         signupMutation.mutate(body);
