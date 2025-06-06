@@ -4,9 +4,9 @@ import theme from '@app/styles/theme';
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { PostBox, CommentInputBox, CommentListBox, PageBottomBox } from '../components/index';
-import { dummyComments } from '../data/DummyPosts';
 import { useMyInfoStore } from '@shared/store/useMyInfoStore';
 import { useFreePostDetailQuery } from '@post/feature/hooks/useFreePostDetailQuery';
+import { useFreeCommentsQuery } from '@post/feature/hooks/useFreeCommentsQuery';
 
 export const FreePage = () => {
   const navigate = useNavigate();
@@ -16,22 +16,13 @@ export const FreePage = () => {
   const userId = myInfo?.clientId;
   const { postId } = useParams();
 
-  const { data, isLoading, error } = useFreePostDetailQuery(postId);
-  const post = data;
+  const { data: post, isLoading, error } = useFreePostDetailQuery(postId);
+  const { data: commentData } = useFreeCommentsQuery(postId);
+  // commentData는 [{id, author, content, date, replies: [...]}, ...] 형태
 
+  console.log('commentData', commentData);
   // 댓글 입력창의 값 상태
   const [commentInput, setCommentInput] = useState('');
-  // 댓글 및 답글(대댓글) 전체 리스트 상태
-  const [comments, setComments] = useState(() =>
-    dummyComments.map((comment) => ({
-      id: comment.id,
-      author: comment.writer,
-      authorId: Math.floor(Math.random() * 1000),
-      content: comment.content,
-      date: comment.createdAt,
-      replies: [],
-    })),
-  );
   // 답글 입력창의 값 상태 (댓글 id별로 관리)
   const [replyInput, setReplyInput] = useState({});
   // 현재 답글 입력창이 열려있는 댓글 id (하나만 열림)
@@ -49,28 +40,11 @@ export const FreePage = () => {
   };
 
   // 댓글 등록 버튼 클릭 시 실행되는 함수
-  // 새 댓글을 comments 배열에 추가하고 입력창을 초기화함
   const handleCommentSubmit = () => {
-    if (!commentInput.trim()) return; // 빈 값 방지
-    setComments([
-      ...comments,
-      {
-        id: Date.now(), // 임시 id (실제 서비스에서는 백엔드에서 받아오는 id 사용)
-        author: '닉네임', // 실제 닉네임으로 교체 필요
-        authorId: userId,
-        content: commentInput,
-        date: new Date().toLocaleString('ko-KR', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-        }),
-        replies: [],
-      },
-    ]);
+    if (!commentInput.trim()) return;
+    // 댓글 등록 API 필요
     setCommentInput('');
-    if (commentRef.current) commentRef.current.style.height = '40px'; // 댓글 입력 창 높이 초기화
+    if (commentRef.current) commentRef.current.style.height = '40px';
   };
 
   // 답글 입력창 토글 함수 (같은 댓글을 다시 누르면 닫힘)
@@ -84,38 +58,12 @@ export const FreePage = () => {
   };
 
   // 답글 등록 버튼 클릭 시 실행되는 함수
-  // 해당 댓글의 replies 배열에 새 답글을 추가함
   const handleReplySubmit = (commentId) => {
     const input = replyInput[commentId];
-    if (!input || !input.trim()) return; // 빈 값 방지
-    setComments(
-      // 댓글 목록 중 해당 댓글의 id와 일치하는 댓글을 찾아서 답글을 추가
-      comments.map((comment) =>
-        comment.id === commentId
-          ? {
-              ...comment,
-              replies: [
-                ...comment.replies,
-                {
-                  id: Date.now(), // 임시 id
-                  author: '닉네임', // 실제 닉네임으로 교체 필요
-                  authorId: userId,
-                  content: input,
-                  date: new Date().toLocaleString('ko-KR', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  }),
-                },
-              ],
-            }
-          : comment,
-      ),
-    );
-    setReplyInput({ ...replyInput, [commentId]: '' }); // 답글 입력창 초기화
-    setReplyingTo(null); // 답글 입력창 닫기
+    if (!input || !input.trim()) return;
+    // 대댓글 등록 API 필요
+    setReplyInput({ ...replyInput, [commentId]: '' });
+    setReplyingTo(null);
   };
 
   // '목록으로 돌아가기' 버튼 클릭 시 실행 (진입 경로가 있으면 해당 경로로, 없으면 /free로 이동)
@@ -156,7 +104,7 @@ export const FreePage = () => {
       />
       {/* 댓글/답글 리스트 및 답글 입력창 */}
       <CommentListBox
-        comments={comments}
+        comments={commentData || []}
         replyInput={replyInput}
         replyingTo={replyingTo}
         onReplyToggle={handleReplyToggle}

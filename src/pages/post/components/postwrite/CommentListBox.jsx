@@ -3,6 +3,7 @@ import theme from '@app/styles/theme';
 import Arrow from '@shared/assets/icons/arrow.svg';
 import DeleteModal from '@pages/my/components/DeleteModal';
 import { useState } from 'react';
+import { formatDate } from '@shared/utils/date';
 
 //삭제 안될 경우 삭제 모달 복제해서 새로 만들기
 export const CommentListBox = ({
@@ -14,84 +15,89 @@ export const CommentListBox = ({
   onReplySubmit,
   userId,
 }) => {
-
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleDelete = () => {
     setIsDeleteModalOpen(true);
   };
 
-  return(
+  return (
     <>
-  <CommentListSection>
-    {comments.map((comment) => (
-      <CommentBlock key={comment.id}>
-        <CommentRow>
-          <ProfileCircle />
-          <CommentRight>
-            <CommentAuthor>{comment.author}</CommentAuthor>
-            <CommentContent>{comment.content}</CommentContent>
-            <CommentInfoRow>
-              <CommentDate>{comment.date}</CommentDate>
-              <ReplyButton type="button" onClick={() => onReplyToggle(comment.id)}>
-                답글쓰기
-              </ReplyButton>
-              {userId === comment.authorId && (
-                <EditDeleteGroup>
-                  <EditButton type="button">수정</EditButton>
-                  <Divider>|</Divider>
-                  <DeleteButton type="button" onClick={handleDelete}>삭제</DeleteButton>
-                </EditDeleteGroup>
-              )}
-            </CommentInfoRow>
-          </CommentRight>
-        </CommentRow>
-        {/* 답글 입력창 */}
-        {replyingTo === comment.id && (
-          <ReplyInputRow>
-            <ReplyInput
-              placeholder="답글을 입력하세요"
-              value={replyInput[comment.id] || ''}
-              onChange={(e) => onReplyInputChange(e, comment.id)}
-            />
-            <ReplyRegisterButton type="button" onClick={() => onReplySubmit(comment.id)}>
-              등록
-            </ReplyRegisterButton>
-          </ReplyInputRow>
-        )}
-        {/* 답글 리스트 */}
-        {comment.replies && comment.replies.length > 0 && (
-          <ReplyList>
-            {comment.replies.map((reply) => (
-              <ReplyBlock key={reply.id}>
-                <ReplyRow>
-                  <Replybox>
-                    <img src={Arrow} alt="arrow" />
-                    <ReplyProfileCircle />
-                  </Replybox>
-                  <ReplyRight>
-                    <ReplyAuthor>{reply.author}</ReplyAuthor>
-                    <ReplyContent>{reply.content}</ReplyContent>
-                    <ReplyInfoRow>
-                      <ReplyDate>{reply.date}</ReplyDate>
-                      {userId === reply.authorId && (
-                        <EditDeleteGroup>
-                          <EditButton type="button">수정</EditButton>
-                          <Divider>|</Divider>
-                          <DeleteButton type="button" onClick={handleDelete}>삭제</DeleteButton>
-                        </EditDeleteGroup>
-                      )}
-                    </ReplyInfoRow>
-                  </ReplyRight>
-                </ReplyRow>
-              </ReplyBlock>
-            ))}
-          </ReplyList>
-        )}
-      </CommentBlock>
-    ))}
-    </CommentListSection>
-    {isDeleteModalOpen && <DeleteModal onClose={() => setIsDeleteModalOpen(false)} />}
+      <CommentListSection>
+        {comments.map((comment) => (
+          <CommentBlock key={comment.id}>
+            <CommentRow>
+              <ProfileCircle />
+              <CommentRight>
+                <CommentAuthor>{comment.author}</CommentAuthor>
+                <CommentContent>
+                  {comment.isDeleted ? '(삭제된 댓글입니다)' : comment.content}
+                </CommentContent>
+                <CommentInfoRow>
+                  <CommentDate>{formatDate(comment.date)}</CommentDate>
+                  <ReplyButton type="button" onClick={() => onReplyToggle(comment.id)}>
+                    답글쓰기
+                  </ReplyButton>
+                  {userId === comment.authorId && (
+                    <EditDeleteGroup>
+                      <EditButton type="button">수정</EditButton>
+                      <Divider>|</Divider>
+                      <DeleteButton type="button" onClick={handleDelete}>
+                        삭제
+                      </DeleteButton>
+                    </EditDeleteGroup>
+                  )}
+                </CommentInfoRow>
+              </CommentRight>
+            </CommentRow>
+            {/* 답글 입력창 */}
+            {replyingTo === comment.id && (
+              <ReplyInputRow>
+                <ReplyInput
+                  placeholder="답글을 입력하세요"
+                  value={replyInput[comment.id] || ''}
+                  onChange={(e) => onReplyInputChange(e, comment.id)}
+                />
+                <ReplyRegisterButton type="button" onClick={() => onReplySubmit(comment.id)}>
+                  등록
+                </ReplyRegisterButton>
+              </ReplyInputRow>
+            )}
+            {/* 답글 리스트 */}
+            {comment.replies && comment.replies.length > 0 && (
+              <ReplyList>
+                {comment.replies.map((reply) => (
+                  <ReplyBlock key={reply.id}>
+                    <ReplyRow>
+                      <Replybox>
+                        <img src={Arrow} alt="arrow" />
+                        <ReplyProfileCircle />
+                      </Replybox>
+                      <ReplyRight>
+                        <ReplyAuthor>{reply.author}</ReplyAuthor>
+                        <ReplyContent>{reply.content}</ReplyContent>
+                        <ReplyInfoRow>
+                          <ReplyDate>{formatDate(reply.date)}</ReplyDate>
+                          {userId === reply.authorId && (
+                            <EditDeleteGroup>
+                              <EditButton type="button">수정</EditButton>
+                              <Divider>|</Divider>
+                              <DeleteButton type="button" onClick={handleDelete}>
+                                삭제
+                              </DeleteButton>
+                            </EditDeleteGroup>
+                          )}
+                        </ReplyInfoRow>
+                      </ReplyRight>
+                    </ReplyRow>
+                  </ReplyBlock>
+                ))}
+              </ReplyList>
+            )}
+          </CommentBlock>
+        ))}
+      </CommentListSection>
+      {isDeleteModalOpen && <DeleteModal onClose={() => setIsDeleteModalOpen(false)} />}
     </>
   );
 };
