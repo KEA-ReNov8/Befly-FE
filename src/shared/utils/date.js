@@ -17,3 +17,48 @@ export const formatDate = (isoString) => {
 
   return `${year}. ${month}. ${day}. ${ampm} ${String(hour).padStart(2, '0')}:${minute}`;
 };
+
+/**
+ * 생성일시를 기준으로 "방금 전", "분 전", "시간 전" 등의 형태로 변환하는 함수
+ * 백엔드 formatTimeAgo 로직과 동일하게 구현
+ * @param {string|Date} createdAt - 생성일시 (ISO string 또는 Date 객체)
+ * @returns {string} - "방금 전", "5분 전", "2시간 전" 등의 형태
+ */
+export const formatTimeAgo = (createdAt) => {
+  try {
+    const now = new Date();
+    const created = new Date(createdAt);
+
+    // 유효하지 않은 날짜인 경우 원본 반환
+    if (isNaN(created.getTime())) {
+      return createdAt;
+    }
+
+    const diffMs = now.getTime() - created.getTime();
+    const seconds = Math.floor(diffMs / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (seconds < 60) {
+      return '방금 전';
+    } else if (minutes < 60) {
+      return `${minutes}분 전`;
+    } else if (hours < 24) {
+      return `${hours}시간 전`;
+    } else if (days === 1) {
+      return '어제';
+    } else if (days < 7) {
+      return `${days}일 전`;
+    } else {
+      // 7일 이상인 경우 YYYY-MM-DD 형태로 반환
+      const year = created.getFullYear();
+      const month = String(created.getMonth() + 1).padStart(2, '0');
+      const day = String(created.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+  } catch (error) {
+    console.error('시간 형식 변환 오류:', error);
+    return createdAt; // 오류 시 원본 반환
+  }
+};
