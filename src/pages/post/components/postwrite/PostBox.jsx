@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import PostSelectModal from '@pages/post/components/PostSelectModal';
 import { useState } from 'react';
+import { formatDate } from '@shared/utils/date';
 
 export const PostBox = ({
   title,
@@ -32,7 +33,7 @@ export const PostBox = ({
           <Meta>
             <span>{author}</span>
             <Divider>|</Divider>
-            <span>{date}</span>
+            <span>{formatDate(date)}</span>
           </Meta>
         </HeaderWrapper>
         <EditButton onClick={handleDelete}>...</EditButton>

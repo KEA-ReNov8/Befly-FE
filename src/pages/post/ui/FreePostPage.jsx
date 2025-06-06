@@ -37,9 +37,9 @@ export const FreePostPage = () => {
   const handleTempSave = () => {
     const editorInstance = editorRef.current.getInstance();
     const html = editorInstance.getHTML();
-    // const markdown = editorInstance.getMarkdown();
+    const markdown = editorInstance.getMarkdown();
 
-    if (!title.trim() && !html.trim()) {
+    if (!title.trim() && !markdown.trim()) {
       alert('임시 저장할 내용이 없습니다.');
       return;
     }
@@ -76,9 +76,9 @@ export const FreePostPage = () => {
 
     const editorInstance = editorRef.current.getInstance();
     const html = editorInstance.getHTML();
-    // const markdown = editorInstance.getMarkdown();
+    const markdown = editorInstance.getMarkdown();
 
-    if (!title.trim() || !html.trim()) {
+    if (!title.trim() || !markdown.trim()) {
       alert('제목과 내용을 모두 입력해주세요.');
       setIsSubmitting(false);
       return;

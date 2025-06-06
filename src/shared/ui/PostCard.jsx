@@ -21,7 +21,14 @@ const PostCard = ({
 
   const navigate = useNavigate();
   const location = useLocation();
-  console.log('🔍 cardImage:', cardImage);
+
+  // HTML 태그를 제거하고 텍스트만 추출하는 함수
+  const stripHtmlTags = (html) => {
+    if (!html) return '';
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+    return temp.textContent || temp.innerText || '';
+  };
 
   const handleClick = () => {
     // 클릭 시 해당 계시글로 이동
@@ -40,7 +47,7 @@ const PostCard = ({
       )}
       <CardContentContainer>
         <CardTitle>{title}</CardTitle>
-        <CardContent>{content}</CardContent>
+        <CardContent>{stripHtmlTags(content)}</CardContent>
         <CardFooter>
           <LeftFooter>
             <span>♡ {likes}</span>

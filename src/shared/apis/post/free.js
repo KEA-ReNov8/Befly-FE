@@ -81,8 +81,3 @@ export const createFreePost = async ({ title, content, imageKeys }) => {
 
   return response.data.result;
 };
-
-export const deleteFreePost = async (freeId) => {
-  const response = await apiInstance.delete(`/community/free/${freeId}`);
-  return response.data.result;
-};
