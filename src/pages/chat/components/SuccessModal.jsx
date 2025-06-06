@@ -1,19 +1,44 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import closeIcon from '@shared/assets/icons/Xmark.svg';
+import { useConsultResultQuery } from '@chat/feature/hooks/query/useConsultResultQuery';
 
 
 const SuccessModal = ({ onClose }) => {
 
     const navigate = useNavigate();
+    const { sessionId } = useParams();
+    const consultResultQuery = useConsultResultQuery(sessionId);
 
-    const handleReportClick = () => {
-        navigate('/report');
+    const handleReportClick = async () => {
+        if(!sessionId) {
+            alert('세션 정보를 찾을 수 없습니다.');
+            return;
+        }
+
+        try {
+            await consultResultQuery.refetch();
+
+            navigate(`/report/${sessionId}`);
+        } catch (error) {
+            console.error('평가 API 호출 실패:', error);
+        }
     };
 
-    const handleListClick = () => {
-        navigate('/list');
+    const handleListClick = async () => {
+        if(!sessionId) {
+            alert('세션 정보를 찾을 수 없습니다.');
+            return;
+        }
+
+        try {
+            await consultResultQuery.refetch();
+
+            navigate('/my/myworry');
+        } catch (error) {
+            console.error('평가 API 호출 실패:', error);
+        }
     };
 
     return (
@@ -28,8 +53,18 @@ const SuccessModal = ({ onClose }) => {
                     <Title>분석을 통해 자기 이해를 해보세요!</Title>
                 </TitleContainer>
                 <ButtonContainer>
-                    <ListButton onClick={handleListClick}>목록으로 가기</ListButton>
-                    <ReportButton onClick={handleReportClick}>분석 보기</ReportButton>
+                    <ListButton 
+                        onClick={handleListClick}
+                        disabled={consultResultQuery.isLoading}
+                    >
+                        {consultResultQuery.isLoading ? '처리 중...' : '목록으로 가기'}
+                    </ListButton>
+                    <ReportButton 
+                        onClick={handleReportClick}
+                        disabled={consultResultQuery.isLoading}
+                    >
+                        {consultResultQuery.isLoading ? '처리 중...' : '분석 보기'}
+                    </ReportButton>
                 </ButtonContainer>
             </ModalContainer>
         </ModalOverlay>
@@ -109,9 +144,17 @@ const ReportButton = styled.button`
     background-color: ${theme.colors.green.main};
     font-size: ${theme.fontSize.md};
     font-weight: ${theme.fontWeight.medium};
+    transition: background-color 0.2s ease;
     
-    &:hover {
+    &:hover:not(:disabled) {
         background-color: ${theme.colors.green.hover};
+    }
+
+    &:disabled {
+        background-color: ${theme.colors.gray[300]};
+        color: ${theme.colors.gray[500]};
+        cursor: not-allowed;
+        opacity: 0.6;
     }
 `;
 
@@ -126,9 +169,18 @@ const ListButton = styled.button`
     color: ${theme.colors.other.black};
     font-size: ${theme.fontSize.md};
     font-weight: ${theme.fontWeight.medium};
+    transition: background-color 0.2s ease;
 
-    &:hover {
+    &:hover:not(:disabled) {
         background-color: ${theme.colors.gray[500]};
+    }
+
+    &:disabled {
+        background-color: ${theme.colors.gray[200]};
+        color: ${theme.colors.gray[400]};
+        border-color: ${theme.colors.gray[300]};
+        cursor: not-allowed;
+        opacity: 0.6;
     }
 `;
 
