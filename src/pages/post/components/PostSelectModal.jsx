@@ -5,7 +5,7 @@ import { useState } from 'react';
 import DeleteModal from '@pages/post/components/DeleteModal';
 
 //삭제 안될 경우 삭제 모달 복제해서 새로 만들기
-const PostSelectModal = ({ postId }) => {
+const PostSelectModal = ({ postId, onClose }) => {
   const navigate = useNavigate();
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -19,13 +19,27 @@ const PostSelectModal = ({ postId }) => {
   };
 
   return (
-    <ModalContainer>
-      <EditButton onClick={handleEdit}>수정</EditButton>
-      <DeleteButton onClick={handleDelete}>삭제</DeleteButton>
-      {isDeleteModalOpen && <DeleteModal onClose={() => setIsDeleteModalOpen(false)} />}
-    </ModalContainer>
+    <>
+      <ModalOverlay onClick={onClose} />
+      <ModalContainer>
+        <EditButton onClick={handleEdit}>수정</EditButton>
+        <DeleteButton onClick={handleDelete}>삭제</DeleteButton>
+        {isDeleteModalOpen && (
+          <DeleteModal postId={postId} onClose={() => setIsDeleteModalOpen(false)} />
+        )}
+      </ModalContainer>
+    </>
   );
 };
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+`;
 
 const ModalContainer = styled.div`
   position: absolute;
@@ -40,6 +54,7 @@ const ModalContainer = styled.div`
   background-color: ${theme.colors.other.white};
   border-radius: 8px;
   border: 1px solid ${theme.colors.gray[400]};
+  z-index: 1000;
 `;
 
 const EditButton = styled.div`

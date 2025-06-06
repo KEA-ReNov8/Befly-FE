@@ -1,9 +1,23 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
+import { useDeleteFreePostMutation } from '@post/feature/hooks/useDeleteFreePostMutation';
+import { useNavigate } from 'react-router-dom';
 
-const DeleteModal = ({ onClose }) => {
-  const handleClick = () => {
-    window.location.reload();
+const DeleteModal = ({ onClose, postId }) => {
+  const navigate = useNavigate();
+  const { mutate: deleteFreePost, isPending } = useDeleteFreePostMutation();
+
+  const handleDelete = () => {
+    deleteFreePost(postId, {
+      onSuccess: () => {
+        alert('게시글이 삭제되었습니다.');
+        navigate('/free'); // 자유게시판 목록으로 이동
+      },
+      onError: (error) => {
+        console.error('삭제 실패:', error);
+        alert('게시글 삭제에 실패했습니다.');
+      },
+    });
   };
 
   return (
@@ -12,7 +26,9 @@ const DeleteModal = ({ onClose }) => {
         <Title>삭제하시겠습니까?</Title>
         <ButtonContainer>
           <ReturnButton onClick={onClose}>취소</ReturnButton>
-          <DeleteButton onClick={handleClick}>삭제하기</DeleteButton>
+          <DeleteButton onClick={handleDelete} disabled={isPending}>
+            {isPending ? '삭제 중...' : '삭제하기'}
+          </DeleteButton>
         </ButtonContainer>
       </ModalContainer>
     </ModalOverlay>

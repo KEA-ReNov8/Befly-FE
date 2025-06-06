@@ -3,6 +3,7 @@ import theme from '@app/styles/theme';
 import PostSelectModal from '@pages/post/components/PostSelectModal';
 import { useState } from 'react';
 import { formatDate } from '@shared/utils/date';
+import { useMyInfoStore } from '@shared/store/useMyInfoStore';
 
 export const PostBox = ({
   title,
@@ -16,6 +17,10 @@ export const PostBox = ({
   children = null,
 }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const { myInfo } = useMyInfoStore();
+
+  // 현재 로그인된 유저가 게시글 작성자인지 확인
+  const isAuthor = myInfo?.nickName === author;
 
   const handleDelete = () => {
     setIsDeleteModalOpen((prev) => !prev); // 이전 상태를 반전
@@ -36,7 +41,7 @@ export const PostBox = ({
             <span>{formatDate(date)}</span>
           </Meta>
         </HeaderWrapper>
-        <EditButton onClick={handleDelete}>...</EditButton>
+        {isAuthor && <EditButton onClick={handleDelete}>...</EditButton>}
       </PostHeader>
       {/* MindReportSection 등 children이 들어갈 위치 */}
       {children}
@@ -47,7 +52,7 @@ export const PostBox = ({
         </LikeButton>
         <span>🗨️ {stats.comment}</span>
       </PostStats>
-      {isDeleteModalOpen && <PostSelectModal postId={postId} />}
+      {isDeleteModalOpen && <PostSelectModal postId={postId} onClose={onCloseDeleteModal} />}
     </PostContainer>
   );
 };

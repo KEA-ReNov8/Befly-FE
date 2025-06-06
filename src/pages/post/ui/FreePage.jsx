@@ -122,7 +122,7 @@ export const FreePage = () => {
           date={post.createdAt}
           content={post.content}
           stats={{ like: post.likes, comment: post.comments }}
-          postId={post.freeId}
+          postId={post.postId}
           isLiked={isLiked}
           onToggleLike={handleLikeClick}
         />
