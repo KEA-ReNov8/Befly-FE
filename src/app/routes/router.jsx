@@ -16,16 +16,16 @@ import { ReportPage } from '@pages/report';
 import { ChatPage } from '@pages/chat';
 import { ErrorPage } from '@pages/error/ErrorPage';
 import { ProtectedRouter } from './ProtectedRouter';
+import { PublicRouter } from './ProtectedRouter';
 
 export const router = createBrowserRouter([
-  //작업 완료시 프로텍트 라우터로 전환 예정
-  /*{
+  // 로그인/회원가입 페이지 - 로그인되어 있으면 홈으로 리다이렉트
+  {
     path: '/',
-    element: <ProtectedRouter />,
+    element: <PublicRouter />,
     errorElement: <ErrorPage />,
     children: [
       {
-        index: true,
         path: 'login',
         element: <LoginPage />,
       },
@@ -42,115 +42,106 @@ export const router = createBrowserRouter([
         element: <FindPwPage />,
       },
     ]
-  },*/
-  {
-    path: '/login',
-    element: <LoginPage />,
-    errorElement: <ErrorPage />,
   },
-  {
-    path: 'signup',
-    element: <SignupPage />,
-  },
-  {
-    path: 'common-signup',
-    element: <SelfSignupPage />,
-  },
-  {
-    path: 'find-pw',
-    element: <FindPwPage />,
-  },
+  // 메인 콘텐츠 - 로그인 안되어 있으면 로그인 페이지로 리다이렉트
   {
     path: '/',
-    element: <RootLayout />,
+    element: <ProtectedRouter />,
+    errorElement: <ErrorPage />,
     children: [
       {
-        index: true,
-        element: <HomePage />,
-      },
-    ],
-  },
-  {
-    path: 'free',
-    element: <RootLayout />,
-    children: [
-      {
-        path: 'page/:page',
-        element: <FreePostListPage />,
+        path: '/',
+        element: <RootLayout />,
+        children: [
+          {
+            index: true,
+            element: <HomePage />,
+          },
+        ],
       },
       {
-        path: 'create-free',
-        element: <FreePostPage />,
+        path: 'free',
+        element: <RootLayout />,
+        children: [
+          {
+            path: 'page/:page',
+            element: <FreePostListPage />,
+          },
+          {
+            path: 'create-free',
+            element: <FreePostPage />,
+          },
+          {
+            path: 'edit/:postId',
+            element: <FreePostPage />,
+          },
+          {
+            path: ':postId',
+            element: <FreePage />,
+          },
+        ],
       },
       {
-        path: 'edit/:postId',
-        element: <FreePostPage />,
+        path: 'share',
+        element: <RootLayout />,
+        children: [
+          {
+            path: 'page/:page',
+            element: <SharePostListPage />,
+          },
+          {
+            path: 'create-share',
+            element: <SharePostPage />,
+          },
+          {
+            path: ':postId',
+            element: <SharePage />,
+          },
+        ],
       },
       {
-        path: ':postId',
-        element: <FreePage />,
-      },
-    ],
-  },
-  {
-    path: 'share',
-    element: <RootLayout />,
-    children: [
-      {
-        path: 'page/:page',
-        element: <SharePostListPage />,
-      },
-      {
-        path: 'create-share',
-        element: <SharePostPage />,
+        path: 'my',
+        element: <RootLayout />,
+        children: [
+          {
+            index: true,
+            element: <MyPage />,
+          },
+          {
+            path: 'myworry',
+            element: <MyWorryPage />,
+          },
+        ],
       },
       {
-        path: ':postId',
-        element: <SharePage />,
-      },
-    ],
-  },
-  {
-    path: 'my',
-    element: <RootLayout />,
-    children: [
-      {
-        index: true,
-        element: <MyPage />,
+        path: 'profile/:userId',
+        element: <RootLayout />,
+        children: [
+          {
+            index: true,
+            element: <UserProfilePage />,
+          },
+        ],
       },
       {
-        path: 'myworry',
-        element: <MyWorryPage />,
+        path: 'report/:sessionId',
+        element: <RootLayout />,
+        children: [
+          {
+            index: true,
+            element: <ReportPage />,
+          },
+        ],
       },
-    ],
-  },
-  {
-    path: 'profile/:userId',
-    element: <RootLayout />,
-    children: [
       {
-        index: true,
-        element: <UserProfilePage />,
-      },
-    ],
-  },
-  {
-    path: 'report/:sessionId',
-    element: <RootLayout />,
-    children: [
-      {
-        index: true,
-        element: <ReportPage />,
-      },
-    ],
-  },
-  {
-    path: 'chat/:sessionId',
-    element: <RootLayout />,
-    children: [
-      {
-        index: true,
-        element: <ChatPage />,
+        path: 'chat/:sessionId',
+        element: <RootLayout />,
+        children: [
+          {
+            index: true,
+            element: <ChatPage />,
+          },
+        ],
       },
     ],
   },
