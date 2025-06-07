@@ -10,8 +10,7 @@ import { apiInstance } from '@/shared/apis/instance';
 
 export const LoginPage = () => {
     const navigate = useNavigate();
-
-    const { isFirstMount, setIsFirstMount, setIsLoggedIn } = useIsLoggedInStore.getState();
+    const { isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn } = useIsLoggedInStore();
 
     useEffect(() => {
         const getIsLoggedIn = async () => {
@@ -25,13 +24,16 @@ export const LoginPage = () => {
             } catch (error) {
                 console.error('로그인 검증 실패:', error);
                 setIsLoggedIn(false);
-                //setIsFirstMount(false);
+                setIsFirstMount(false);
             }
         };
-        if(isFirstMount) {
+        
+        // 첫 방문이면서 로그인 상태가 아닌 경우에만 자동 로그인 시도
+        // 로그아웃 직후에는 isFirstMount가 false이므로 시도하지 않음
+        if(isFirstMount && !isLoggedIn) {
             getIsLoggedIn();
         }
-    }, []);
+    }, [isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn, navigate]);
 
     return (
         <Wrapper>
