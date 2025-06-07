@@ -3,14 +3,13 @@ import Footer from '@shared/ui/Footer';
 import Background from '@pages/login/components/Background';
 import LoginForm from '@pages/login/components/LoginForm';
 import { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import useIsLoggedInStore from '@shared/store/useIsLoggedInStore';
 import { apiInstance } from '@/shared/apis/instance';
 
 
 export const LoginPage = () => {
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
     const { isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn } = useIsLoggedInStore();
 
     useEffect(() => {
@@ -29,14 +28,12 @@ export const LoginPage = () => {
             }
         };
         
-        // 소셜 로그인 성공 후 리다이렉트인지 확인 (여러 방법 시도)
-        const hasRefreshToken = document.cookie.includes('refreshToken') || document.cookie.includes('JSESSIONID');
-        
-        // 소셜 로그인 후이거나, 쿠키가 있거나, 첫 방문이면서 로그인 상태가 아닌 경우 자동 로그인 시도
-        if(socialLoginSuccess || hasRefreshToken || (isFirstMount && !isLoggedIn)) {
+        // 첫 방문이면서 로그인 상태가 아닌 경우에만 자동 로그인 시도
+        // 로그아웃 직후에는 isFirstMount가 false이므로 시도하지 않음
+        if(isFirstMount && !isLoggedIn) {
             getIsLoggedIn();
         }
-    }, [searchParams, isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn, navigate]);
+    }, [isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn, navigate]);
 
     return (
         <Wrapper>
