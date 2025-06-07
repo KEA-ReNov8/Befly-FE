@@ -5,12 +5,11 @@ import LoginForm from '@pages/login/components/LoginForm';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import useIsLoggedInStore from '@shared/store/useIsLoggedInStore';
-import { apiInstance } from '@/shared/apis/instance';
+import { apiInstance } from '@shared/apis/instance';
 
 
 export const LoginPage = () => {
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
     const { isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn } = useIsLoggedInStore();
 
     useEffect(() => {
