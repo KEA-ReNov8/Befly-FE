@@ -4,7 +4,7 @@ import defaultProfile from '@shared/assets/icons/defaultUser.svg';
 import { badgeSystem } from '@my/util/badgeSystem';
 
 const UserDetail = ({ handleProfileClick, userData }) => {
-    const badge = badgeSystem(userData);
+    const badge = badgeSystem(userData.badge);
     const isDefaultProfile = !userData?.profileImg;
     
     return (
@@ -33,13 +33,11 @@ const ProfileImage = styled.div`
     width: 170px;
     height: 170px;
     border-radius: 50%;
-    object-fit: cover;
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: ${theme.colors.gray[200]};
-    object-fit: cover;
 
     img {
         width: ${props => props.$isDefault ? '80px' : '170px'};
