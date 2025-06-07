@@ -80,15 +80,35 @@ const UserProfile = ({ userInfo }) => {
                 <FreeButton data-active={activeTab === '자유'} onClick={() => handleTabChange('자유')}>자유함</FreeButton>
             </ButtonContainer>
             <PostSection>
-                {currentPosts.map((post, index) => {
+                {currentPosts.length === 0 ? (
+                    <EmptyStateContainer>
+                        {activeTab === '공유' ? (
+                            <>
+                                <EmptyTitle>공유한 고민이 없어요</EmptyTitle>
+                                <EmptyDescription>
+                                    아직 공유된 고민이 없습니다.
+                                </EmptyDescription>
+                            </>
+                        ) : (
+                            <>
+                                <EmptyTitle>작성한 자유글이 없어요</EmptyTitle>
+                                <EmptyDescription>
+                                    아직 작성된 자유글이 없습니다.
+                                </EmptyDescription>
+                            </>
+                        )}
+                    </EmptyStateContainer>
+                ) : (
+                    currentPosts.map((post, index) => {
                         if (activeTab === '공유') {
                             return <SharePostCard key={`${post.solvedId}-${index}`} post={post} />;
                         } else if (activeTab === '자유') {
                             return <FreePostCard key={`${post.postId}-${index}`} post={post} />;
                         } 
-                    })}
+                    })
+                )}
                 {/* 무한스크롤 트리거 (공유함일 때만) */}
-                {activeTab === '공유' && (
+                {activeTab === '공유' && currentPosts.length > 0 && (
                     <div ref={observerRef} style={{ height: '20px', width: '100%' }}></div>
                 )}
             </PostSection>
@@ -171,6 +191,32 @@ const PostSection = styled.div`
     align-items: center;
     flex-wrap: wrap;
     gap: 20px;
+`;
+
+const EmptyStateContainer = styled.div`
+    margin-right: 10%;
+    width: 100%;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+`;
+
+const EmptyTitle = styled.h3`
+    font-size: ${theme.fontSize.lg};
+    font-weight: ${theme.fontWeight.semibold};
+    color: ${theme.colors.gray[600]};
+    margin: 0;
+`;
+
+const EmptyDescription = styled.p`
+    font-size: ${theme.fontSize.md};
+    color: ${theme.colors.gray[500]};
+    text-align: center;
+    line-height: 1.5;
+    margin: 0;
 `;
 
 export default UserProfile;

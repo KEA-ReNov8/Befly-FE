@@ -80,6 +80,20 @@ const WorryList = () => {
                 onDeleteClick={handleDeleteClick} 
                 activeTab={activeTab}
             />
+            {visiblePosts.length === 0 && (
+                <EmptyStateContainer>
+                    <EmptyTitle>
+                        {activeTab === '전체' ? '아직 고민이 없어요' : 
+                         activeTab === '고민중' ? '진행 중인 고민이 없어요' : 
+                         '해결된 고민이 없어요'}
+                    </EmptyTitle>
+                    <EmptyDescription>
+                        {activeTab === '전체' ? '새로운 고민을 시작해보세요!' : 
+                         activeTab === '고민중' ? '새로운 고민을 시작해보세요!' : 
+                         '고민을 해결해보세요!'}
+                    </EmptyDescription>
+                </EmptyStateContainer>
+            )}
             <Pagination>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                     <PageButton
@@ -193,6 +207,32 @@ const CategoryDate = styled.div`
     margin-left: 80px;
     font-size: ${theme.fontSize.lgMd};
     font-weight: ${theme.fontWeight.semibold};
+`;
+
+const EmptyStateContainer = styled.div`
+    width: 100%;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 40px 0;
+`;
+
+const EmptyTitle = styled.h3`
+    font-size: ${theme.fontSize.lg};
+    font-weight: ${theme.fontWeight.semibold};
+    color: ${theme.colors.gray[600]};
+    margin: 0;
+`;
+
+const EmptyDescription = styled.p`
+    font-size: ${theme.fontSize.md};
+    color: ${theme.colors.gray[500]};
+    text-align: center;
+    line-height: 1.5;
+    margin: 0;
 `;
 
 const Pagination = styled.div`

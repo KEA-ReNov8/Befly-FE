@@ -12,9 +12,16 @@ const NotificationModal = () => {
   return (
     <Wrapper>
       <ItemList>
-        {notifications.map((notification, index) => (
-          <NotificationItem key={index} content={notification} />
-        ))}
+        {notifications.length === 0 ? (
+          <EmptyStateContainer>
+            <EmptyTitle>새로운 알림이 없어요</EmptyTitle>
+            <EmptyDescription>새로운 소식이 있으면 알려드릴게요!</EmptyDescription>
+          </EmptyStateContainer>
+        ) : (
+          notifications.map((notification, index) => (
+            <NotificationItem key={index} content={notification} />
+          ))
+        )}
       </ItemList>
     </Wrapper>
   );
@@ -43,4 +50,31 @@ const ItemList = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+`;
+
+const EmptyStateContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 60px;
+`;
+
+const EmptyTitle = styled.h4`
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.semibold};
+  color: ${theme.colors.gray[600]};
+  margin: 0;
+  text-align: center;
+`;
+
+const EmptyDescription = styled.p`
+  font-size: ${theme.fontSize.sm};
+  color: ${theme.colors.gray[500]};
+  text-align: center;
+  line-height: 1.4;
+  margin: 0;
 `;
