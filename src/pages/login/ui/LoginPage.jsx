@@ -12,7 +12,7 @@ export const LoginPage = () => {
     const navigate = useNavigate();
     const { isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn } = useIsLoggedInStore();
 
-    useEffect(() => {
+    /*useEffect(() => {
         const getIsLoggedIn = async () => {
             try {
                 const response = await apiInstance.get('/auth/refresh');
@@ -23,16 +23,15 @@ export const LoginPage = () => {
                 }
             } catch (error) {
                 console.error('로그인 검증 실패:', error);
-                setIsLoggedIn(false);
                 setIsFirstMount(true);
             }
         };
             // 첫 방문이면서 로그인 상태가 아닌 경우에만 자동 로그인 시도
             // 로그아웃 직후에는 isFirstMount가 false이므로 시도하지 않음
-        if(isFirstMount && !isLoggedIn) {
+        if(isFirstMount) {
             getIsLoggedIn();
         }
-    }, [isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn, navigate]);
+    }, [isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn, navigate]);*/
 
     return (
         <Wrapper>
