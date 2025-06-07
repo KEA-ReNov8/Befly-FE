@@ -129,6 +129,7 @@ export const SharePage = () => {
       </TopBarWrapper>
       {post && (
         <PostBox
+          userId={post.userId}
           title={post.title}
           author={post.nickname}
           date={post.createdAt}
