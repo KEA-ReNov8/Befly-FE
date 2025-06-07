@@ -6,12 +6,46 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import useIsLoggedInStore from '@shared/store/useIsLoggedInStore';
 import { apiInstance } from '@shared/apis/instance';
+import { useMyInfoStore } from '@shared/store/useMyInfoStore';
+
 
 export const LoginPage = () => {
     const navigate = useNavigate();
     const { isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn } = useIsLoggedInStore();
-
+    const { setMyInfo } = useMyInfoStore();
+    
     useEffect(() => {
+        const run = async () => {
+          try {
+            const response = await fetchMyInfo(); // 소셜 로그인 이후 토큰이 있으면 성공
+            if (response?.result) {
+              setMyInfo(response.result);
+              setIsLoggedIn(true);
+              setIsFirstMount(false);
+              navigate('/', { replace: true });
+            } else {
+              // 로그인 실패 시도
+              setIsLoggedIn(false);
+              setIsFirstMount(true);
+            }
+          } catch (e) {
+            console.warn('소셜 로그인 후 사용자 정보 가져오기 실패:', e);
+            setIsLoggedIn(false);
+            setIsFirstMount(true);
+          }
+        };
+    
+        if (isFirstMount === null || isLoggedIn === null) {
+          setIsFirstMount(true);
+          setIsLoggedIn(false);
+        }
+    
+        if (isFirstMount) {
+          run();
+        }
+      }, [isFirstMount, isLoggedIn])
+
+    /*useEffect(() => {
         const getIsLoggedIn = async () => {
             try {
                 const response = await apiInstance.get('/auth/refresh');
@@ -22,21 +56,15 @@ export const LoginPage = () => {
                 }
             } catch (error) {
                 console.error('로그인 검증 실패:', error);
-                setIsLoggedIn(false);
-                setIsFirstMount(false);
+                setIsFirstMount(true);
             }
         };
-        
-        // 소셜 로그인 성공 후 리다이렉트인지 확인 (여러 방법 시도)
-        const hasRefreshToken = document.cookie.includes('refreshToken') || document.cookie.includes('JSESSIONID');
-        
-        // 소셜 로그인 후이거나, 쿠키가 있거나, 첫 방문이면서 로그인 상태가 아닌 경우 자동 로그인 시도
-        if(hasRefreshToken || (isFirstMount && !isLoggedIn)) {
-            setIsFirstMount(false);
-            setIsLoggedIn(true);
+            // 첫 방문이면서 로그인 상태가 아닌 경우에만 자동 로그인 시도
+            // 로그아웃 직후에는 isFirstMount가 false이므로 시도하지 않음
+        if(isFirstMount) {
             getIsLoggedIn();
         }
-    }, [isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn, navigate]);
+    }, [isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn, navigate]);*/
 
     return (
         <Wrapper>
