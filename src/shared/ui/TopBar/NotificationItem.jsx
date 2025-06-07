@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
-const NotificationTem = ({ content, time }) => {
+const NotificationTem = ({ content}) => {
   return (
     <ItemWrapper>
       <Message>{content}</Message>
-      <Time>{time}</Time>
     </ItemWrapper>
   );
 };

@@ -1,26 +1,19 @@
 import styled from 'styled-components';
 import NotificationItem from './NotificationItem';
 import theme from '@/app/styles/theme';
-// 임시 목데이터
-const dummyNotifications = [
-  { id: 1, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-  { id: 2, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-  { id: 3, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-  { id: 4, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-  { id: 5, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-  { id: 6, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-  { id: 7, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-  { id: 8, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-  { id: 9, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-];
+import { useGetNotificationQuery } from '@shared/hooks/useGetNotificationQuery';
 
 const NotificationModal = () => {
+  const { data: notifications = [] } = useGetNotificationQuery();
+  
+  console.log('NotificationModal에서 받은 notifications:', notifications);
+  
   // 알람 세부 기능은 백 연결하고 추가
   return (
     <Wrapper>
       <ItemList>
-        {dummyNotifications.map((item) => (
-          <NotificationItem key={item.id} content={item.content} time={item.time} />
+        {notifications.map((notification, index) => (
+          <NotificationItem key={index} content={notification} />
         ))}
       </ItemList>
     </Wrapper>
