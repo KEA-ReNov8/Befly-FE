@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import { useNavigate } from 'react-router-dom';
 import closeIcon from '@shared/assets/icons/Xmark.svg';
+import Greet from '@shared/ui/lottieComp/Greet';
 
 const ConfirmModal = ( {onClose}) => {
     const navigate = useNavigate();
@@ -15,7 +16,9 @@ const ConfirmModal = ( {onClose}) => {
             <CloseButton onClick={onClose}>
                 <img src={closeIcon} alt="close" />
             </CloseButton>
-            <Img />
+            <LottieContainer>
+                <Greet />
+            </LottieContainer>
             <Title>시작해볼까요?</Title>
             <Button onClick={handleClick}>Be, Fly 시작하기</Button>
         </Container>
@@ -37,15 +40,11 @@ const CloseButton = styled.button`
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-    margin-bottom: 10px;
 `;
 
-const Img = styled.img`
-    width: 10rem;
-    height: 10rem;
-    border-radius: 50%;
-    background-color: ${theme.colors.gray.main};
-    margin-bottom: 10px;
+const LottieContainer = styled.div`
+    width: 180px;
+    height: 180px;
 `;
 
 const Title = styled.h2`
