@@ -32,6 +32,8 @@ const TopBar = () => {
       return null;
     }
   };
+  const userInfo = getUserInfo();
+  const isDefaultProfile = !userInfo?.profileImg;
 
   return (
     <Container>
@@ -52,8 +54,8 @@ const TopBar = () => {
       </Nav>
       <RightSection>
         <NotificationWrapper>
-          <NotificationButton onClick={toggleNotificationModal}>
-            <img src={getUserInfo()?.profileImage || defaultProfile} alt="defaultProfile" />
+          <NotificationButton onClick={toggleNotificationModal} $isDefault={isDefaultProfile}>
+            <img src={userInfo?.profileImg || defaultProfile} alt="defaultProfile" />
           </NotificationButton>
           {isNotificationModalOpen && <NotificationModal />}
         </NotificationWrapper>
@@ -96,10 +98,13 @@ const NavButton = styled.button`
   border: none;
   cursor: pointer;
   transition: color 0.3s ease;
+  transition: scale 0.3s ease;
 
   &:hover {
     color: ${theme.colors.green.hover};
     transition: color 0.3s ease;
+    scale: 1.05;
+    transition: scale 0.3s ease;
   }
 `;
 
@@ -128,6 +133,12 @@ const WorryButton = styled.button`
   border: none;
   cursor: pointer;
   border-radius: 30px;
+  transition: background-color 0.3s ease;
+  
+  &:hover {
+    background-color: ${theme.colors.green.hover};
+    transition: background-color 0.3s ease;
+  }
 `;
 
 const NotificationButton = styled.div`
@@ -140,9 +151,16 @@ const NotificationButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: box-shadow 0.3s ease;
+  object-fit: cover;
 
   img {
-    width: 24px;
-    height: 24px;
+    width: ${props => props.$isDefault ? '18px' : '30px'};
+    height: ${props => props.$isDefault ? '18px' : '30px'};
+  }
+
+  &:hover {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
   }
 `;
