@@ -117,6 +117,7 @@ export const FreePage = () => {
       {!isLoading && !error && !post && <div>게시글이 없습니다.</div>}
       {!isLoading && !error && post && (
         <PostBox
+          userId={post.userId}
           title={post.title}
           author={post.nickname}
           date={post.createdAt}
@@ -136,7 +137,7 @@ export const FreePage = () => {
         inputRef={commentRef}
       />
       {/* 댓글/답글 리스트 및 답글 입력창 */}
-      <CommentListBox
+      <CommentListBox        
         comments={commentData || []}
         replyInput={replyInput}
         replyingTo={replyingTo}

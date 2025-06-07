@@ -1,23 +1,23 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 
-const UserStat = ( {userData} ) => {
+const UserStat = ( {userData, postCount} ) => {
     return (
         <StatSection>
             <StatItem>
-                <StatValue>{userData.worry}</StatValue>
+                <StatValue>{postCount?.chat || 0}</StatValue>
                 <StatLabel>고민함</StatLabel>
             </StatItem>
             <StatItem>
-                <StatValue>{userData.share}</StatValue>
+                <StatValue>{postCount?.solved || 0}</StatValue>
                 <StatLabel>공유함</StatLabel>
             </StatItem>
             <StatItem>
-                <StatValue>{userData.free}</StatValue>
+                <StatValue>{postCount?.free || 0}</StatValue>
                 <StatLabel>자유함</StatLabel>
             </StatItem>
             <StatItem>
-                <StatValue>{userData.point}</StatValue>
+                <StatValue>{userData?.wing || 0}</StatValue>
                 <StatLabel>날개</StatLabel>
             </StatItem>
         </StatSection>

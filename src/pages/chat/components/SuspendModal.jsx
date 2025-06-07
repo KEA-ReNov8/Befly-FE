@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import { useNavigate } from 'react-router-dom';
+import Suspend from '@shared/ui/lottieComp/Suspend';
 
 const SuspendModal = ( {onClose}) => {
 
@@ -13,7 +14,9 @@ const SuspendModal = ( {onClose}) => {
     return (
         <ModalOverlay>
             <ModalContainer>
-                <Img />
+                <LottieContainer>
+                    <Suspend />
+                </LottieContainer>
                 <TitleContainer>
                     <Title>당신의 이야기를</Title>
                     <Title>조금 더 들려주세요!</Title>
@@ -55,12 +58,10 @@ const ModalContainer = styled.div`
     border: 1px solid ${theme.colors.gray[400]};
 `;
 
-const Img = styled.img`
+const LottieContainer = styled.div`
     margin-top: 20px;
     width: 150px;
     height: 150px;
-    border-radius: 50%;
-    background-color: ${theme.colors.gray[500]};
 `;
 
 const TitleContainer = styled.div`

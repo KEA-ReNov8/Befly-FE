@@ -1,27 +1,27 @@
 import styled from 'styled-components';
 import NotificationItem from './NotificationItem';
 import theme from '@/app/styles/theme';
-// 임시 목데이터
-const dummyNotifications = [
-  { id: 1, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-  { id: 2, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-  { id: 3, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-  { id: 4, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-  { id: 5, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-  { id: 6, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-  { id: 7, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-  { id: 8, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-  { id: 9, content: 'OOO님이 댓글을 달았습니다.', time: '0분전' },
-];
+import { useGetNotificationQuery } from '@shared/hooks/useGetNotificationQuery';
 
 const NotificationModal = () => {
+  const { data: notifications = [] } = useGetNotificationQuery();
+  
+  console.log('NotificationModal에서 받은 notifications:', notifications);
+  
   // 알람 세부 기능은 백 연결하고 추가
   return (
     <Wrapper>
       <ItemList>
-        {dummyNotifications.map((item) => (
-          <NotificationItem key={item.id} content={item.content} time={item.time} />
-        ))}
+        {notifications.length === 0 ? (
+          <EmptyStateContainer>
+            <EmptyTitle>새로운 알림이 없어요</EmptyTitle>
+            <EmptyDescription>새로운 소식이 있으면 알려드릴게요!</EmptyDescription>
+          </EmptyStateContainer>
+        ) : (
+          notifications.map((notification, index) => (
+            <NotificationItem key={index} content={notification} />
+          ))
+        )}
       </ItemList>
     </Wrapper>
   );
@@ -50,4 +50,31 @@ const ItemList = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+`;
+
+const EmptyStateContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 60px;
+`;
+
+const EmptyTitle = styled.h4`
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.semibold};
+  color: ${theme.colors.gray[600]};
+  margin: 0;
+  text-align: center;
+`;
+
+const EmptyDescription = styled.p`
+  font-size: ${theme.fontSize.sm};
+  color: ${theme.colors.gray[500]};
+  text-align: center;
+  line-height: 1.4;
+  margin: 0;
 `;

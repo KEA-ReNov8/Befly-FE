@@ -1,64 +1,115 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import UserDetail from '@profile/components/UserDetail';
-import UserStat from '@my/components/UserStat';
+import UserStat from '@profile/components/UserStat';
 import SharePostCard from '@my/components/SharePostCard';
 import FreePostCard from '@my/components/FreePostCard';
+import { usePostCountQuery } from '@profile/feature/hook/usePostCountQuery';
+import { usePostListQuery } from '@my/feature/hook/Query/usePostListQuery';
+import { useInfinitePostListQuery } from '@my/feature/hook/Query/useInfinitePostListQuery';
 
-const UserProfile = () => {
 
+const UserProfile = ({ userInfo }) => {
     const [activeTab, setActiveTab] = useState('공유');
-    const [userData, setUserData] = useState({
-        username: '비플라이2',
-        email: 'befly@example.co.kr',
-        worry: 5,
-        share: 4,
-        free: 4,
-        point: 9999
-    });
+    const observerRef = useRef(null);
 
-    const dummyPosts = [
-        { id: 1, type: '자유', category: '불안 ', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/24', likes: 120, comments: 10 },
-        { id: 2, type: '공유', category: '진로', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/23', likes: 85, comments: 10 },
-        { id: 3, type: '자유', category: '불안', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/22', likes: 65, comments: 10 },
-        { id: 4, type: '공유', category: '불안', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/21', likes: 42, comments: 10 },
-        { id: 5, type: '자유', category: '불안', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/20', likes: 28, comments: 10 },
-        { id: 6, type: '공유', category: '불안', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/19', likes: 15, comments: 10 },
-        { id: 7, type: '자유', category: '불안', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/18', likes: 10, comments: 10 },
-        { id: 8, type: '공유', category: '불안', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/17', likes: 5, comments: 10 },
-        { id: 9, type: '자유', category: '불안', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/16', likes: 3, comments: 10 },
-        { id: 10, type: '공유', category: '불안', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/15', likes: 2, comments: 10 },
-        { id: 11, type: '자유', category: '불안', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/14', likes: 1, comments: 10 },
-        { id: 12, type: '공유', category: '불안', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/13', likes: 1, comments: 10 },
-        { id: 13, type: '자유', category: '불안', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/12', likes: 1, comments: 10 },
-        { id: 14, type: '공유', category: '불안', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/11', likes: 1, comments: 10 },
-        { id: 15, type: '자유', category: '불안', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/10', likes: 1, comments: 10 },
-        { id: 16, type: '공유', category: '불안', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/09', likes: 1, comments: 10   },
-        { id: 17, type: '자유', category: '불안', title: '오늘 너무 피곤해서 잠만 잤어요', date: '2023/11/08', likes: 1, comments: 10 },
-    ];
+    const { data: postCount } = usePostCountQuery(userInfo?.userId);
 
-    const filteredPosts = dummyPosts.filter(post => post.type === activeTab);
+    const {
+        data: infiniteData,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+        isLoading: isLoadingPosts,
+    } = useInfinitePostListQuery(activeTab === '공유' ? userInfo?.userId : null);
+
+    const { data: freePostData, isLoading: isFreeLoading } = usePostListQuery(activeTab === '자유' ? userInfo?.userId : null);
+
+    // 네이티브 Intersection Observer로 무한스크롤 구현 (공유함만)
+    useEffect(() => {
+        if (activeTab !== '공유' || !observerRef.current) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const [entry] = entries;
+                if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+                    fetchNextPage();
+                }
+            },
+            {
+                root: null,
+                rootMargin: '100px',
+                threshold: 0
+            }
+        );
+
+        observer.observe(observerRef.current);
+
+        return () => {
+            if (observerRef.current) {
+                observer.unobserve(observerRef.current);
+            }
+        };
+    }, [activeTab, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
     };
 
+    // 현재 탭에 따른 게시글 데이터
+    const getCurrentPosts = () => {
+        if (activeTab === '공유') {
+            return infiniteData?.posts || [];
+        } else if (activeTab === '자유') {
+            return freePostData?.posts || [];
+        } 
+        return [];
+    };
+
+    const currentPosts = getCurrentPosts();
+
     return (
         <Container>
             <ProfileContainer>
-                <UserDetail userData={userData} />
+                <UserDetail userData={userInfo} />
             </ProfileContainer>
-            <UserStat userData={userData}/>
+            <UserStat userData={userInfo} postCount={postCount}/>
             <ButtonContainer>
                 <ShareButton data-active={activeTab === '공유'} onClick={() => handleTabChange('공유')}>공유함</ShareButton>
                 <FreeButton data-active={activeTab === '자유'} onClick={() => handleTabChange('자유')}>자유함</FreeButton>
             </ButtonContainer>
             <PostSection>
-                {filteredPosts.map(post => 
-                    activeTab === '공유' ? 
-                    <SharePostCard key={post.id} post={post} /> :
-                    <FreePostCard key={post.id} post={post} />
+                {currentPosts.length === 0 ? (
+                    <EmptyStateContainer>
+                        {activeTab === '공유' ? (
+                            <>
+                                <EmptyTitle>공유한 고민이 없어요</EmptyTitle>
+                                <EmptyDescription>
+                                    아직 공유된 고민이 없습니다.
+                                </EmptyDescription>
+                            </>
+                        ) : (
+                            <>
+                                <EmptyTitle>작성한 자유글이 없어요</EmptyTitle>
+                                <EmptyDescription>
+                                    아직 작성된 자유글이 없습니다.
+                                </EmptyDescription>
+                            </>
+                        )}
+                    </EmptyStateContainer>
+                ) : (
+                    currentPosts.map((post, index) => {
+                        if (activeTab === '공유') {
+                            return <SharePostCard key={`${post.solvedId}-${index}`} post={post} />;
+                        } else if (activeTab === '자유') {
+                            return <FreePostCard key={`${post.postId}-${index}`} post={post} />;
+                        } 
+                    })
+                )}
+                {/* 무한스크롤 트리거 (공유함일 때만) */}
+                {activeTab === '공유' && currentPosts.length > 0 && (
+                    <div ref={observerRef} style={{ height: '20px', width: '100%' }}></div>
                 )}
             </PostSection>
         </Container>
@@ -140,6 +191,32 @@ const PostSection = styled.div`
     align-items: center;
     flex-wrap: wrap;
     gap: 20px;
+`;
+
+const EmptyStateContainer = styled.div`
+    margin-right: 10%;
+    width: 100%;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+`;
+
+const EmptyTitle = styled.h3`
+    font-size: ${theme.fontSize.lg};
+    font-weight: ${theme.fontWeight.semibold};
+    color: ${theme.colors.gray[600]};
+    margin: 0;
+`;
+
+const EmptyDescription = styled.p`
+    font-size: ${theme.fontSize.md};
+    color: ${theme.colors.gray[500]};
+    text-align: center;
+    line-height: 1.5;
+    margin: 0;
 `;
 
 export default UserProfile;
