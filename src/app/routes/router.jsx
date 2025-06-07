@@ -20,26 +20,35 @@ import { ProtectedRouter } from './ProtectedRouter';
 export const router = createBrowserRouter([
   // 로그인/회원가입 페이지 - 로그인되어 있으면 홈으로 리다이렉트
   {
+    path: 'login',
+    element: <LoginPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: 'signup',
+    element: <SignupPage />,
+  },
+  {
+    path: 'common-signup',
+    element: <SelfSignupPage />,
+  },
+  {
+    path: 'find-pw',
+    element: <FindPwPage />,
+  },
+  {
     path: '/',
     element: <ProtectedRouter />,
     errorElement: <ErrorPage />,
     children: [
-      { path: 'login', element: <LoginPage /> },
-      { path: 'signup', element: <SignupPage /> },
-      { path: 'common-signup', element: <SelfSignupPage /> },
-      { path: 'find-pw', element: <FindPwPage /> },
+      {
+        element: <RootLayout />,
+        children: [
+          { index: true, element: <HomePage /> },
+        ],
+      },
     ],
   },
-  // 홈 페이지
-  {
-    path: '/',
-    element: <RootLayout />,
-    errorElement: <ErrorPage />,
-    children: [
-      { index: true, element: <HomePage /> },
-    ],
-  },
-
   // 자유 게시판
   {
     path: 'free',
@@ -52,7 +61,6 @@ export const router = createBrowserRouter([
       { path: ':postId', element: <FreePage /> },
     ],
   },
-
   // 나눔 게시판
   {
     path: 'share',
@@ -75,7 +83,6 @@ export const router = createBrowserRouter([
       { path: 'myworry', element: <MyWorryPage /> },
     ],
   },
-
   // 유저 프로필
   {
     path: 'profile/:userId',
@@ -85,7 +92,6 @@ export const router = createBrowserRouter([
       { index: true, element: <UserProfilePage /> },
     ],
   },
-
   // 리포트 페이지
   {
     path: 'report/:sessionId',
@@ -95,7 +101,6 @@ export const router = createBrowserRouter([
       { index: true, element: <ReportPage /> },
     ],
   },
-
   // 채팅 페이지
   {
     path: 'chat/:sessionId',

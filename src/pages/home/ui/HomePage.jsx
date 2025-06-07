@@ -9,7 +9,7 @@ import useIsLoggedInStore from '@shared/store/useIsLoggedInStore';
 
 export const HomePage = () => {
   const { myInfo, setMyInfo } = useMyInfoStore();
-  const { isLoggedIn } = useIsLoggedInStore();
+  const { isLoggedIn, setIsLoggedIn, setIsFirstMount } = useIsLoggedInStore();
 
   useEffect(() => {
     // 로그인 상태이지만 사용자 정보가 없는 경우 (소셜 로그인 후 상황)
