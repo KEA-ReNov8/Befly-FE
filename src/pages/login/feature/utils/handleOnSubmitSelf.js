@@ -7,16 +7,15 @@ export const handleOnSubmitSelf = async (e, getValues, signupMutation) => {
     try {
         const { clientId, password, nickName } = getValues();
 
-        /*let photoUrl = '';
-        if (image.length > 0) {
-            const convertedImage = await convertSingleImgToWebP({ img: image[0] });
-            if (convertedImage) photoUrl = await uploadImage(image, convertedImage);
-        }*/
-        const photoUrl = null;
-        const body = { clientId, password, nickName, photoUrl };
+        const body = { clientId, password, nickName, loginType: 'INTERNAL' };
 
         signupMutation.mutate(body);
     } catch (error) {
         console.error('회원가입 처리 중 오류 발생:', error);
     }
 };
+    /*let photoUrl = '';
+    if (image.length > 0) {
+        const convertedImage = await convertSingleImgToWebP({ img: image[0] });
+        if (convertedImage) photoUrl = await uploadImage(image, convertedImage);
+    }*/
