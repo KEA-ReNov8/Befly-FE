@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import useIsLoggedInStore from '@shared/store/useIsLoggedInStore';
 import { useMyInfoStore } from '@shared/store/useMyInfoStore';
+import { fetchMyInfo } from '@shared/apis/user/user';
 
 export const LoginPage = () => {
     const navigate = useNavigate();
