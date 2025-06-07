@@ -65,9 +65,9 @@ const WorryList = () => {
                     <TabButton data-isActive={activeTab === '고민중'} onClick={() => handleTabChange('고민중')}>고민중</TabButton>
                     <TabButton data-isActive={activeTab === '고민해결'} onClick={() => handleTabChange('고민해결')}>고민해결</TabButton>
                 </TabContainer>
-                <SearchContainer>
+                {/*<SearchContainer>
                     <SearchBar />
-                </SearchContainer>
+                </SearchContainer>*/}
             </Header>
             <CategoryContainer>
                 <CategoryStatus>진행여부</CategoryStatus>
@@ -112,13 +112,13 @@ const Header = styled.div`
     justify-content: space-between;
 `;
 
-const SearchContainer = styled.div`
+/*const SearchContainer = styled.div`
     margin-top: 20px;
     display: flex;
     align-items: center;
     margin-bottom: 10px;
     margin-right: 75px;
-`;
+`;*/
 
 const TabContainer = styled.div`
     width: 100%;
@@ -140,7 +140,7 @@ const TabButton = styled.button`
     border: none;
     border-radius: 20px;
     border: 1px solid ${theme.colors.gray[400]};
-    background-color: ${props => props['data-isActive'] ? theme.colors.green.main : 'transparent'};
+    background-color: ${props => props['data-isActive'] ? theme.colors.green[800] : 'transparent'};
     color: ${props => props['data-isActive'] ? theme.colors.other.white : theme.colors.gray[900]};
     border: 1px solid ${props => props['data-isActive'] ? theme.colors.green.light : theme.colors.gray[400]};
     cursor: pointer;
