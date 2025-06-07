@@ -98,7 +98,7 @@ export const FreePage = () => {
     if (location.state?.from) {
       navigate(location.state.from, { state: { page: location.state.page } });
     } else {
-      navigate('/free');
+      navigate('/free/page/1');
     }
   };
 
