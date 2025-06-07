@@ -49,17 +49,14 @@ export const LoginSchema = z.object({
         .nonempty('비밀번호를 입력해주세요.'),
 });
 
-export const ImageSchema = z.object({
-    image: z
-        .any()
-        .refine(
-            (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
-            'jpeg, jpg, png, webp만 업로드 가능합니다.',
-        )
-        .optional(),
-    previewImage: z
+export const ProfileSchema = z.object({
+    nickName: z
         .string()
-        .optional(),
+        .min(1, "닉네임을 입력해주세요.")
+        .max(12)
+        .regex(/^[a-zA-Z0-9가-힣\s]+$/, '닉네임에 특수문자를 포함할 수 없습니다.')
+        .refine((value) => value.trim() !== '', '닉네임은 공백만 입력할 수 없습니다.')
+        .refine((value) => value.trimStart() === value, '닉네임은 첫 글자가 공백일 수 없습니다.'),
 });
 
 /*export const VerifyEmailSchema = z.object({
