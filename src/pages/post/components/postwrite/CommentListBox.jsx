@@ -124,7 +124,7 @@ export const CommentListBox = ({
         {comments.map((comment) => (
           <CommentBlock key={comment.id}>
             <CommentRow>
-              <ProfileCircle onClick={() => handleClickCommenterProfile(comment.userId)} src={comment.imageKey}/>
+              <ProfileCircle onClick={() => handleClickCommenterProfile(comment.userId)} src={comment.profileImage}/>
               <CommentRight>
                 <CommentTop>
                   <CommentAuthor>{comment.author}</CommentAuthor>
@@ -193,7 +193,7 @@ export const CommentListBox = ({
                     <ReplyRow>
                       <Replybox>
                         <img src={Arrow} alt="arrow" />
-                        <ReplyProfileCircle onClick={() => handleClickCommenterProfile(reply.userId)} src={reply.imageKey}/>
+                        <ReplyProfileCircle onClick={() => handleClickCommenterProfile(reply.userId)} src={reply.profileImage}/>
                       </Replybox>
                       <ReplyRight>
                         <ReplyAuthor>
@@ -288,7 +288,7 @@ const ProfileCircle = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: ${theme.colors.gray[400]};
+  background: ${theme.colors.gray[200]};
   border: 2px solid ${theme.colors.green.main};
   margin-top: 2px;
   cursor: pointer;
@@ -431,7 +431,7 @@ const ReplyProfileCircle = styled.img`
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: ${theme.colors.gray[400]};
+  background: ${theme.colors.gray[200]};
   border: 2px solid ${theme.colors.green.main};
   margin-top: 2px;
 `;
