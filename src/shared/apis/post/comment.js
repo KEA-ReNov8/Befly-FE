@@ -16,7 +16,7 @@ export const getFreeComments = async (freeId) => {
         content: c.comment,
         date: c.createdAt,
         isDeleted: c.isDeleted,
-        imageKey: c.imageKey,
+        profileImage: c.profileImage,
         replies: [], // 나중에 추가
       }));
     // 2. parent가 있는 경우 대댓글로 분류
@@ -29,9 +29,9 @@ export const getFreeComments = async (freeId) => {
         badge: c.badge,
         author: c.nickname,
         content: c.comment,
-        date: c.createdAt,
+        date: c.createdAt,  
         isDeleted: c.isDeleted,
-        imageKey: c.imageKey,
+        profileImage: c.profileImage,
       }));
 
     // 3. 대댓글을 부모 댓글의 replies에 추가
