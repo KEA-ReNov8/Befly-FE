@@ -24,7 +24,7 @@ export const LoginPage = () => {
             } catch (error) {
                 console.error('로그인 검증 실패:', error);
                 setIsLoggedIn(false);
-                setIsFirstMount(false);
+                setIsFirstMount(true);
             }
         };
             // 첫 방문이면서 로그인 상태가 아닌 경우에만 자동 로그인 시도
