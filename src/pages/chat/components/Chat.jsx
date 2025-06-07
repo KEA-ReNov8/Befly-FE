@@ -55,12 +55,21 @@ const Chat = () => {
   const convertApiMessagesToState = (apiMessages) => {
     if (!apiMessages || !Array.isArray(apiMessages)) return [];
 
-    return apiMessages.map((msg, index) => ({
-      id: index + 1,
-      text: msg.content,
-      isUser: msg.type === 'human',
-      timestamp: new Date(),
-    }))
+    return apiMessages.map((msg, index) => {
+      let cleanedContent = msg.content;
+      
+      // AI 메시지의 경우 "AI:" 접두사와 ** 마크다운 문자 제거
+      if (msg.type === 'ai') {
+        cleanedContent = msg.content.replace(/^AI:\s*/, '').replace(/\*\*/g, '');
+      }
+
+      return {
+        id: index + 1,
+        text: cleanedContent,
+        isUser: msg.type === 'human',
+        timestamp: new Date(),
+      };
+    })
   };
 
   // 채팅 내역 로드 완료 시 메시지 설정
@@ -120,8 +129,8 @@ const Chat = () => {
   }, [messages]);
 
   const handleChatSuccess = (aiResponse, fullResponse) => {
-    // "AI:" 접두사 제거
-    const cleanedResponse = aiResponse.replace(/^AI:\s*/, '');
+    // "AI:" 접두사와 ** 마크다운 문자 제거
+    const cleanedResponse = aiResponse.replace(/^AI:\s*/, '').replace(/\*\*/g, '');
     
     const aiMessage = {
       id: messages.length + 1,
