@@ -13,7 +13,7 @@ const FindPw = ( ) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        navigate('/');
+        navigate('/login');
     }
 
     const handleSendCode = () => {
@@ -108,6 +108,10 @@ const EmailContainer = styled.div`
     gap: 1rem;
     border: 1px solid ${theme.colors.gray.main};
     border-radius: 8px;
+
+    &:focus-within {
+        border-color: ${theme.colors.green.main};
+    }
 `;
 
 const Email = styled.input`
@@ -151,6 +155,10 @@ const CheckCodeContainer = styled.div`
     gap: 1rem;
     border: 1px solid ${theme.colors.gray.main};
     border-radius: 8px;
+
+    &:focus-within {
+        border-color: ${theme.colors.green.main};
+    }
 `;
 
 const CheckCode = styled.input`
@@ -219,7 +227,7 @@ const PasswordCheck = styled.input`
 `;
 
 const SubmitButton = styled.button`
-    width: 335.7px;
+    width: 200px;
     height: 40px;
     background-color: ${theme.colors.green.main};
     font-size: ${theme.fontSize.md};
@@ -228,7 +236,7 @@ const SubmitButton = styled.button`
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 10px;
 
     &:hover {
         background-color: ${theme.colors.green[80]};
