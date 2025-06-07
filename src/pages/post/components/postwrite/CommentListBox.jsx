@@ -7,6 +7,9 @@ import { formatDate } from '@shared/utils/date';
 import { useDeleteFreeCommentMutation } from '@post/feature/hooks/useDeleteFreeCommentMutation';
 import { useUpdateFreeCommentMutation } from '@post/feature/hooks/useUpdateFreeCommentMutation';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { badgeSystem } from '@pages/my/util/badgeSystem';
+import defaultProfile from '@shared/assets/icons/defaultUser.svg';
 
 export const CommentListBox = ({
   comments,
@@ -18,6 +21,9 @@ export const CommentListBox = ({
   userNickname,
 }) => {
   const { postId } = useParams();
+  const navigate = useNavigate();
+  console.log(comments);
+
   const [deleteModalState, setDeleteModalState] = useState({
     isOpen: false,
     commentId: null,
@@ -107,15 +113,23 @@ export const CommentListBox = ({
     setEditingComment({ id: null, content: '', isReply: false, originalContent: '' });
   };
 
+  const handleClickCommenterProfile = (commentId) => {
+    //navigate(`/profile/${comment.userId}`, { state: { comment } });
+    navigate(`/profile/${commentId}`);
+  };
+
   return (
     <>
       <CommentListSection>
         {comments.map((comment) => (
           <CommentBlock key={comment.id}>
             <CommentRow>
-              <ProfileCircle />
+              <ProfileCircle onClick={() => handleClickCommenterProfile(comment.userId)} src={comment.imageKey}/>
               <CommentRight>
-                <CommentAuthor>{comment.author}</CommentAuthor>
+                <CommentTop>
+                  <CommentAuthor>{comment.author}</CommentAuthor>
+                  <CommentBadge src={badgeSystem(comment.badge)} />
+                </CommentTop>
                 {editingComment.id === comment.id ? (
                   <EditInputContainer>
                     <EditInput
@@ -179,10 +193,13 @@ export const CommentListBox = ({
                     <ReplyRow>
                       <Replybox>
                         <img src={Arrow} alt="arrow" />
-                        <ReplyProfileCircle />
+                        <ReplyProfileCircle onClick={() => handleClickCommenterProfile(reply.userId)} src={reply.imageKey}/>
                       </Replybox>
                       <ReplyRight>
-                        <ReplyAuthor>{reply.author}</ReplyAuthor>
+                        <ReplyAuthor>
+                          {reply.author}
+                          <img src={badgeSystem(reply.badge)} alt="badge" />
+                        </ReplyAuthor>
                         {editingComment.id === reply.id ? (
                           <EditInputContainer>
                             <EditInput
@@ -267,24 +284,34 @@ const CommentRow = styled.div`
   gap: 16px;
   margin-bottom: 10px;
 `;
-const ProfileCircle = styled.div`
+const ProfileCircle = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 50%;
   background: ${theme.colors.gray[400]};
   border: 2px solid ${theme.colors.green.main};
   margin-top: 2px;
+  cursor: pointer;
 `;
 const CommentRight = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
   flex: 1;
+`;
+const CommentTop = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+`;
+const CommentBadge = styled.img`
+  width: 18px;
+  height: 18px;
 `;
 const CommentAuthor = styled.div`
   font-weight: ${theme.fontWeight.medium};
   font-size: ${theme.fontSize.md};
-  margin-bottom: 4px;
 `;
 const CommentContent = styled.div`
   font-size: ${theme.fontSize.md};
@@ -400,7 +427,7 @@ const Replybox = styled.div`
   align-items: center;
   gap: 8px;
 `;
-const ReplyProfileCircle = styled.div`
+const ReplyProfileCircle = styled.img`
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -418,6 +445,14 @@ const ReplyAuthor = styled.div`
   font-weight: ${theme.fontWeight.medium};
   font-size: ${theme.fontSize.md};
   margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  img {
+    width: 18px;
+    height: 18px;
+  }
 `;
 const ReplyContent = styled.div`
   font-size: ${theme.fontSize.md};
