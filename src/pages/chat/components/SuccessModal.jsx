@@ -1,15 +1,18 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useState } from 'react';
 import closeIcon from '@shared/assets/icons/Xmark.svg';
 import { useConsultResultQuery } from '@chat/feature/hooks/query/useConsultResultQuery';
-
+import Success from '@shared/ui/lottieComp/Success';
+import Loading from '@shared/ui/lottieComp/Loading';
 
 const SuccessModal = ({ onClose }) => {
 
     const navigate = useNavigate();
     const { sessionId } = useParams();
     const consultResultQuery = useConsultResultQuery(sessionId);
+    const [isProcessing, setIsProcessing] = useState(false);
 
     const handleReportClick = async () => {
         if(!sessionId) {
@@ -18,11 +21,14 @@ const SuccessModal = ({ onClose }) => {
         }
 
         try {
+            setIsProcessing(true);
             await consultResultQuery.refetch();
 
             navigate(`/report/${sessionId}`);
         } catch (error) {
             console.error('평가 API 호출 실패:', error);
+        } finally {
+            setIsProcessing(false);
         }
     };
 
@@ -33,11 +39,14 @@ const SuccessModal = ({ onClose }) => {
         }
 
         try {
+            setIsProcessing(true);
             await consultResultQuery.refetch();
 
             navigate('/my/myworry');
         } catch (error) {
             console.error('평가 API 호출 실패:', error);
+        } finally {
+            setIsProcessing(false);
         }
     };
 
@@ -47,7 +56,9 @@ const SuccessModal = ({ onClose }) => {
                 <CloseButton onClick={onClose}>
                     <img src={closeIcon} alt="close" />
                 </CloseButton>
-                <Img />
+                <LottieContainer>
+                    {isProcessing || consultResultQuery.isLoading ? <Loading /> : <Success />}
+                </LottieContainer>
                 <TitleContainer>
                     <Title>마음의 짐이 덜어졌나요?</Title>
                     <Title>분석을 통해 자기 이해를 해보세요!</Title>
@@ -55,15 +66,15 @@ const SuccessModal = ({ onClose }) => {
                 <ButtonContainer>
                     <ListButton 
                         onClick={handleListClick}
-                        disabled={consultResultQuery.isLoading}
+                        disabled={isProcessing || consultResultQuery.isLoading}
                     >
-                        {consultResultQuery.isLoading ? '처리 중...' : '목록으로 가기'}
+                        {isProcessing || consultResultQuery.isLoading ? '처리 중...' : '목록으로 가기'}
                     </ListButton>
                     <ReportButton 
                         onClick={handleReportClick}
-                        disabled={consultResultQuery.isLoading}
+                        disabled={isProcessing || consultResultQuery.isLoading}
                     >
-                        {consultResultQuery.isLoading ? '처리 중...' : '분석 보기'}
+                        {isProcessing || consultResultQuery.isLoading ? '처리 중...' : '분석 보기'}
                     </ReportButton>
                 </ButtonContainer>
             </ModalContainer>
@@ -105,12 +116,10 @@ const CloseButton = styled.button`
     cursor: pointer;
 `;
 
-const Img = styled.img`
+const LottieContainer = styled.div`
     margin-top: 30px;
     width: 150px;
     height: 150px;
-    border-radius: 50%;
-    background-color: ${theme.colors.gray[500]};
 `;
 
 const TitleContainer = styled.div`
