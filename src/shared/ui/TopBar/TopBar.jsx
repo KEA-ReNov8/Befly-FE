@@ -155,8 +155,9 @@ const NotificationButton = styled.div`
   object-fit: cover;
 
   img {
-    width: ${props => props.$isDefault ? '18px' : '30px'};
-    height: ${props => props.$isDefault ? '18px' : '30px'};
+    width: ${props => props.$isDefault ? '18px' : '41px'};
+    height: ${props => props.$isDefault ? '18px' : '41px'};
+    border-radius: 50%;
   }
 
   &:hover {
