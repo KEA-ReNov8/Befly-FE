@@ -3,7 +3,7 @@ import Footer from '@shared/ui/Footer';
 import Background from '@pages/login/components/Background';
 import LoginForm from '@pages/login/components/LoginForm';
 import { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import useIsLoggedInStore from '@shared/store/useIsLoggedInStore';
 import { apiInstance } from '@/shared/apis/instance';
 
@@ -33,10 +33,10 @@ export const LoginPage = () => {
         const hasRefreshToken = document.cookie.includes('refreshToken') || document.cookie.includes('JSESSIONID');
         
         // 소셜 로그인 후이거나, 쿠키가 있거나, 첫 방문이면서 로그인 상태가 아닌 경우 자동 로그인 시도
-        if(socialLoginSuccess || hasRefreshToken || (isFirstMount && !isLoggedIn)) {
+        if(hasRefreshToken || (isFirstMount && !isLoggedIn)) {
             getIsLoggedIn();
         }
-    }, [searchParams, isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn, navigate]);
+    }, [isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn, navigate]);
 
     return (
         <Wrapper>
