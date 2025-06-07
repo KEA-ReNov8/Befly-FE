@@ -5,9 +5,7 @@ import LoginForm from '@pages/login/components/LoginForm';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import useIsLoggedInStore from '@shared/store/useIsLoggedInStore';
-import { apiInstance } from '@shared/apis/instance';
 import { useMyInfoStore } from '@shared/store/useMyInfoStore';
-
 
 export const LoginPage = () => {
     const navigate = useNavigate();
@@ -57,8 +55,12 @@ export const LoginPage = () => {
             } catch (error) {
                 console.error('로그인 검증 실패:', error);
                 setIsFirstMount(true);
+                setIsFirstMount(true);
             }
         };
+            // 첫 방문이면서 로그인 상태가 아닌 경우에만 자동 로그인 시도
+            // 로그아웃 직후에는 isFirstMount가 false이므로 시도하지 않음
+        if(isFirstMount) {
             // 첫 방문이면서 로그인 상태가 아닌 경우에만 자동 로그인 시도
             // 로그아웃 직후에는 isFirstMount가 false이므로 시도하지 않음
         if(isFirstMount) {
