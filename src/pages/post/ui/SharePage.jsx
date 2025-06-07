@@ -10,39 +10,22 @@ import {
   PageBottomBox,
   MindReportSection,
 } from '../components/index';
-import { mockFreePostData, dummyComments } from '../data/DummyPosts';
+import { useSharePostDetailQuery } from '@post/feature/hooks/useSharePostDetailQuery';
+import { useMyInfoStore } from '@shared/store/useMyInfoStore';
 
 export const SharePage = () => {
-  const userId = 123;
   const navigate = useNavigate();
   const location = useLocation();
+  const { myInfo } = useMyInfoStore();
+  const userNickname = myInfo?.nickName;
   const { postId } = useParams();
-  const [post, setPost] = useState(null);
+  const { data: post, isLoading, error } = useSharePostDetailQuery(postId);
 
   const [commentInput, setCommentInput] = useState('');
   const [comments, setComments] = useState([]);
   const [replyInput, setReplyInput] = useState({});
   const [replyingTo, setReplyingTo] = useState(null);
   const commentRef = useRef(null);
-
-  useEffect(() => {
-    const foundPost = mockFreePostData.find((p) => p.id === parseInt(postId));
-    if (foundPost) {
-      setPost(foundPost);
-      setComments(
-        dummyComments.map((comment) => ({
-          id: comment.id,
-          author: comment.writer,
-          authorId: Math.floor(Math.random() * 1000),
-          content: comment.content,
-          date: comment.createdAt,
-          replies: [],
-        })),
-      );
-    } else {
-      navigate('/share');
-    }
-  }, [postId, navigate]);
 
   const handleInputChange = (e) => {
     setCommentInput(e.target.value);
@@ -59,7 +42,7 @@ export const SharePage = () => {
       {
         id: Date.now(),
         author: '닉네임',
-        authorId: userId,
+        authorId: 'zzz',
         content: commentInput,
         date: new Date().toLocaleString('ko-KR', {
           year: 'numeric',
@@ -96,7 +79,7 @@ export const SharePage = () => {
                 {
                   id: Date.now(),
                   author: '닉네임',
-                  authorId: userId,
+                  authorId: 'zzz',
                   content: input,
                   date: new Date().toLocaleString('ko-KR', {
                     year: 'numeric',
@@ -118,7 +101,7 @@ export const SharePage = () => {
     if (location.state?.from) {
       navigate(location.state.from, { state: { page: location.state.page } });
     } else {
-      navigate('/share');
+      navigate('/share/page/1');
     }
   };
   return (
@@ -127,7 +110,10 @@ export const SharePage = () => {
         <TopBar />
         <Line>공유함</Line>
       </TopBarWrapper>
-      {post && (
+      {isLoading && <div>로딩중...</div>}
+      {error && <div>에러가 발생했습니다.</div>}
+      {!isLoading && !error && !post && <div>게시글이 없습니다.</div>}
+      {!isLoading && !error && post && (
         <PostBox
           title={post.title}
           author={post.nickname}
@@ -137,9 +123,10 @@ export const SharePage = () => {
           postId={post.id}
           // MindReportSection을 PostBox 내부에 children으로 전달
         >
-          <MindReportSection />
+          <MindReportSection reportData={post.reportData} />
         </PostBox>
       )}
+
       <CommentInputBox
         value={commentInput}
         onChange={handleInputChange}
@@ -153,7 +140,7 @@ export const SharePage = () => {
         onReplyToggle={handleReplyToggle}
         onReplyInputChange={handleReplyInputChange}
         onReplySubmit={handleReplySubmit}
-        userId={userId}
+        userNickname={userNickname}
       />
       <PageBottomBox onClick={handleGoList} />
     </PageContainer>
@@ -173,13 +160,13 @@ const TopBarWrapper = styled.div`
 `;
 
 const Line = styled.div`
-    width: 100%;
-    height: 66px;
-    background-color: ${theme.colors.green.main};
-    display: flex;
-    align-items: center;
-    font-size: ${theme.fontSize.xl};
-    font-weight: ${theme.fontWeight.bold};
-    padding-left: 220px;
-    color: ${theme.colors.other.white};
+  width: 100%;
+  height: 66px;
+  background-color: ${theme.colors.green.main};
+  display: flex;
+  align-items: center;
+  font-size: ${theme.fontSize.xl};
+  font-weight: ${theme.fontWeight.bold};
+  padding-left: 220px;
+  color: ${theme.colors.other.white};
 `;

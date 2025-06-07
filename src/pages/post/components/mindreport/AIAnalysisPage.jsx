@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
-export const AIAnalysisPage = ({ analysisData }) => {
+export const AIAnalysisPage = ({ totalComment }) => {
   return (
     <FullBox>
       <ReportTitle>
@@ -8,11 +8,7 @@ export const AIAnalysisPage = ({ analysisData }) => {
         <TitleDivider />
       </ReportTitle>
       <ReportContent>
-      {analysisData ? (
-          <p>{analysisData}</p>
-        ) : (
-          <p>분석 데이터를 불러오는 중입니다...</p>
-        )}
+        {totalComment ? <p>{totalComment}</p> : <p>분석 데이터를 불러오는 중입니다...</p>}
       </ReportContent>
     </FullBox>
   );

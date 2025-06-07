@@ -2,6 +2,34 @@
 import { apiInstance } from '@shared/apis/instance';
 import { formatTimeAgo } from '@shared/utils/date';
 
+export const getSharePostDetail = async (shareId) => {
+  try {
+    const response = await apiInstance.get(`/community/solved/${shareId}`);
+    const result = response.data.result;
+
+    return {
+      postId: result.solvedId,
+      nickname: result.nickname,
+      title: result.solvedTitle,
+      content: result.solvedContent,
+      imageUrls: result.imageUrls ?? [],
+      likes: result.likeCount,
+      comments: result.commentCount,
+      createdAt: result.createdAt,
+      updatedAt: result.updatedAt,
+      category: result.category,
+      reportData: {
+        analytics: result.analytics,
+        totalComment: result.totalComment,
+        suggest: result.suggest,
+        userNickname: result.nickname,
+      },
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getSolvedPostsByPage = async (page = 0) => {
   try {
     const response = await apiInstance.get(`/community/solved/page/${page}`);

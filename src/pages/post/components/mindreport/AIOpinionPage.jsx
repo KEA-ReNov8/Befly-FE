@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 
-export const AIOpinionPage = ({ adviseItems }) => {
+export const AIOpinionPage = ({ suggest }) => {
   return (
     <FullBox>
       <ReportTitle>
@@ -9,11 +9,7 @@ export const AIOpinionPage = ({ adviseItems }) => {
         <TitleDivider />
       </ReportTitle>
       <ReportContent>
-      {adviseItems ? (
-        <p>{adviseItems}</p>
-      ) : (
-        <p>조언 데이터를 불러오는 중입니다...</p>
-      )}
+        {suggest ? <p>{suggest}</p> : <p>조언 데이터를 불러오는 중입니다...</p>}
       </ReportContent>
     </FullBox>
   );

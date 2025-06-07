@@ -31,7 +31,7 @@ export const MindReportSection = ({ reportData }) => {
     setPage((prev) => (prev < 2 ? prev + 1 : prev));
   };
 
-  const { analysisData, scores, adviseItems, title } = reportData || {};
+  const { analytics, totalComment, suggest, userNickname } = reportData || {};
 
   return (
     <SectionWrapper>
@@ -39,17 +39,17 @@ export const MindReportSection = ({ reportData }) => {
         &lt;
       </LeftNavButton>
       <ContentArea>
-        <ReportHeader>{userInfo?.nickName}님의 분석 리포트</ReportHeader>
+        <ReportHeader>{userNickname}님의 분석 리포트</ReportHeader>
         <SliderContainer>
           <SliderWrapper style={{ transform: `translateX(-${page * 33.333}%)` }}>
             <SliderPage>
-              <AnalysisCardsPage scores={scores} />
+              <AnalysisCardsPage analytics={analytics} />
             </SliderPage>
             <SliderPage>
-              <AIAnalysisPage analysisData={analysisData} />
+              <AIAnalysisPage totalComment={totalComment} />
             </SliderPage>
             <SliderPage>
-              <AIOpinionPage adviseItems={adviseItems} />
+              <AIOpinionPage suggest={suggest} />
             </SliderPage>
           </SliderWrapper>
         </SliderContainer>
