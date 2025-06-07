@@ -1,17 +1,32 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import { useNavigate } from 'react-router-dom';
+import defaultImage from '@shared/assets/imgs/defaultImage.svg';
 
 const FreePostCard = ( {post}) => {
     
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/free/${post.id}`);
+        navigate(`/free/${post.postId}`);
     };
+
+    const dateOnly = new Date(post.createdAt).toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+    const handleImageError = (e) => {
+      e.target.src = defaultImage;
+    };
+
     return (
         <CardContainer onClick={handleClick}>
-          <CardImage />
+         <CardImage 
+            src={post.imageUrl || defaultImage} 
+            alt="게시글 이미지"
+            onError={handleImageError}
+          />
           <CardContentContainer>
             <CardTitle>{post.title}</CardTitle>
             <CardFooter>
@@ -20,7 +35,7 @@ const FreePostCard = ( {post}) => {
                 <span>🗨️ {post.comments}</span>
               </LeftFooter>
               <RightFooter>
-                <span>{post.date}</span>
+                <span>{dateOnly}</span>
               </RightFooter>
             </CardFooter>
           </CardContentContainer>
@@ -46,11 +61,12 @@ const CardContainer = styled.div`
   box-sizing: border-box;
 `;
 
-const CardImage = styled.div`
+const CardImage = styled.img`
   width: 100%;
   height: 153px;
-  background: ${theme.colors.gray[300]};
+  background: ${theme.colors.gray[100]};
   border-radius: 8px 8px 0 0;
+  object-fit: cover;
 `;
 
 const CardContentContainer = styled.div`
@@ -166,8 +182,7 @@ const PostDate = styled.p`
     font-family: ${theme.fontFamily.pretendard};
 `;
 
-const PostStat = styled.div`
-    display: flex;
+const PostStat = styled.div`    display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
@@ -175,3 +190,4 @@ const PostStat = styled.div`
     font-size: ${theme.fontSize.xsmall};
 `;
 */
+
