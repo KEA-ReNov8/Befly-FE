@@ -10,10 +10,13 @@ export const getFreeComments = async (freeId) => {
       .filter((c) => c.parentCommentId === null)
       .map((c) => ({
         id: c.commentId,
+        userId: c.userId,
+        badge: c.badge,
         author: c.nickname,
         content: c.comment,
         date: c.createdAt,
         isDeleted: c.isDeleted,
+        imageKey: c.imageKey,
         replies: [], // 나중에 추가
       }));
     // 2. parent가 있는 경우 대댓글로 분류
@@ -22,10 +25,13 @@ export const getFreeComments = async (freeId) => {
       .map((c) => ({
         id: c.commentId,
         parentId: c.parentCommentId.freeCommentId,
+        userId: c.userId,
+        badge: c.badge,
         author: c.nickname,
         content: c.comment,
         date: c.createdAt,
         isDeleted: c.isDeleted,
+        imageKey: c.imageKey,
       }));
 
     // 3. 대댓글을 부모 댓글의 replies에 추가
