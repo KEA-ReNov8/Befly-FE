@@ -125,7 +125,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: 'profile/:id',
+    path: 'profile/:userId',
     element: <RootLayout />,
     children: [
       {
