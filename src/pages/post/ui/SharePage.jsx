@@ -12,6 +12,8 @@ import {
 } from '../components/index';
 import { useSharePostDetailQuery } from '@post/feature/hooks/useSharePostDetailQuery';
 import { useMyInfoStore } from '@shared/store/useMyInfoStore';
+import { useShareCommentsQuery } from '@post/feature/hooks/useShareCommentsQuery';
+import { useCreateShareCommentMutation } from '@post/feature/hooks/useCreateShareCommentMutation';
 
 export const SharePage = () => {
   const navigate = useNavigate();
@@ -20,9 +22,10 @@ export const SharePage = () => {
   const userNickname = myInfo?.nickName;
   const { postId } = useParams();
   const { data: post, isLoading, error } = useSharePostDetailQuery(postId);
+  const { data: commentData } = useShareCommentsQuery(postId);
+  const { mutate: createComment } = useCreateShareCommentMutation(postId);
 
   const [commentInput, setCommentInput] = useState('');
-  const [comments, setComments] = useState([]);
   const [replyInput, setReplyInput] = useState({});
   const [replyingTo, setReplyingTo] = useState(null);
   const commentRef = useRef(null);
@@ -37,25 +40,22 @@ export const SharePage = () => {
 
   const handleCommentSubmit = () => {
     if (!commentInput.trim()) return;
-    setComments([
-      ...comments,
+    createComment(
       {
-        id: Date.now(),
-        author: '닉네임',
-        authorId: 'zzz',
-        content: commentInput,
-        date: new Date().toLocaleString('ko-KR', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-        }),
-        replies: [],
+        shareId: Number(postId),
+        postId: Number(postId),
+        pcommentId: null,
+        comment: commentInput,
       },
-    ]);
-    setCommentInput('');
-    if (commentRef.current) commentRef.current.style.height = '40px';
+      {
+        onSuccess: () => {
+          setCommentInput('');
+          if (commentRef.current) {
+            commentRef.current.style.height = '40px';
+          }
+        },
+      },
+    );
   };
 
   const handleReplyToggle = (commentId) => {
@@ -69,34 +69,23 @@ export const SharePage = () => {
   const handleReplySubmit = (commentId) => {
     const input = replyInput[commentId];
     if (!input || !input.trim()) return;
-    setComments(
-      comments.map((comment) =>
-        comment.id === commentId
-          ? {
-              ...comment,
-              replies: [
-                ...comment.replies,
-                {
-                  id: Date.now(),
-                  author: '닉네임',
-                  authorId: 'zzz',
-                  content: input,
-                  date: new Date().toLocaleString('ko-KR', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  }),
-                },
-              ],
-            }
-          : comment,
-      ),
+
+    createComment(
+      {
+        shareId: Number(postId),
+        postId: Number(postId),
+        pcommentId: commentId,
+        comment: input,
+      },
+      {
+        onSuccess: () => {
+          setReplyInput({ ...replyInput, [commentId]: '' });
+          setReplyingTo(null);
+        },
+      },
     );
-    setReplyInput({ ...replyInput, [commentId]: '' });
-    setReplyingTo(null);
   };
+
   const handleGoList = () => {
     if (location.state?.from) {
       navigate(location.state.from, { state: { page: location.state.page } });
@@ -104,6 +93,7 @@ export const SharePage = () => {
       navigate('/share/page/1');
     }
   };
+
   return (
     <PageContainer>
       <TopBarWrapper>
@@ -134,7 +124,8 @@ export const SharePage = () => {
         inputRef={commentRef}
       />
       <CommentListBox
-        comments={comments}
+        commentType="share"
+        comments={commentData || []}
         replyInput={replyInput}
         replyingTo={replyingTo}
         onReplyToggle={handleReplyToggle}

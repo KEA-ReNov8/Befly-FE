@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { formatDate } from '@shared/utils/date';
 import { useDeleteFreeCommentMutation } from '@post/feature/hooks/useDeleteFreeCommentMutation';
 import { useUpdateFreeCommentMutation } from '@post/feature/hooks/useUpdateFreeCommentMutation';
+import { useDeleteShareCommentMutation } from '@post/feature/hooks/useDeleteShareCommentMutation';
+import { useUpdateShareCommentMutation } from '@post/feature/hooks/useUpdateShareCommentMutation';
 import { useParams } from 'react-router-dom';
 
 export const CommentListBox = ({
@@ -16,6 +18,7 @@ export const CommentListBox = ({
   onReplyInputChange,
   onReplySubmit,
   userNickname,
+  commentType = 'free',
 }) => {
   const { postId } = useParams();
   const [deleteModalState, setDeleteModalState] = useState({
@@ -30,8 +33,13 @@ export const CommentListBox = ({
     originalContent: '',
   });
 
-  const { mutate: deleteComment } = useDeleteFreeCommentMutation(postId);
-  const { mutate: updateComment } = useUpdateFreeCommentMutation(postId);
+  const { mutate: deleteFreeComment } = useDeleteFreeCommentMutation(postId);
+  const { mutate: updateFreeComment } = useUpdateFreeCommentMutation(postId);
+  const { mutate: deleteShareComment } = useDeleteShareCommentMutation(postId);
+  const { mutate: updateShareComment } = useUpdateShareCommentMutation(postId);
+
+  const deleteComment = commentType === 'share' ? deleteShareComment : deleteFreeComment;
+  const updateComment = commentType === 'share' ? updateShareComment : updateFreeComment;
 
   const handleDeleteClick = (commentId, isReply = false) => {
     setDeleteModalState({
