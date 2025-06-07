@@ -12,7 +12,7 @@ export const useSocialSignupMutation = ({ onSuccess }) => {
             return response;
         },
         onSuccess: (response) => {
-            alert('회원가입이 완료되었습니다.');
+            console.log('회원가입이 완료되었습니다.');
             onSuccess?.();
         },
         onError: (error) => {
