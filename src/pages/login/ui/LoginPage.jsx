@@ -12,7 +12,7 @@ export const LoginPage = () => {
     const navigate = useNavigate();
     const { isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn } = useIsLoggedInStore();
 
-    useEffect(() => {
+    /*useEffect(() => {
         const getIsLoggedIn = async () => {
             try {
                 const response = await apiInstance.get('/auth/refresh');
@@ -33,7 +33,7 @@ export const LoginPage = () => {
         if(isFirstMount && !isLoggedIn) {
             getIsLoggedIn();
         }
-    }, [isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn, navigate]);
+    }, [isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn, navigate]);*/
 
     return (
         <Wrapper>
