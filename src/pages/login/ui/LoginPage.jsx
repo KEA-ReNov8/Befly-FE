@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router';
 import useIsLoggedInStore from '@shared/store/useIsLoggedInStore';
 import { apiInstance } from '@shared/apis/instance';
 
-
 export const LoginPage = () => {
     const navigate = useNavigate();
     const { isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn } = useIsLoggedInStore();
@@ -33,6 +32,8 @@ export const LoginPage = () => {
         
         // 소셜 로그인 후이거나, 쿠키가 있거나, 첫 방문이면서 로그인 상태가 아닌 경우 자동 로그인 시도
         if(hasRefreshToken || (isFirstMount && !isLoggedIn)) {
+            setIsFirstMount(false);
+            setIsLoggedIn(true);
             getIsLoggedIn();
         }
     }, [isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn, navigate]);
