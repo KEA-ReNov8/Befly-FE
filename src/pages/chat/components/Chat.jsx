@@ -5,14 +5,12 @@ import ProgressBar from '@chat/components/ProgressBar';
 import ChatMessage from '@chat/components/ChatMessage';
 import ChatForm from '@chat/components/ChatForm';
 import ChatMenu from '@shared/assets/icons/ChatMenuicon.svg';
-// public 폴더의 assets는 URL로 접근
 const aiLogo = '/favicon.svg';
 import theme from '@app/styles/theme';
 import SuspendModal from '@chat/components/SuspendModal';
 import SuccessModal from '@chat/components/SuccessModal';
 import { useSendChatMutation } from '@chat/feature/hooks/mutate/useSendChatMutation';
 import { sendChat } from '@chat/feature/utils/sendChat';
-//import { useChatStore } from '@chat/feature/store/useChatStore';
 import { useChatHistoryQuery } from '@chat/feature/hooks/query/useChatHistoryQuery';
 import { useLocation, useParams } from 'react-router-dom';
 
@@ -29,12 +27,6 @@ const Chat = () => {
   const location = useLocation();
   const params = useParams();
 
-  /*const {
-    currentSessionId,
-    setCurrentSessionId,
-    progress,
-    incrementProgress,
-  } = useChatStore();*/
   useEffect(() => {
     if (params.sessionId) {
       setCurrentSessionId(params.sessionId);
@@ -84,13 +76,26 @@ const Chat = () => {
       return;
     }
 
+    // 나래의 인사 메시지 (항상 첫 번째)
+    const initialMessage = {
+      id: 0,
+      text: '안녕하세요 저는 나래입니다. 고민이 있으시면 언제든지 물어보세요. 제가 도와드리겠습니다.',
+      isUser: false,
+      timestamp: new Date(),
+    };
+
     if (
       chatHistoryData?.result?.messages &&
       Array.isArray(chatHistoryData.result.messages) &&
       chatHistoryData.result.messages.length > 0
     ) {
       const convertedMessages = convertApiMessagesToState(chatHistoryData.result.messages);
-      setMessages(convertedMessages);
+      // 인사 메시지를 맨 앞에 추가하고, 기존 메시지들의 ID를 조정
+      const adjustedMessages = convertedMessages.map((msg, index) => ({
+        ...msg,
+        id: index + 2, // 인사 메시지가 id: 0이므로 2부터 시작
+      }));
+      setMessages([initialMessage, ...adjustedMessages]);
 
       // 프로그레스 계산 (AI 메시지 개수 * 10, 최대 100)
       const aiMessageCount = chatHistoryData.result.messages.filter(
@@ -99,14 +104,7 @@ const Chat = () => {
       setProgress(Math.min(aiMessageCount * 10, 100));
     } else if (chatHistoryData?.result?.messages && chatHistoryData.result.messages.length === 0) {
       // 빈 배열인 경우 (새로운 세션이거나 메시지가 없는 세션)
-      setMessages([
-        {
-          id: 1,
-          text: '안녕하세요 저는 나래입니다. 고민이 있으시면 언제든지 물어보세요. 제가 도와드리겠습니다.',
-          isUser: false,
-          timestamp: new Date(),
-        },
-      ]);
+      setMessages([initialMessage]);
       setProgress(0);
     }
   }, [chatHistoryData, isHistoryLoading, currentSessionId]);
@@ -153,7 +151,7 @@ const Chat = () => {
     const cleanedResponse = aiResponse.replace(/^AI:\s*/, '').replace(/\*\*/g, '');
     
     const aiMessage = {
-      id: messages.length + 1,
+      id: Date.now() + 1, // 고유 ID 생성 (사용자 메시지와 겹치지 않도록 +1)
       text: cleanedResponse,
       isUser: false,
       timestamp: new Date(),
@@ -178,7 +176,7 @@ const Chat = () => {
     setIsLoading(true);
 
     const userMessage = {
-      id: messages.length + 1,
+      id: Date.now(), // 고유 ID 생성
       text,
       isUser: true,
       timestamp: new Date(),
