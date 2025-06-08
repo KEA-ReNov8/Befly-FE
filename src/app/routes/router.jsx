@@ -18,33 +18,9 @@ import { ErrorPage } from '@pages/error/ErrorPage';
 import { ProtectedRouter } from './ProtectedRouter';
 
 export const router = createBrowserRouter([
-  //작업 완료시 프로텍트 라우터로 전환 예정
-  /*{
-    path: '/',
-    element: <ProtectedRouter />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        index: true,
-        path: 'login',
-        element: <LoginPage />,
-      },
-      {
-        path: 'signup',
-        element: <SignupPage />,
-      },
-      {
-        path: 'common-signup',
-        element: <SelfSignupPage />,
-      },
-      {
-        path: 'find-pw',
-        element: <FindPwPage />,
-      },
-    ]
-  },*/
+  // 로그인/회원가입 페이지 - 로그인되어 있으면 홈으로 리다이렉트
   {
-    path: '/login',
+    path: 'login',
     element: <LoginPage />,
     errorElement: <ErrorPage />,
   },
@@ -62,39 +38,34 @@ export const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <RootLayout />,
+    element: <ProtectedRouter />,
+    errorElement: <ErrorPage />,
     children: [
       {
-        index: true,
-        element: <HomePage />,
+        element: <RootLayout />,
+        children: [
+          { index: true, element: <HomePage /> },
+        ],
       },
     ],
   },
+  // 자유 게시판
   {
     path: 'free',
     element: <RootLayout />,
+    errorElement: <ErrorPage />,
     children: [
-      {
-        path: 'page/:page',
-        element: <FreePostListPage />,
-      },
-      {
-        path: 'create-free',
-        element: <FreePostPage />,
-      },
-      {
-        path: 'edit/:postId',
-        element: <FreePostPage />,
-      },
-      {
-        path: ':postId',
-        element: <FreePage />,
-      },
+      { path: 'page/:page', element: <FreePostListPage /> },
+      { path: 'create-free', element: <FreePostPage /> },
+      { path: 'edit/:postId', element: <FreePostPage /> },
+      { path: ':postId', element: <FreePage /> },
     ],
   },
+  // 나눔 게시판
   {
     path: 'share',
     element: <RootLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: 'page/:page',
@@ -114,48 +85,42 @@ export const router = createBrowserRouter([
       },
     ],
   },
+
+  // 마이페이지
   {
     path: 'my',
     element: <RootLayout />,
+    errorElement: <ErrorPage />,
     children: [
-      {
-        index: true,
-        element: <MyPage />,
-      },
-      {
-        path: 'myworry',
-        element: <MyWorryPage />,
-      },
+      { index: true, element: <MyPage /> },
+      { path: 'myworry', element: <MyWorryPage /> },
     ],
   },
+  // 유저 프로필
   {
-    path: 'profile/:id',
+    path: 'profile/:userId',
     element: <RootLayout />,
+    errorElement: <ErrorPage />,
     children: [
-      {
-        index: true,
-        element: <UserProfilePage />,
-      },
+      { index: true, element: <UserProfilePage /> },
     ],
   },
+  // 리포트 페이지
   {
     path: 'report/:sessionId',
     element: <RootLayout />,
+    errorElement: <ErrorPage />,
     children: [
-      {
-        index: true,
-        element: <ReportPage />,
-      },
+      { index: true, element: <ReportPage /> },
     ],
   },
+  // 채팅 페이지
   {
     path: 'chat/:sessionId',
     element: <RootLayout />,
+    errorElement: <ErrorPage />,
     children: [
-      {
-        index: true,
-        element: <ChatPage />,
-      },
+      { index: true, element: <ChatPage /> },
     ],
   },
 ]);

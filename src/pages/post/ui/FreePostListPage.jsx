@@ -26,8 +26,8 @@ export const FreePostListPage = () => {
       <TopBar />
       <SectionTitleBar title="자유함" />
       <Wrapper>
-        <WriteButton onClick={() => navigate('/free/create-free')}>글쓰기</WriteButton>
         <SearchBar />
+        <WriteButton onClick={() => navigate('/free/create-free')}>글쓰기</WriteButton>
       </Wrapper>
       {isLoading && <div>로딩 중...</div>}
       {error && <div>에러 발생!</div>}
@@ -70,7 +70,7 @@ const BoardGrid = styled.div`
 const Wrapper = styled.div`
   width: 1044px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   gap: 12px;
   margin: 10px 0;
@@ -80,18 +80,20 @@ const Wrapper = styled.div`
 const WriteButton = styled.button`
   padding: 0 20px;
   margin-top: 18px;
-  height: 28px;
-  border: none;
+  margin-right: 10px;
+  height: 32px;
   border-radius: 8px;
-  background: ${theme.colors.green.main};
-  color: ${theme.colors.other.white};
+  border: 1px solid ${theme.colors.gray[400]};
+  background: ${theme.colors.other.white};
+  color: ${theme.colors.other.black};
   font-size: ${theme.fontSize.md};
   font-weight: ${theme.fontWeight.medium};
   cursor: pointer;
   transition: background 0.3s ease-in-out;
 
   &:hover {
-    background: ${theme.colors.green.hover};
+    background: ${theme.colors.gray[300]};
     transition: background 0.3s ease-in-out;
+    border: 1px solid ${theme.colors.gray[400]};
   }
 `;

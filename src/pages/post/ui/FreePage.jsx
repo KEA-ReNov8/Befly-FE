@@ -117,6 +117,7 @@ export const FreePage = () => {
       {!isLoading && !error && !post && <div>게시글이 없습니다.</div>}
       {!isLoading && !error && post && (
         <PostBox
+          userId={post.userId}
           title={post.title}
           author={post.nickname}
           date={post.createdAt}

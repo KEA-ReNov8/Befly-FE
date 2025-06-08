@@ -6,6 +6,29 @@ const ScoreCard = ({ title, value, content, maxValue = 100 }) => {
   // 점수를 백분율로 계산
   const percentage = Math.round((value / maxValue) * 100);
 
+  // 긍정적인 감정들 (높을수록 좋음)
+  const positiveCategories = ['안정감', '자존감', '대인관계'];
+  const isPositiveCategory = positiveCategories.includes(title);
+
+  // 색상 결정 함수
+  const getColor = (value) => {
+    if (isPositiveCategory) {
+      // 긍정적 감정: 높으면 초록, 낮으면 빨강
+      return value >= 70
+        ? theme.colors.green.main
+        : value >= 30
+          ? theme.colors.other.yellow
+          : theme.colors.red.main;
+    } else {
+      // 부정적 감정: 낮으면 초록, 높으면 빨강
+      return value <= 30
+        ? theme.colors.green.main
+        : value <= 70
+          ? theme.colors.other.yellow
+          : theme.colors.red.main;
+    }
+  };
+
   const [animatedValue, setAnimatedValue] = useState(0);
   const [animatedPercentage, setAnimatedPercentage] = useState(0);
 
@@ -41,11 +64,11 @@ const ScoreCard = ({ title, value, content, maxValue = 100 }) => {
     <Card>
       <CardHeader>
         <Stat>
-          <ScoreTitle data-color={animatedPercentage}>{title}</ScoreTitle>
-          <ScoreValue data-color={animatedPercentage}>{animatedValue}</ScoreValue>
+          <ScoreTitle data-color={animatedPercentage} data-positive={isPositiveCategory}>{title}</ScoreTitle>
+          <ScoreValue data-color={animatedPercentage} data-positive={isPositiveCategory}>{animatedValue}</ScoreValue>
         </Stat>
         <ProgressBar>
-          <Progress data-percentage={animatedPercentage} />
+          <Progress data-percentage={animatedPercentage} data-positive={isPositiveCategory} />
         </ProgressBar>
       </CardHeader>
       <ContentContainer>
@@ -87,21 +110,45 @@ const Stat = styled.div`
 `;
 
 const ScoreTitle = styled.h3`
-  color: ${props => props['data-color'] >= 70
-    ? theme.colors.green.main        // 초록색
-    : props['data-color'] >= 30
-      ? theme.colors.other.yellow      // 노란색 
-        : theme.colors.red.main    // 빨간색 
-  };
+  color: ${props => {
+    const percentage = props['data-color'];
+    const isPositive = props['data-positive'];
+    
+    if (isPositive) {
+      return percentage >= 70
+        ? theme.colors.green.main
+        : percentage >= 30
+          ? theme.colors.other.yellow
+          : theme.colors.red.main;
+    } else {
+      return percentage <= 30
+        ? theme.colors.green.main
+        : percentage <= 70
+          ? theme.colors.other.yellow
+          : theme.colors.red.main;
+    }
+  }};
 `;
 
 const ScoreValue = styled.div`  
-  color: ${props => props['data-color'] >= 70
-    ? theme.colors.green.main        // 초록색
-    : props['data-color'] >= 30
-      ? theme.colors.other.yellow      // 노란색 
-        : theme.colors.red.main    // 빨간색 
-  };
+  color: ${props => {
+    const percentage = props['data-color'];
+    const isPositive = props['data-positive'];
+    
+    if (isPositive) {
+      return percentage >= 70
+        ? theme.colors.green.main
+        : percentage >= 30
+          ? theme.colors.other.yellow
+          : theme.colors.red.main;
+    } else {
+      return percentage <= 30
+        ? theme.colors.green.main
+        : percentage <= 70
+          ? theme.colors.other.yellow
+          : theme.colors.red.main;
+    }
+  }};
 `;
 
 const ProgressBar = styled.div`
@@ -113,16 +160,34 @@ const ProgressBar = styled.div`
   overflow: hidden;
 `;
 
-const Progress = styled.div.attrs(props => ({
-  style: {
-    width: `${props['data-percentage']}%`,
-    backgroundColor: props['data-percentage'] >= 70
-      ? theme.colors.green.main        // 초록색
-      : props['data-percentage'] >= 30
-        ? theme.colors.other.yellow      // 노란색
-          : theme.colors.red.main    // 빨간색 
+const Progress = styled.div.attrs(props => {
+  const percentage = props['data-percentage'];
+  const isPositive = props['data-positive'];
+  
+  let backgroundColor;
+  if (isPositive) {
+    // 긍정적 감정: 높으면 초록, 낮으면 빨강
+    backgroundColor = percentage >= 70
+      ? theme.colors.green.main
+      : percentage >= 30
+        ? theme.colors.other.yellow
+        : theme.colors.red.main;
+  } else {
+    // 부정적 감정: 낮으면 초록, 높으면 빨강
+    backgroundColor = percentage <= 30
+      ? theme.colors.green.main
+      : percentage <= 70
+        ? theme.colors.other.yellow
+        : theme.colors.red.main;
   }
-}))`
+
+  return {
+    style: {
+      width: `${percentage}%`,
+      backgroundColor
+    }
+  };
+})`
   height: 100%;
   transition: width 0.5s ease;
 `;

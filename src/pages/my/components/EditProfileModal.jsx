@@ -1,27 +1,168 @@
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ProfileSchema } from '@login/feature/schema';
+import { useProfileImageMutation } from '@my/feature/hook/mutation/useProfileImageMutation';
+import { useProfileNicknameMutation } from '@my/feature/hook/mutation/useProfileNicknameMutation';
+import { useMyInfoStore } from '@shared/store/useMyInfoStore';
+import { uploadImage } from '@login/feature/utils/uploadImage';
+import Message from '@login/components/Message';
+import { useQueryClient } from '@tanstack/react-query';
+import defaultImage from '@shared/assets/icons/defaultUser.svg';
+import logo from '../../../../public/favicon.svg';
 
-const EditProfileModal = ( {onClose}) => {
+const EditProfileModal = ({ onClose }) => {
+    const { myInfo, setMyInfo } = useMyInfoStore();
+    const fileInputRef = useRef(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(myInfo?.profileImageUrl || logo);
+    const [isUploading, setIsUploading] = useState(false);
+    const queryClient = useQueryClient();
+    const [uploadError, setUploadError] = useState('');
 
-    const handleClick = () => {
-        window.location.reload();
+    const {
+        register,
+        setValue,
+        handleSubmit,
+        watch,
+        formState: { errors, isValid },
+    } = useForm({
+        resolver: zodResolver(ProfileSchema),
+        mode: 'onChange',
+
+        defaultValues: {
+            nickName: myInfo?.nickName || ''
+        }
+    });
+
+    const profileImageMutation = useProfileImageMutation();
+    const profileNicknameMutation = useProfileNicknameMutation();
+
+    const nickName = watch('nickName');
+
+    useEffect(() => {
+        if (myInfo?.nickName) {
+            setValue('nickName', myInfo.nickName);
+        }
+        if (myInfo?.profileImg) {
+            setPreviewUrl('');
+        }
+    }, [myInfo, setValue]);
+
+    // 파일 선택 핸들러
+    const handleFileSelect = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            
+            // 미리보기 URL 생성
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setPreviewUrl(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    // + 버튼 클릭 시 파일 선택 다이얼로그 열기
+    const handleAddButtonClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    // 폼 제출 핸들러
+    const onSubmit = async (formData) => {
+        setIsUploading(true);
+        setUploadError('');
+
+        try {
+            const promises = [];
+            let uploadedImageUrl = null;
+
+            // 이미지가 변경된 경우 업로드
+            if (selectedFile) {
+                const imageUploadPromise = async () => {
+                    const blobURL = URL.createObjectURL(selectedFile);
+                    const imageUrl = await uploadImage(blobURL, selectedFile);
+                    console.log('이미지 업로드 결과:', imageUrl);
+                    if (!imageUrl) {
+                        throw new Error('이미지 업로드에 실패했습니다.');
+                    }
+
+                    uploadedImageUrl = imageUrl; // 상위 스코프에 저장
+                    return profileImageMutation.mutateAsync(imageUrl);
+                };
+                promises.push(imageUploadPromise());
+            }
+
+            // 닉네임이 변경된 경우 업데이트
+            if (nickName !== myInfo?.nickName) {
+                promises.push(
+                    profileNicknameMutation.mutateAsync(nickName)
+                );
+            }
+
+            // 모든 업데이트 실행
+            if (promises.length > 0) {
+                await Promise.all(promises);
+                
+                // 프로필 쿼리 다시 가져오기
+                await queryClient.invalidateQueries(['profile']);
+                
+                // 로컬 스토어 업데이트
+                const updatedInfo = {
+                    ...myInfo,
+                    nickName: nickName,
+                    ...(uploadedImageUrl && { profileImg: uploadedImageUrl })
+                };
+                setMyInfo(updatedInfo);
+            }
+
+            onClose();
+        } catch (error) {
+            console.error('프로필 수정 실패:', error);
+            setUploadError(error.message || '프로필 수정에 실패했습니다.');
+        } finally {
+            setIsUploading(false);
+        }
     };
 
     return (
         <ModalOverlay>
-            <ModalContainer>
+            <ModalContainer onClick={(e) => e.stopPropagation()}>
                 <Profile>
-                    <ProfileImage />
-                    <AddButton>+</AddButton>
+                    <ProfileImage src={previewUrl} />
+                    <AddButton onClick={handleAddButtonClick} disabled={isUploading}>+</AddButton>
+                    <HiddenFileInput
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileSelect}
+                    />
                 </Profile>
-                <Input>
-                    <Nickname type ="text" placeholder="닉네임" maxLength={10} required/>
-                    <CheckButton>중복확인</CheckButton>
-                </Input>
-                <ButtonContainer>
-                    <ReturnButton onClick={onClose}>취소</ReturnButton>
-                    <EditButton onClick={handleClick}>수정하기</EditButton>
-                </ButtonContainer>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Input>
+                        <Nickname 
+                            type="text" 
+                            placeholder="닉네임" 
+                            maxLength={10} 
+                            {...register('nickName')}
+                        />
+                    </Input>
+                    <Message isValid={!errors.nickName} message={errors.nickName?.message} />
+                    <ButtonContainer>
+                        <ReturnButton type="button" onClick={onClose} disabled={isUploading}>
+                            취소
+                        </ReturnButton>
+                        <EditButton 
+                            type="submit" 
+                            disabled={!isValid || isUploading || (nickName === myInfo?.nickName && !selectedFile)}
+                        >
+                            {isUploading ? '수정 중...' : '수정하기'}
+                        </EditButton>
+                    </ButtonContainer>
+                </form>
             </ModalContainer>
         </ModalOverlay>
     );
@@ -60,10 +201,10 @@ const Profile = styled.div`
 `;
 
 const ProfileImage = styled.img`
-    width: 247px;
-    height: 247px;
+    width: 230px;
+    height: 230px;
     border-radius: 50%;
-    background-color: ${theme.colors.gray[500]};
+    background-color: ${theme.colors.gray[300]};
 `;
 
 const AddButton = styled.button`
@@ -85,6 +226,10 @@ const AddButton = styled.button`
     }
 `;
 
+const HiddenFileInput = styled.input`
+    display: none;
+`;
+
 const Input = styled.div`
     display: flex;
     position: relative;
@@ -92,10 +237,15 @@ const Input = styled.div`
     height: 53px;
     align-items: center;
     justify-content: center;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     gap: 1rem;
     border: 1px solid ${theme.colors.gray[500]};
     border-radius: 8px;
+    margin-bottom: 8px;
+
+    &:focus-within {
+        border-color: ${theme.colors.green.main};
+    }
 `;
 
 const Nickname = styled.input`
@@ -112,26 +262,9 @@ const Nickname = styled.input`
     }
 `;
 
-const CheckButton = styled.button`
-    margin-right: 10px;
-    width: 66px;
-    height: 30px;
-    background-color: ${theme.colors.green.main};
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: ${theme.fontSize.sm};
-    font-weight: ${theme.fontWeight.regular};
-    cursor: pointer;
-
-    &:hover {
-        background-color: ${theme.colors.green.hover};
-    }
-`;
-
 const ButtonContainer = styled.div`
     display: flex;
-    margin-top: 40px;
+    margin-top: 1.5rem;
     gap: 15px;
 `;
 
@@ -141,13 +274,18 @@ const EditButton = styled.button`
     border-radius: 10px;
     cursor: pointer;
     border: none;
-    background-color: ${theme.colors.green.main};
+    background-color: ${props => props.disabled ? theme.colors.gray[400] : theme.colors.green.main};
     color: white;
     font-size: ${theme.fontSize.md};
     font-weight: ${theme.fontWeight.medium};
+    transition: background-color 0.2s;
 
-    &:hover {
+    &:hover:not(:disabled) {
         background-color: ${theme.colors.green.hover};
+    }
+
+    &:disabled {
+        cursor: not-allowed;
     }
 `;
 
@@ -160,9 +298,14 @@ const ReturnButton = styled.button`
     border: 1px solid ${theme.colors.gray[400]};
     font-size: ${theme.fontSize.md};
     font-weight: ${theme.fontWeight.medium};
+    transition: background-color 0.2s;
 
-    &:hover {
-        background-color: ${theme.colors.gray[500]};
+    &:hover:not(:disabled) {
+        background-color: ${theme.colors.gray[100]};
+    }
+    &:disabled {
+        cursor: not-allowed;
+        background-color: ${theme.colors.gray[200]};
     }
 `;
 

@@ -15,9 +15,10 @@ const ChatForm = ( { onSendMessage, isLoading = false }) => {
     };
 
     const handleKeyDown = (e) => {
+        if (e.isComposing) return;
         if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault(); // 줄바꿈 방지
-          handleSubmit(e);
+            e.preventDefault(); // 줄바꿈 방지
+            handleSubmit(e);
         }
       };
 

@@ -4,8 +4,10 @@ import PostSelectModal from '@pages/post/components/PostSelectModal';
 import { useState } from 'react';
 import { formatDate } from '@shared/utils/date';
 import { useMyInfoStore } from '@shared/store/useMyInfoStore';
+import { useNavigate } from 'react-router-dom';
 
 export const PostBox = ({
+  userId,
   title,
   author,
   date,
@@ -19,6 +21,7 @@ export const PostBox = ({
 }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { myInfo } = useMyInfoStore();
+  const navigate = useNavigate();
 
   // 현재 로그인된 유저가 게시글 작성자인지 확인
   const isAuthor = myInfo?.nickName === author;
@@ -29,6 +32,10 @@ export const PostBox = ({
 
   const onCloseDeleteModal = () => {
     setIsDeleteModalOpen(false);
+  }; 
+
+  const handleClickOwnerProfile = () => {
+    navigate(`/profile/${userId}`);
   };
 
   return (
@@ -37,7 +44,9 @@ export const PostBox = ({
         <HeaderWrapper>
           <PostTitle>{title}</PostTitle>
           <Meta>
-            <span>{author}</span>
+            <span onClick={handleClickOwnerProfile} style={{ cursor: 'pointer' }}>
+              {author}
+            </span>
             <Divider>|</Divider>
             <span>{formatDate(date)}</span>
           </Meta>

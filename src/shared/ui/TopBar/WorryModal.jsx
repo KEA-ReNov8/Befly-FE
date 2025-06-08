@@ -150,4 +150,9 @@ const SubmitButton = styled.button`
   &:hover {
     background-color: ${theme.colors.green.hover};
   }
+
+  &:disabled {
+    background-color: ${theme.colors.gray[300]};
+    cursor: not-allowed;
+  }
 `;

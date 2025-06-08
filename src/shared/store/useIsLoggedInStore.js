@@ -9,7 +9,7 @@ const useIsLoggedInStore = create(
       setIsFirstMount: (isFirstMount) => set({ isFirstMount }),
       setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
       logout: () => {
-        set({ isLoggedIn: false, isFirstMount: true });
+        set({ isLoggedIn: false, isFirstMount: false });
         localStorage.removeItem('is-logged-in-store');
         localStorage.removeItem('myInfoStore');
       },

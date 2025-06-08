@@ -1,30 +1,41 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
+import defaultImage from '@shared/assets/imgs/defaultImage.svg';
 
 const SharePostCard = ( { post } ) => {
 
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/share/${post.id}`);
+        navigate(`/share/${post.solvedId}`);
+    };
+
+    const dateOnly = new Date(post.createdAt).toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+
+    const handleImageError = (e) => {
+      e.target.src = defaultImage;
     };
 
     return (
     <CardContainer onClick={handleClick}>
-      <CardImage />
-      {post.type === '공유' && post.category && (
+      <CardImage src={post.imageUrl || defaultImage} alt="게시글 이미지"/>
+      {post.category && (
         <CategoryPill color={theme.colors.category[post.category]}>{post.category}</CategoryPill>
       )}
       <CardContentContainer>
-        <CardTitle>{post.title}</CardTitle>
+        <CardTitle>{post.solvedTitle}</CardTitle>
         <CardFooter>
           <LeftFooter>
-            <span>♡ {post.likes}</span>
-            <span>🗨️ {post.comments}</span>
+            <span>♡ {post.likeCount}</span>
+            <span>🗨️ {post.commentCount}</span>
           </LeftFooter>
           <RightFooter>
-            <span>{post.date}</span>
+            <span>{dateOnly}</span>
           </RightFooter>
         </CardFooter>
       </CardContentContainer>
@@ -50,11 +61,12 @@ const CardContainer = styled.div`
   box-sizing: border-box;
 `;
 
-const CardImage = styled.div`
+const CardImage = styled.img`
   width: 100%;
   height: 153px;
-  background: ${theme.colors.gray[300]};
+  background: ${theme.colors.gray[100]};
   border-radius: 8px 8px 0 0;
+  object-fit: cover;
 `;
 
 const CategoryPill = styled.div`
