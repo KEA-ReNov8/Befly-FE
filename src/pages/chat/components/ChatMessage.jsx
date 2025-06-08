@@ -1,33 +1,32 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
-import aiLogo from '../../../../public/favicon.svg';
+// public 폴더의 assets는 URL로 접근
+const aiLogo = '/favicon.svg';
 
-const ChatMessage = ( {message} ) => {
-    const { text, isUser } = message;
+const ChatMessage = ({ message }) => {
+  const { text, isUser } = message;
 
-    return (
-        <Container data-isUser={isUser}>
-            {!isUser && <ProfileMark src={aiLogo} />}
-            <MessageBubble data-isUser={isUser}>
-                { text }
-            </MessageBubble>
-        </Container>
-    );
+  return (
+    <Container data-isUser={isUser}>
+      {!isUser && <ProfileMark src={aiLogo} />}
+      <MessageBubble data-isUser={isUser}>{text}</MessageBubble>
+    </Container>
+  );
 };
 
 const Container = styled.div`
-    display: flex;
-    align-items: flex-start;
-    justify-content: ${(props) => (props['data-isUser'] ? 'flex-end' : 'flex-start')}; 
-    gap: 10px;
-    margin-bottom: 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: ${(props) => (props['data-isUser'] ? 'flex-end' : 'flex-start')};
+  gap: 10px;
+  margin-bottom: 16px;
 `;
 
 const ProfileMark = styled.img`
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    object-fit: cover;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
 `;
 
 const MessageBubble = styled.div`
@@ -36,10 +35,11 @@ const MessageBubble = styled.div`
   max-width: 70%;
   padding: 16px 16px;
   border-radius: 8px;
-  border:none;
+  border: none;
   word-wrap: break-word;
   line-height: 1.5;
-  background-color: ${(props) => (props['data-isUser'] ? theme.colors.gray[300] : theme.colors.green.main)};
+  background-color: ${(props) =>
+    props['data-isUser'] ? theme.colors.gray[300] : theme.colors.green.main};
   color: ${(props) => (props['data-isUser'] ? theme.colors.black : theme.colors.other.white)};
 
   &::after {

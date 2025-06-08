@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import TopBar from '@shared/ui/TopBar/TopBar';
 import theme from '@app/styles/theme';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import {
   PostBox,
@@ -10,39 +10,33 @@ import {
   PageBottomBox,
   MindReportSection,
 } from '../components/index';
-import { mockFreePostData, dummyComments } from '../data/DummyPosts';
+import { useMyInfoStore } from '@shared/store/useMyInfoStore';
+import { useSharePostDetailQuery } from '@post/feature/hooks/useSharePostDetailQuery';
+import { useShareCommentsQuery } from '@post/feature/hooks/useShareCommentsQuery';
+import { useCreateShareCommentMutation } from '@post/feature/hooks/useCreateShareCommentMutation';
+import {
+  useCheckShareEmpathyQuery,
+  useToggleShareEmpathyMutation,
+} from '@post/feature/hooks/useShareEmpathy';
 
 export const SharePage = () => {
-  const userId = 123;
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { myInfo } = useMyInfoStore();
+  const userNickname = myInfo?.nickName;
   const { postId } = useParams();
-  const [post, setPost] = useState(null);
+
+  const { data: post, isLoading, error } = useSharePostDetailQuery(postId);
+  const { data: commentData } = useShareCommentsQuery(postId);
+  const { data: isLiked } = useCheckShareEmpathyQuery(postId);
+  const { mutate: createComment } = useCreateShareCommentMutation(postId);
+  const { mutate: toggleLike } = useToggleShareEmpathyMutation(postId, isLiked);
 
   const [commentInput, setCommentInput] = useState('');
-  const [comments, setComments] = useState([]);
   const [replyInput, setReplyInput] = useState({});
   const [replyingTo, setReplyingTo] = useState(null);
   const commentRef = useRef(null);
-
-  useEffect(() => {
-    const foundPost = mockFreePostData.find((p) => p.id === parseInt(postId));
-    if (foundPost) {
-      setPost(foundPost);
-      setComments(
-        dummyComments.map((comment) => ({
-          id: comment.id,
-          author: comment.writer,
-          authorId: Math.floor(Math.random() * 1000),
-          content: comment.content,
-          date: comment.createdAt,
-          replies: [],
-        })),
-      );
-    } else {
-      navigate('/share');
-    }
-  }, [postId, navigate]);
 
   const handleInputChange = (e) => {
     setCommentInput(e.target.value);
@@ -54,25 +48,22 @@ export const SharePage = () => {
 
   const handleCommentSubmit = () => {
     if (!commentInput.trim()) return;
-    setComments([
-      ...comments,
+    createComment(
       {
-        id: Date.now(),
-        author: '닉네임',
-        authorId: userId,
-        content: commentInput,
-        date: new Date().toLocaleString('ko-KR', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-        }),
-        replies: [],
+        shareId: Number(postId),
+        postId: Number(postId),
+        pcommentId: null,
+        comment: commentInput,
       },
-    ]);
-    setCommentInput('');
-    if (commentRef.current) commentRef.current.style.height = '40px';
+      {
+        onSuccess: () => {
+          setCommentInput('');
+          if (commentRef.current) {
+            commentRef.current.style.height = '40px';
+          }
+        },
+      },
+    );
   };
 
   const handleReplyToggle = (commentId) => {
@@ -86,48 +77,45 @@ export const SharePage = () => {
   const handleReplySubmit = (commentId) => {
     const input = replyInput[commentId];
     if (!input || !input.trim()) return;
-    setComments(
-      comments.map((comment) =>
-        comment.id === commentId
-          ? {
-              ...comment,
-              replies: [
-                ...comment.replies,
-                {
-                  id: Date.now(),
-                  author: '닉네임',
-                  authorId: userId,
-                  content: input,
-                  date: new Date().toLocaleString('ko-KR', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  }),
-                },
-              ],
-            }
-          : comment,
-      ),
+
+    createComment(
+      {
+        shareId: Number(postId),
+        postId: Number(postId),
+        pcommentId: commentId,
+        comment: input,
+      },
+      {
+        onSuccess: () => {
+          setReplyInput({ ...replyInput, [commentId]: '' });
+          setReplyingTo(null);
+        },
+      },
     );
-    setReplyInput({ ...replyInput, [commentId]: '' });
-    setReplyingTo(null);
   };
+
   const handleGoList = () => {
     if (location.state?.from) {
       navigate(location.state.from, { state: { page: location.state.page } });
     } else {
-      navigate('/share');
+      navigate('/share/page/1');
     }
   };
+
+  const handleLikeClick = () => {
+    toggleLike();
+  };
+
   return (
     <PageContainer>
       <TopBarWrapper>
         <TopBar />
         <Line>공유함</Line>
       </TopBarWrapper>
-      {post && (
+      {isLoading && <div>로딩중...</div>}
+      {error && <div>에러가 발생했습니다.</div>}
+      {!isLoading && !error && !post && <div>게시글이 없습니다.</div>}
+      {!isLoading && !error && post && (
         <PostBox
           userId={post.userId}
           title={post.title}
@@ -135,12 +123,16 @@ export const SharePage = () => {
           date={post.createdAt}
           content={post.content}
           stats={{ like: post.likes, comment: post.comments }}
-          postId={post.id}
+          postId={post.postId}
+          isLiked={isLiked}
+          onToggleLike={handleLikeClick}
+          postType="share"
           // MindReportSection을 PostBox 내부에 children으로 전달
         >
-          <MindReportSection />
+          <MindReportSection reportData={post.reportData} />
         </PostBox>
       )}
+
       <CommentInputBox
         value={commentInput}
         onChange={handleInputChange}
@@ -148,13 +140,14 @@ export const SharePage = () => {
         inputRef={commentRef}
       />
       <CommentListBox
-        comments={comments}
+        commentType="share"
+        comments={commentData || []}
         replyInput={replyInput}
         replyingTo={replyingTo}
         onReplyToggle={handleReplyToggle}
         onReplyInputChange={handleReplyInputChange}
         onReplySubmit={handleReplySubmit}
-        userId={userId}
+        userNickname={userNickname}
       />
       <PageBottomBox onClick={handleGoList} />
     </PageContainer>
@@ -174,13 +167,13 @@ const TopBarWrapper = styled.div`
 `;
 
 const Line = styled.div`
-    width: 100%;
-    height: 66px;
-    background-color: ${theme.colors.green.main};
-    display: flex;
-    align-items: center;
-    font-size: ${theme.fontSize.xl};
-    font-weight: ${theme.fontWeight.bold};
-    padding-left: 220px;
-    color: ${theme.colors.other.white};
+  width: 100%;
+  height: 66px;
+  background-color: ${theme.colors.green.main};
+  display: flex;
+  align-items: center;
+  font-size: ${theme.fontSize.xl};
+  font-weight: ${theme.fontWeight.bold};
+  padding-left: 220px;
+  color: ${theme.colors.other.white};
 `;

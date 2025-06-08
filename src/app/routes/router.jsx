@@ -67,9 +67,22 @@ export const router = createBrowserRouter([
     element: <RootLayout />,
     errorElement: <ErrorPage />,
     children: [
-      { path: 'page/:page', element: <SharePostListPage /> },
-      { path: 'create-share', element: <SharePostPage /> },
-      { path: ':postId', element: <SharePage /> },
+      {
+        path: 'page/:page',
+        element: <SharePostListPage />,
+      },
+      {
+        path: 'create-share',
+        element: <SharePostPage />,
+      },
+      {
+        path: 'edit/:postId',
+        element: <SharePostPage />,
+      },
+      {
+        path: ':postId',
+        element: <SharePage />,
+      },
     ],
   },
 

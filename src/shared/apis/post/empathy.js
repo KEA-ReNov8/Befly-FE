@@ -14,3 +14,18 @@ export const deleteFreeEmpathy = async (freeId) => {
   const response = await apiInstance.delete(`/community/free/${freeId}/empathy`);
   return response.data.result;
 };
+
+export const checkShareEmpathy = async (shareId) => {
+  const response = await apiInstance.get(`/community/solved/${shareId}/empathy/check`);
+  return response.data.result;
+};
+
+export const postShareEmpathy = async (shareId) => {
+  const response = await apiInstance.post(`/community/solved/${shareId}/empathy`);
+  return response.data.result;
+};
+
+export const deleteShareEmpathy = async (shareId) => {
+  const response = await apiInstance.delete(`/community/solved/${shareId}/empathy`);
+  return response.data.result;
+};

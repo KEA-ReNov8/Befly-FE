@@ -5,7 +5,7 @@ import { useState } from 'react';
 import DeleteModal from '@pages/post/components/DeleteModal';
 
 //삭제 안될 경우 삭제 모달 복제해서 새로 만들기
-const PostSelectModal = ({ postId, onClose }) => {
+const PostSelectModal = ({ postId, onClose, postType = 'free' }) => {
   const navigate = useNavigate();
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -15,7 +15,11 @@ const PostSelectModal = ({ postId, onClose }) => {
   };
 
   const handleEdit = () => {
-    navigate(`/free/edit/${postId}`);
+    if (postType === 'share') {
+      navigate(`/share/edit/${postId}`);
+    } else {
+      navigate(`/free/edit/${postId}`);
+    }
   };
 
   return (
@@ -25,7 +29,11 @@ const PostSelectModal = ({ postId, onClose }) => {
         <EditButton onClick={handleEdit}>수정</EditButton>
         <DeleteButton onClick={handleDelete}>삭제</DeleteButton>
         {isDeleteModalOpen && (
-          <DeleteModal postId={postId} onClose={() => setIsDeleteModalOpen(false)} />
+          <DeleteModal
+            postId={postId}
+            postType={postType}
+            onClose={() => setIsDeleteModalOpen(false)}
+          />
         )}
       </ModalContainer>
     </>

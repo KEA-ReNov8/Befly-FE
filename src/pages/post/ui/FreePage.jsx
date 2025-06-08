@@ -27,7 +27,7 @@ export const FreePage = () => {
   const { mutate: createComment } = useCreateFreeCommentMutation(postId);
   const { mutate: toggleLike } = useToggleFreeEmpathyMutation(postId, isLiked);
 
-  const [commentInput, setCommentInput] = useState(''); // 댓글 입력창의 값 상태
+  const [commentInput, setCommentInput] = useState('');
   const [replyInput, setReplyInput] = useState({}); // 답글 입력창의 값 상태 (댓글 id별로 관리)
   const [replyingTo, setReplyingTo] = useState(null); // 현재 답글 입력창이 열려있는 댓글 id (하나만 열림)
   const commentRef = useRef(null); // 댓글 입력창 textarea DOM 참조 (높이 자동 조절용)
@@ -98,7 +98,7 @@ export const FreePage = () => {
     if (location.state?.from) {
       navigate(location.state.from, { state: { page: location.state.page } });
     } else {
-      navigate('/free');
+      navigate('/free/page/1');
     }
   };
 
@@ -126,6 +126,7 @@ export const FreePage = () => {
           postId={post.postId}
           isLiked={isLiked}
           onToggleLike={handleLikeClick}
+          postType="free"
         />
       )}
 
@@ -137,7 +138,8 @@ export const FreePage = () => {
         inputRef={commentRef}
       />
       {/* 댓글/답글 리스트 및 답글 입력창 */}
-      <CommentListBox        
+      <CommentListBox
+        commentType="free"
         comments={commentData || []}
         replyInput={replyInput}
         replyingTo={replyingTo}

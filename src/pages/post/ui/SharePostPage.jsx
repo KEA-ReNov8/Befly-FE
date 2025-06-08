@@ -1,52 +1,89 @@
 import { useRef, useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import TopBar from '@shared/ui/TopBar/TopBar';
 import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { MindReportSection } from '../components/mindreport/MindReportSection';
-// import { createSharePost } from '../api/post'; // 실제 API 연동 시 활용될 POST 요청 함수 예시
+import { useUploadImageMutation } from '@/shared/hooks/useUploadImageMutation';
+import { useCreateSharePostMutation } from '@post/feature/hooks/useCreateSharePostMutation';
+import { useUpdateSharePostMutation } from '@post/feature/hooks/useUpdateSharePostMutation';
+import { useSharePostDetailQuery } from '@post/feature/hooks/useSharePostDetailQuery';
+import { getUserInfo } from '@shared/utils/getUserInfo';
 
 export const SharePostPage = () => {
+  const userInfo = getUserInfo();
+  const navigate = useNavigate();
   const location = useLocation();
-  const reportData = location.state?.reportData;
+  const { postId } = useParams(); // URL에서 postId 추출
 
-  console.log('SharePostPage - received reportData:', reportData);
+  // 편집 모드인지 확인 (URL에 postId가 있으면 편집 모드)
+  const isEditMode = !!postId;
 
+  const editorRef = useRef(null);
+  const imageUrlsRef = useRef([]);
+
+  const [title, setTitle] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { mutateAsync: uploadImage } = useUploadImageMutation();
+  const { mutate: createSharePost, isPending: isCreating } = useCreateSharePostMutation();
+  const { mutate: updateSharePost } = useUpdateSharePostMutation();
+
+  // 편집 모드일 때 기존 게시글 데이터 로드
+  const { data: existingPost, isLoading: isLoadingPost } = useSharePostDetailQuery(postId, {
+    enabled: isEditMode,
+  });
+
+  // 새 글 작성 모드일 때만 reportData 사용
+  const reportData = !isEditMode ? location.state?.reportData : null;
+  const sessionId = !isEditMode ? location.state?.sessionId : null;
+
+  // reportData 구조 변환 (MindReportSection에서 기대하는 형태로)
+  const transformedReportData = reportData
+    ? {
+        analytics: reportData.scores
+          ? reportData.scores.map((score) => ({
+              emotion: score.title, // title -> emotion
+              score: score.value, // value -> score
+              comment: score.content, // content -> comment
+            }))
+          : [],
+        totalComment: reportData.analysisData || '',
+        suggest: reportData.adviseItems || '',
+        userNickname: userInfo?.nickName,
+      }
+    : isEditMode && existingPost?.reportData
+      ? existingPost.reportData
+      : null;
+
+  // 폼 초기화 (새 글 작성 시 임시저장 복원, 편집 시 기존 데이터 로드)
   useEffect(() => {
-    const savedTitle = localStorage.getItem('temp_share_post_title');
-    const savedContent = localStorage.getItem('temp_share_post_content');
+    if (isEditMode && existingPost) {
+      // 편집 모드: 기존 게시글 데이터로 폼 초기화
+      setTitle(existingPost.title);
+      if (editorRef.current) {
+        editorRef.current.getInstance().setHTML(existingPost.content);
+      }
+      // 기존 이미지 정보도 설정 (필요시)
+      imageUrlsRef.current = existingPost.imageUrls || [];
+    } else if (!isEditMode) {
+      // 새 글 작성 모드: 임시저장된 내용 복원
+      const savedTitle = localStorage.getItem('temp_share_post_title');
+      const savedContent = localStorage.getItem('temp_share_post_content');
 
-    if (savedTitle || savedContent) {
-      const shouldRestore = window.confirm('이전에 임시 저장된 내용이 있습니다. 불러올까요?');
-      if (shouldRestore) {
-        if (savedTitle) setTitle(savedTitle);
-        if (savedContent && editorRef.current) {
-          editorRef.current.getInstance().setHTML(savedContent);
+      if (savedTitle || savedContent) {
+        const shouldRestore = window.confirm('이전에 임시 저장된 내용이 있습니다. 불러올까요?');
+        if (shouldRestore) {
+          if (savedTitle) setTitle(savedTitle);
+          if (savedContent && editorRef.current) {
+            editorRef.current.getInstance().setHTML(savedContent);
+          }
         }
       }
     }
-  }, []);
-
-  const navigate = useNavigate();
-  const editorRef = useRef(null);
-  const [title, setTitle] = useState('');
-  const [htmlContent, setHtmlContent] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // 이미지 업로드 핸들러 (Mock)
-  const handleImageUpload = async (blob, callback) => {
-    const mockUrl = URL.createObjectURL(blob);
-    callback(mockUrl, '업로드 이미지');
-    // 실제 API가 준비되면 아래에 코드 추가
-    // const formData = new FormData();
-    // formData.append('image', blob);
-    // const res =await axios.post('/api/upload', formData);
-    // const imageUrl = res.data.url;
-    // callback(imageUrl, '업로드 이미지');
-  };
-
+  }, [isEditMode, existingPost]);
   const handleTempSave = () => {
     const editorInstance = editorRef.current.getInstance();
     const html = editorInstance.getHTML();
@@ -63,7 +100,27 @@ export const SharePostPage = () => {
     alert('임시 저장이 완료되었습니다!');
   };
 
-  const handleRegister = async () => {
+  const handleImageUpload = async (blob, callback) => {
+    const imageKey = `${Date.now()}-${blob.name || 'image'}`;
+
+    try {
+      const result = await uploadImage({ image: blob, imageKey });
+
+      if (result && result.imageUrl) {
+        // 쿼리 파라미터(? 이후)를 제거하여 깔끔한 URL로 만들기
+        const cleanImageUrl = result.imageUrl.split('?')[0];
+        imageUrlsRef.current.push(result.imageUrl);
+        callback(cleanImageUrl, '업로드 이미지');
+      } else {
+        throw new Error('업로드 결과가 올바르지 않습니다.');
+      }
+    } catch (error) {
+      alert(`이미지 업로드에 실패했습니다: ${error.message}`);
+      callback('', '업로드 실패');
+    }
+  };
+
+  const handleRegister = () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
@@ -71,40 +128,110 @@ export const SharePostPage = () => {
     const html = editorInstance.getHTML();
     const markdown = editorInstance.getMarkdown();
 
-    const isContentEmpty = !markdown.trim();
-    if (!title.trim() || isContentEmpty) {
+    if (!title.trim() || !markdown.trim()) {
       alert('제목과 내용을 모두 입력해주세요.');
       setIsSubmitting(false);
       return;
     }
 
-    try {
-      // await createSharePost({ title, content: html });
-      console.log('✅ 등록 완료. title:', title);
-      console.log('✅ 등록 완료. content:', html);
-      navigate('/share');
-    } catch (err) {
-      alert('등록 실패. 나중에 다시 시도해주세요.');
-    } finally {
-      setIsSubmitting(false);
+    // HTML 내용에서 첫 번째 이미지만 추출 (대표이미지용)
+    const imgTagRegex = /<img[^>]+src="([^"]+)"/g;
+    const firstImageMatch = imgTagRegex.exec(html);
+
+    let representativeImage = [];
+    if (firstImageMatch) {
+      const firstImageSrc = firstImageMatch[1];
+      // HTML에서 추출한 첫 번째 이미지 URL을 직접 사용
+      representativeImage = [firstImageSrc];
+    }
+
+    if (isEditMode) {
+      // 편집 모드: 게시글 수정
+      updateSharePost(
+        {
+          solvedId: postId,
+          title: title,
+          content: html,
+          imageKeys: representativeImage,
+        },
+        {
+          onSuccess: () => {
+            alert('공유글이 수정되었습니다.');
+            navigate(`/share/${postId}`); // 수정된 게시글로 이동
+          },
+          onError: () => {
+            alert('공유글 수정에 실패했습니다.');
+          },
+          onSettled: () => {
+            setIsSubmitting(false);
+          },
+        },
+      );
+    } else {
+      // 새 글 작성 모드: 게시글 생성
+      createSharePost(
+        {
+          solvedTitle: title,
+          solvedContent: html,
+          imageKeys: representativeImage,
+          sessionId: sessionId || '알 수 없음',
+          category: reportData?.category || '기타',
+        },
+        {
+          onSuccess: (data) => {
+            console.log('공유글 생성 완료:', data);
+            alert('공유글이 성공적으로 등록되었습니다!');
+
+            // 임시 저장 데이터 삭제
+            localStorage.removeItem('temp_share_post_title');
+            localStorage.removeItem('temp_share_post_content');
+
+            // 공유글 목록 페이지로 이동
+            navigate('/share/page/1');
+          },
+          onError: (error) => {
+            console.error('공유글 생성 실패:', error);
+            alert('공유글 등록에 실패했습니다. 다시 시도해주세요.');
+          },
+          onSettled: () => {
+            setIsSubmitting(false);
+          },
+        },
+      );
     }
   };
+
+  // 편집 모드에서 데이터 로딩 중일 때 로딩 표시
+  if (isEditMode && isLoadingPost) {
+    return (
+      <Container>
+        <TopBar />
+        <Line>게시글 로딩 중...</Line>
+      </Container>
+    );
+  }
 
   return (
     <Container>
       <TopBar />
-      <Line>공유함 글쓰기</Line>
+      <Line>{isEditMode ? '공유함 글수정' : '공유함 글쓰기'}</Line>
       <EditorContainer>
         <Header>
           <ButtonContainer>
-            <TempSaveButton onClick={handleTempSave}>임시저장</TempSaveButton>
+            {!isEditMode && <TempSaveButton onClick={handleTempSave}>임시저장</TempSaveButton>}
             <WriteButton onClick={handleRegister} disabled={isSubmitting}>
-              {isSubmitting ? '등록 중...' : '등록'}
+              {isSubmitting
+                ? isEditMode
+                  ? '수정 중...'
+                  : '등록 중...'
+                : isEditMode
+                  ? '수정'
+                  : '등록'}
             </WriteButton>
           </ButtonContainer>
         </Header>
         <TitleInput placeholder="제목" value={title} onChange={(e) => setTitle(e.target.value)} />
-        <MindReportSection reportData={reportData} />
+        {transformedReportData && <MindReportSection reportData={transformedReportData} />}
         <Editor
           ref={editorRef}
           previewStyle="vertical"
@@ -131,26 +258,25 @@ const Container = styled.div`
 `;
 
 const Line = styled.div`
-    width: 100%;
-    height: 66px;
-    background-color: ${theme.colors.green.main};
-    display: flex;
-    align-items: center;
-    font-size: ${theme.fontSize.xl};
-    font-weight: ${theme.fontWeight.bold};
-    padding-left: 220px;
-    color: ${theme.colors.other.white};
+  width: 100%;
+  height: 66px;
+  background-color: ${theme.colors.green.main};
+  display: flex;
+  align-items: center;
+  font-size: ${theme.fontSize.xl};
+  font-weight: ${theme.fontWeight.bold};
+  padding-left: 220px;
+  color: ${theme.colors.other.white};
 `;
 
 const EditorContainer = styled.div`
   width: 1044px;
-  height: 100%;
   border: 1px solid ${theme.colors.gray[400]};
+  border-top: none;
   padding: 40px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  border-top: none;
   border-radius: 0 0 10px 10px;
 `;
 const Header = styled.div`
@@ -162,12 +288,12 @@ const Header = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-  width: 170px;
   height: 32px;
   display: flex;
   gap: 12px;
   margin-left: auto;
   align-items: center;
+  justify-content: flex-end;
 `;
 
 const TempSaveButton = styled.button`

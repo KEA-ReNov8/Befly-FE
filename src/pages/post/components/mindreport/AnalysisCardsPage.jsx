@@ -1,15 +1,25 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
-import ScoreSection from '@report/components/ScoreSection'
+import ScoreSection from '@report/components/ScoreSection';
 
-export const AnalysisCardsPage = ({ scores }) => {
+export const AnalysisCardsPage = ({ analytics }) => {
+  // API 응답의 analytics 배열을 ScoreSection에서 필요한 형태로 변환
+  const transformedScores = analytics
+    ? analytics.map((item) => ({
+        title: item.emotion, // "인지 행동 치료(CBT) 원리" 등
+        value: item.score, // 30.0 등
+        maxValue: 100, // 기본 최대값 100
+        content: item.comment, // 상세 설명 텍스트
+      }))
+    : [];
+
   return (
     <FullBox>
       <ReportTitle>
         나래의 점수
         <TitleDivider />
       </ReportTitle>
-      <ScoreSection scores={scores} />
+      <ScoreSection scores={transformedScores} />
     </FullBox>
   );
 };
@@ -18,7 +28,7 @@ const FullBox = styled.div`
   width: 90%;
   height: 100%;
   margin: 0 auto;
-  margin-top:20px;
+  margin-top: 20px;
 `;
 
 const ReportTitle = styled.div`

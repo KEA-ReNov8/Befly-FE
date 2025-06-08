@@ -5,7 +5,8 @@ import ProgressBar from '@chat/components/ProgressBar';
 import ChatMessage from '@chat/components/ChatMessage';
 import ChatForm from '@chat/components/ChatForm';
 import ChatMenu from '@shared/assets/icons/ChatMenuicon.svg';
-import aiLogo from '../../../../public/favicon.svg';
+// public 폴더의 assets는 URL로 접근
+const aiLogo = '/favicon.svg';
 import theme from '@app/styles/theme';
 import SuspendModal from '@chat/components/SuspendModal';
 import SuccessModal from '@chat/components/SuccessModal';
@@ -34,7 +35,7 @@ const Chat = () => {
     progress,
     incrementProgress,
   } = useChatStore();*/
-  useEffect (() => {
+  useEffect(() => {
     if (params.sessionId) {
       setCurrentSessionId(params.sessionId);
       return;
@@ -48,12 +49,14 @@ const Chat = () => {
   }, [location.pathname, params.sessionId]);
 
   const { data: chatHistoryData, error: historyError } = useChatHistoryQuery(
-    currentSessionId, !!currentSessionId
+    currentSessionId,
+    !!currentSessionId,
   );
 
   // 채팅 내역을 메시지 형태로 변환하는 함수
   const convertApiMessagesToState = (apiMessages) => {
     if (!apiMessages || !Array.isArray(apiMessages)) return [];
+
 
     return apiMessages.map((msg, index) => {
       let cleanedContent = msg.content;
@@ -74,12 +77,18 @@ const Chat = () => {
 
   // 채팅 내역 로드 완료 시 메시지 설정
   useEffect(() => {
-    if (chatHistoryData?.result?.messages && Array.isArray(chatHistoryData.result.messages) && chatHistoryData.result.messages.length > 0) {
+    if (
+      chatHistoryData?.result?.messages &&
+      Array.isArray(chatHistoryData.result.messages) &&
+      chatHistoryData.result.messages.length > 0
+    ) {
       const convertedMessages = convertApiMessagesToState(chatHistoryData.result.messages);
       setMessages(convertedMessages);
-      
+
       // 프로그레스 계산 (AI 메시지 개수 * 10, 최대 100)
-      const aiMessageCount = chatHistoryData.result.messages.filter(msg => msg.type === 'ai').length;
+      const aiMessageCount = chatHistoryData.result.messages.filter(
+        (msg) => msg.type === 'ai',
+      ).length;
       setProgress(Math.min(aiMessageCount * 10, 100));
     }
     // chatHistoryData가 있지만 messages가 비어있는 경우는 무시 (새로운 세션이므로 초기 메시지 유지)
@@ -129,6 +138,7 @@ const Chat = () => {
   }, [messages]);
 
   const handleChatSuccess = (aiResponse, fullResponse) => {
+
     // "AI:" 접두사와 ** 마크다운 문자 제거
     const cleanedResponse = aiResponse.replace(/^AI:\s*/, '').replace(/\*\*/g, '');
     
@@ -139,9 +149,9 @@ const Chat = () => {
       timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, aiMessage]);
+    setMessages((prev) => [...prev, aiMessage]);
 
-    setProgress(prev => Math.min(prev + 10, 100));
+    setProgress((prev) => Math.min(prev + 10, 100));
 
     setIsLoading(false);
   };
@@ -150,7 +160,7 @@ const Chat = () => {
     console.error('채팅 전송 실패:', error);
   };
 
-  const sendChatMutation = useSendChatMutation(handleChatSuccess, handleChatError); 
+  const sendChatMutation = useSendChatMutation(handleChatSuccess, handleChatError);
 
   const handleSendMessage = async (text) => {
     if (!text.trim() || isLoading) return;
@@ -164,7 +174,7 @@ const Chat = () => {
       timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
 
     try {
       await sendChat(text, currentSessionId, sendChatMutation);
@@ -199,24 +209,24 @@ const Chat = () => {
           )}
         </TopContainer>
         <MessageContainer>
-        <MessageList ref={messageListRef}>
-          {messages.map((message) => (
-            <ChatMessage key={message.id} message={message} />
-          ))}
-          {isLoading && (
-            <LoadingMessage>
-              <ProfileMark src={aiLogo} />
-              <LoadingBubble>
-                <LoadingDots>
-                  <Dot />
-                  <Dot />
-                  <Dot />
-                </LoadingDots>
-              </LoadingBubble>
-            </LoadingMessage>
-          )}
-        </MessageList>
-        <ChatForm onSendMessage={handleSendMessage} isLoading={isLoading} />
+          <MessageList ref={messageListRef}>
+            {messages.map((message) => (
+              <ChatMessage key={message.id} message={message} />
+            ))}
+            {isLoading && (
+              <LoadingMessage>
+                <ProfileMark src={aiLogo} />
+                <LoadingBubble>
+                  <LoadingDots>
+                    <Dot />
+                    <Dot />
+                    <Dot />
+                  </LoadingDots>
+                </LoadingBubble>
+              </LoadingMessage>
+            )}
+          </MessageList>
+          <ChatForm onSendMessage={handleSendMessage} isLoading={isLoading} />
         </MessageContainer>
       </ChatContainer>
       {isSuspendModalOpen && <SuspendModal onClose={handleSuspendModalClose} />}
@@ -336,7 +346,8 @@ const FinishButton = styled.button`
   }
 `;
 
-const MessageContainer = styled.div`  display: flex;
+const MessageContainer = styled.div`
+  display: flex;
   flex-direction: column;
   height: 770px;
 `;
@@ -371,7 +382,7 @@ const LoadingBubble = styled.div`
   padding: 16px;
   border-radius: 8px;
   position: relative;
-  
+
   &::after {
     content: '';
     position: absolute;
@@ -399,17 +410,19 @@ const Dot = styled.div`
   &:nth-child(1) {
     animation-delay: 0s;
   }
-  
+
   &:nth-child(2) {
     animation-delay: 0.2s;
   }
-  
+
   &:nth-child(3) {
     animation-delay: 0.4s;
   }
 
   @keyframes blink {
-    0%, 80%, 100% {
+    0%,
+    80%,
+    100% {
       opacity: 0.3;
       transform: scale(0.8);
     }
@@ -421,4 +434,3 @@ const Dot = styled.div`
 `;
 
 export default Chat;
-

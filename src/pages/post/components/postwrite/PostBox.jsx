@@ -16,6 +16,7 @@ export const PostBox = ({
   postId,
   isLiked,
   onToggleLike,
+  postType = 'free',
   children = null,
 }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -61,7 +62,9 @@ export const PostBox = ({
         </LikeButton>
         <span>🗨️ {stats.comment}</span>
       </PostStats>
-      {isDeleteModalOpen && <PostSelectModal postId={postId} onClose={onCloseDeleteModal} />}
+      {isDeleteModalOpen && (
+        <PostSelectModal postId={postId} postType={postType} onClose={onCloseDeleteModal} />
+      )}
     </PostContainer>
   );
 };

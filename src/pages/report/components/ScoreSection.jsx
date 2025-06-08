@@ -13,7 +13,7 @@ const ScoreSection = ({ scores }) => {
       <ScoresGrid>
         {scores && scores.length > 0 ? (
           scores.map((score, index) => (
-            <ScoreCard 
+            <ScoreCard
               key={index}
               title={score.title}
               value={score.value}
@@ -61,7 +61,7 @@ const LegendItem = styled.div`
     display: inline-block;
     width: 14px;
     height: 14px;
-    background-color: ${props => props.color};
+    background-color: ${(props) => props.color};
     border-radius: 3px;
   }
 `;
