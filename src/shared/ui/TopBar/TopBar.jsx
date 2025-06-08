@@ -6,12 +6,15 @@ import WorryModal from './WorryModal';
 import NotificationModal from './NotificationModal';
 import logo from '@shared/assets/imgs/befly_logo.svg';
 import defaultProfile from '@shared/assets/icons/defaultUser.svg';
+import { useMyInfoStore } from '@shared/store/useMyInfoStore';
 
 const TopBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isWorryModalOpen, setWorryModalOpen] = useState(false);
   const [isNotificationModalOpen, setNotificationModalOpen] = useState(false);
+  const { myInfo } = useMyInfoStore();
+  
   const toggleWorryModal = () => {
     setWorryModalOpen((prev) => !prev);
   };
@@ -19,21 +22,7 @@ const TopBar = () => {
     setNotificationModalOpen((prev) => !prev);
   };
 
-  const getUserInfo = () => {
-    try {
-      const myInfoStore = localStorage.getItem('myInfoStore');
-      if (myInfoStore) {
-        const parsed = JSON.parse(myInfoStore);
-        return parsed?.state?.myInfo || null;
-      }
-      return null;
-    } catch (error) {
-      console.error('로컬스토리지 파싱 오류:', error);
-      return null;
-    }
-  };
-  const userInfo = getUserInfo();
-  const isDefaultProfile = !userInfo?.profileImg;
+  const isDefaultProfile = !myInfo?.profileImg;
 
   return (
     <Container>
@@ -55,13 +44,13 @@ const TopBar = () => {
       <RightSection>
         <NotificationWrapper>
           <NotificationButton onClick={toggleNotificationModal} $isDefault={isDefaultProfile}>
-            <img src={userInfo?.profileImg || defaultProfile} alt="defaultProfile" />
+            <img src={myInfo?.profileImg || defaultProfile} alt="defaultProfile" />
           </NotificationButton>
           {isNotificationModalOpen && <NotificationModal />}
         </NotificationWrapper>
         <WorryWrapper>
           <WorryButton onClick={toggleWorryModal}>고민 생성 +</WorryButton>
-          {isWorryModalOpen && <WorryModal />}
+          {isWorryModalOpen && <WorryModal onClose={() => setWorryModalOpen(false)} />}
         </WorryWrapper>
       </RightSection>
     </Container>

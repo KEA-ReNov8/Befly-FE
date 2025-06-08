@@ -5,7 +5,7 @@ import CategoryTag from './CategoryTag';
 import { useNavigate } from 'react-router-dom';
 import { useCreateNewChatMutation } from '@chat/feature/hooks/mutate/useCreateNewChatMutation';
 
-const WorryModal = () => {
+const WorryModal = ({ onClose }) => {
   const navigate = useNavigate();
   // 나중에 고민생성하기 버튼 누르면 데이터 넘겨주는 과정 추가하면 될듯
   const [worryTitle, setWorryTitle] = useState(''); // 고민 제목
@@ -14,6 +14,7 @@ const WorryModal = () => {
   const createNewChatMutation = useCreateNewChatMutation(
     (sessionInfo) => {
       console.log('세션 정보:', sessionInfo);
+      onClose(); // 모달 닫기
       navigate(`/chat/${sessionInfo.session_id}`);
     },
     (error) => {
