@@ -50,6 +50,9 @@ export const useLoginMutation = () => {
 
             if (status === 401 && axiosError.response?.data) {
                 alert(axiosError.response.data.message);
+            }
+            else if (status === 400){
+                alert(axiosError.response.data.message);
             } else {
                 alert('서버 오류가 발생했습니다.');
             }
