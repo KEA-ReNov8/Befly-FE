@@ -75,11 +75,9 @@ export const getShareComments = async (shareId) => {
       .filter((c) => c.parentCommentId === null)
       .map((c) => ({
         id: c.commentId,
-        author: c.userId ? `사용자${c.userId}` : '익명', // nickname이 없어서 userId 기반으로 생성
-        // author: c.nickname
+        author: c.nickname,
         content: c.comment,
-        date: new Date().toISOString(), // createdAt이 없어서 현재 시간 사용
-        // date: c.createdAt,
+        date: c.createdAt,
         isDeleted: c.isDeleted,
         replies: [], // 나중에 추가
       }));
@@ -90,11 +88,9 @@ export const getShareComments = async (shareId) => {
       .map((c) => ({
         id: c.commentId,
         parentId: c.parentCommentId.solvedCommentId, // 구조가 다름
-        // author: c.nickname, // 백엔드에서 nickname 필드 추가 예정
-        author: c.userId ? `사용자${c.userId}` : '익명', // 임시값: userId 기반으로 생성
+        author: c.nickname,
         content: c.comment,
-        // date: c.createdAt, // 백엔드에서 createdAt 필드 추가 예정
-        date: new Date().toISOString(), // 임시값: 현재 시간 사용
+        date: c.createdAt,
         isDeleted: c.isDeleted,
       }));
 
