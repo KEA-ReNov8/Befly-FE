@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Footer from '@shared/ui/Footer';
 import Background from '@pages/login/components/Background';
 import LoginForm from '@pages/login/components/LoginForm';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import useIsLoggedInStore from '@shared/store/useIsLoggedInStore';
 import { useMyInfoStore } from '@shared/store/useMyInfoStore';
@@ -12,6 +12,9 @@ export const LoginPage = () => {
     const navigate = useNavigate();
     const { isFirstMount, isLoggedIn, setIsFirstMount, setIsLoggedIn } = useIsLoggedInStore();
     const { setMyInfo } = useMyInfoStore();
+    const retryCountRef = useRef(0);
+    const maxRetries = 2; // 최대 3번 재시도
+    const retryDelay = 2000; // 2초 간격
     
     useEffect(() => {
         const run = async () => {
@@ -21,25 +24,44 @@ export const LoginPage = () => {
               setMyInfo(response.result);
               setIsLoggedIn(true);
               setIsFirstMount(false);
+              retryCountRef.current = 0; // 성공 시 재시도 카운트 리셋
               navigate('/', { replace: true });
             } else {
               // 로그인 실패 시도
-              setIsLoggedIn(false);
-              setIsFirstMount(true);
+              handleFailure();
             }
           } catch (e) {
             console.warn('소셜 로그인 후 사용자 정보 가져오기 실패:', e);
+            handleFailure();
+          }
+        };
+
+        const handleFailure = () => {
+          retryCountRef.current += 1;
+          
+          if (retryCountRef.current >= maxRetries) {
+            // 최대 재시도 횟수 초과 시 더 이상 재시도하지 않음
+            console.warn(`최대 재시도 횟수(${maxRetries})를 초과했습니다. 재시도를 중단합니다.`);
+            setIsLoggedIn(false);
+            setIsFirstMount(false); // 더 이상 재시도하지 않도록 false로 설정
+            return;
+          }
+
+          // 재시도 대기 시간 후 다시 시도
+          console.log(`재시도 ${retryCountRef.current}/${maxRetries} 예정 (${retryDelay}ms 후)`);
+          setTimeout(() => {
             setIsLoggedIn(false);
             setIsFirstMount(true);
-          }
+          }, retryDelay);
         };
     
         if (isFirstMount === null || isLoggedIn === null) {
           setIsFirstMount(true);
           setIsLoggedIn(false);
+          retryCountRef.current = 0;
         }
     
-        if (isFirstMount) {
+        if (isFirstMount && retryCountRef.current < maxRetries) {
           run();
         }
       }, [isFirstMount, isLoggedIn])

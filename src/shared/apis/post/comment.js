@@ -85,6 +85,8 @@ export const getShareComments = async (shareId) => {
         content: c.comment,
         date: c.createdAt,
         isDeleted: c.isDeleted,
+        profileImage: c.profileImage,
+        badge: c.badge,
         replies: [], // 나중에 추가
       }));
 
@@ -98,6 +100,8 @@ export const getShareComments = async (shareId) => {
         content: c.comment,
         date: c.createdAt,
         isDeleted: c.isDeleted,
+        profileImage: c.profileImage,
+        badge: c.badge,
       }));
 
     // 3. 대댓글을 부모 댓글의 replies에 추가

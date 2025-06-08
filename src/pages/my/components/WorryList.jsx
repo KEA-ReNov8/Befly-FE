@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import WorryPost from '@my/components/WorryPost';
 import DeleteModal from '@my/components/DeleteModal';
-import { SearchBar } from '@post/components/postlist/SearchBar';
 import { useChatSessionListQuery } from '@chat/feature/hooks/query/useChatSessionListQuery';
 
 const WorryList = () => {
@@ -65,9 +64,6 @@ const WorryList = () => {
                     <TabButton data-isActive={activeTab === '고민중'} onClick={() => handleTabChange('고민중')}>고민중</TabButton>
                     <TabButton data-isActive={activeTab === '고민해결'} onClick={() => handleTabChange('고민해결')}>고민해결</TabButton>
                 </TabContainer>
-                {/*<SearchContainer>
-                    <SearchBar />
-                </SearchContainer>*/}
             </Header>
             <CategoryContainer>
                 <CategoryStatus>진행여부</CategoryStatus>
@@ -125,14 +121,6 @@ const Header = styled.div`
     align-items: center;
     justify-content: space-between;
 `;
-
-/*const SearchContainer = styled.div`
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    margin-right: 75px;
-`;*/
 
 const TabContainer = styled.div`
     width: 100%;

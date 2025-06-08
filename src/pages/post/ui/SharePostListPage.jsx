@@ -6,6 +6,7 @@ import PostCard from '@shared/ui/PostCard';
 import { SearchBar, Pagination, FilterButton, SectionTitleBar } from '../components/index';
 import theme from '@app/styles/theme';
 import { useSharePostsByPageQuery } from '@/pages/post/feature/hooks/useSharePostsByPageQuery';
+import Wait from '@shared/ui/lottieComp/wait';
 import { useSearchSharePostsQuery } from '@/pages/post/feature/hooks/useSearchSharePostsQuery';
 
 const categories = ['전체', '불안', '상처', '스트레스', '학업', '외로움', '우울', '관계', '진로'];
@@ -120,7 +121,11 @@ export const SharePostListPage = () => {
         </CategoryBar>
         <SearchBar onSearch={handleSearch} />
       </Wrapper>
-
+      {isLoading && (
+        <LoadingContainer>
+          <Wait />
+        </LoadingContainer>
+      )}
       {/* 검색/필터 모드일 때 필터 정보 표시 */}
       {isSearchMode && (
         <FilterInfo>
@@ -132,8 +137,6 @@ export const SharePostListPage = () => {
           <ClearButton onClick={handleClearFilter}>전체 보기</ClearButton>
         </FilterInfo>
       )}
-
-      {isLoading && <div>로딩 중...</div>}
       {error && <div>에러 발생!</div>}
       {!isLoading && !error && !posts.length && (
         <div>{isSearchMode ? '검색 결과가 없습니다.' : '게시글이 없습니다.'}</div>
@@ -174,6 +177,15 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   background-color: ${theme.colors.gray[200]};
+`;
+
+const LoadingContainer = styled.div`
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 50px 0;
 `;
 
 const BoardGrid = styled.div`

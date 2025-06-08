@@ -6,7 +6,9 @@ import PostCard from '@shared/ui/PostCard';
 import { SearchBar, Pagination, SectionTitleBar } from '@/pages/post/components/index';
 import theme from '@app/styles/theme';
 import { useFreePostsByPageQuery } from '@/pages/post/feature/hooks/useFreePostsByPageQuery';
+import Wait from '@shared/ui/lottieComp/wait';
 import { useSearchFreePostsQuery } from '@/pages/post/feature/hooks/useSearchFreePostsQuery';
+
 
 export const FreePostListPage = () => {
   const { page } = useParams();
@@ -95,7 +97,11 @@ export const FreePostListPage = () => {
         <SearchBar onSearch={handleSearch} />
         <WriteButton onClick={() => navigate('/free/create-free')}>글쓰기</WriteButton>
       </Wrapper>
-
+      {isLoading && (
+        <LoadingContainer>
+          <Wait />
+        </LoadingContainer>
+      )}
       {/* 검색 모드일 때 검색 정보 표시 */}
       {isSearchMode && (
         <SearchInfo>
@@ -103,8 +109,6 @@ export const FreePostListPage = () => {
           <ClearButton onClick={handleClearSearch}>전체 보기</ClearButton>
         </SearchInfo>
       )}
-
-      {isLoading && <div>로딩 중...</div>}
       {error && <div>에러 발생!</div>}
       {!isLoading && !error && !posts.length && (
         <div>{isSearchMode ? '검색 결과가 없습니다.' : '게시글이 없습니다.'}</div>
@@ -144,6 +148,15 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   background-color: ${theme.colors.gray[200]};
+`;
+
+const LoadingContainer = styled.div`
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 50px 0;
 `;
 
 const BoardGrid = styled.div`

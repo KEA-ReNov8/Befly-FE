@@ -5,14 +5,12 @@ import ProgressBar from '@chat/components/ProgressBar';
 import ChatMessage from '@chat/components/ChatMessage';
 import ChatForm from '@chat/components/ChatForm';
 import ChatMenu from '@shared/assets/icons/ChatMenuicon.svg';
-// public 폴더의 assets는 URL로 접근
 const aiLogo = '/favicon.svg';
 import theme from '@app/styles/theme';
 import SuspendModal from '@chat/components/SuspendModal';
 import SuccessModal from '@chat/components/SuccessModal';
 import { useSendChatMutation } from '@chat/feature/hooks/mutate/useSendChatMutation';
 import { sendChat } from '@chat/feature/utils/sendChat';
-//import { useChatStore } from '@chat/feature/store/useChatStore';
 import { useChatHistoryQuery } from '@chat/feature/hooks/query/useChatHistoryQuery';
 import { useLocation, useParams } from 'react-router-dom';
 
@@ -29,12 +27,6 @@ const Chat = () => {
   const location = useLocation();
   const params = useParams();
 
-  /*const {
-    currentSessionId,
-    setCurrentSessionId,
-    progress,
-    incrementProgress,
-  } = useChatStore();*/
   useEffect(() => {
     if (params.sessionId) {
       setCurrentSessionId(params.sessionId);
@@ -48,7 +40,7 @@ const Chat = () => {
     }
   }, [location.pathname, params.sessionId]);
 
-  const { data: chatHistoryData, error: historyError } = useChatHistoryQuery(
+  const { data: chatHistoryData, error: historyError, isLoading: isHistoryLoading } = useChatHistoryQuery(
     currentSessionId,
     !!currentSessionId,
   );
@@ -77,37 +69,53 @@ const Chat = () => {
 
   // 채팅 내역 로드 완료 시 메시지 설정
   useEffect(() => {
+    if (!currentSessionId) return;
+
+    if (isHistoryLoading) {
+      // 로딩 중일 때는 메시지를 변경하지 않음
+      return;
+    }
+
+    // 나래의 인사 메시지 (항상 첫 번째)
+    const initialMessage = {
+      id: 0,
+      text: '안녕하세요 저는 나래입니다. 고민이 있으시면 언제든지 물어보세요. 제가 도와드리겠습니다.',
+      isUser: false,
+      timestamp: new Date(),
+    };
+
     if (
       chatHistoryData?.result?.messages &&
       Array.isArray(chatHistoryData.result.messages) &&
       chatHistoryData.result.messages.length > 0
     ) {
       const convertedMessages = convertApiMessagesToState(chatHistoryData.result.messages);
-      setMessages(convertedMessages);
+      // 인사 메시지를 맨 앞에 추가하고, 기존 메시지들의 ID를 조정
+      const adjustedMessages = convertedMessages.map((msg, index) => ({
+        ...msg,
+        id: index + 2, // 인사 메시지가 id: 0이므로 2부터 시작
+      }));
+      setMessages([initialMessage, ...adjustedMessages]);
 
       // 프로그레스 계산 (AI 메시지 개수 * 10, 최대 100)
       const aiMessageCount = chatHistoryData.result.messages.filter(
         (msg) => msg.type === 'ai',
       ).length;
       setProgress(Math.min(aiMessageCount * 10, 100));
-    }
-    // chatHistoryData가 있지만 messages가 비어있는 경우는 무시 (새로운 세션이므로 초기 메시지 유지)
-  }, [chatHistoryData]);
-
-  // 새로운 채팅 세션인 경우 초기 메시지 설정
-  /*useEffect(() => {
-    if (!currentSessionId) {
-      setMessages([
-        {
-          id: 1,
-          text: '안녕하세요 저는 나래입니다. 고민이 있으시면 언제든지 물어보세요. 제가 도와드리겠습니다.',
-          isUser: false,
-          timestamp: new Date(),
-        },
-      ]);
+    } else if (chatHistoryData?.result?.messages && chatHistoryData.result.messages.length === 0) {
+      // 빈 배열인 경우 (새로운 세션이거나 메시지가 없는 세션)
+      setMessages([initialMessage]);
       setProgress(0);
     }
-  }, [currentSessionId]);*/
+  }, [chatHistoryData, isHistoryLoading, currentSessionId]);
+
+  // sessionId가 변경될 때 로딩 상태 표시를 위한 초기화 (메시지는 건드리지 않음)
+  useEffect(() => {
+    if (currentSessionId) {
+      // 로딩 상태만 초기화하고 메시지는 히스토리 로드 후에 처리
+      setIsLoading(false);
+    }
+  }, [currentSessionId]);
 
   const handleSuspendModalOpen = () => {
     setIsSuspendModalOpen(true);
@@ -143,7 +151,7 @@ const Chat = () => {
     const cleanedResponse = aiResponse.replace(/^AI:\s*/, '').replace(/\*\*/g, '');
     
     const aiMessage = {
-      id: messages.length + 1,
+      id: Date.now() + 1, // 고유 ID 생성 (사용자 메시지와 겹치지 않도록 +1)
       text: cleanedResponse,
       isUser: false,
       timestamp: new Date(),
@@ -168,7 +176,7 @@ const Chat = () => {
     setIsLoading(true);
 
     const userMessage = {
-      id: messages.length + 1,
+      id: Date.now(), // 고유 ID 생성
       text,
       isUser: true,
       timestamp: new Date(),
@@ -210,10 +218,7 @@ const Chat = () => {
         </TopContainer>
         <MessageContainer>
           <MessageList ref={messageListRef}>
-            {messages.map((message) => (
-              <ChatMessage key={message.id} message={message} />
-            ))}
-            {isLoading && (
+            {isHistoryLoading ? (
               <LoadingMessage>
                 <ProfileMark src={aiLogo} />
                 <LoadingBubble>
@@ -224,9 +229,27 @@ const Chat = () => {
                   </LoadingDots>
                 </LoadingBubble>
               </LoadingMessage>
+            ) : (
+              <>
+                {messages.map((message) => (
+                  <ChatMessage key={message.id} message={message} />
+                ))}
+                {isLoading && (
+                  <LoadingMessage>
+                    <ProfileMark src={aiLogo} />
+                    <LoadingBubble>
+                      <LoadingDots>
+                        <Dot />
+                        <Dot />
+                        <Dot />
+                      </LoadingDots>
+                    </LoadingBubble>
+                  </LoadingMessage>
+                )}
+              </>
             )}
           </MessageList>
-          <ChatForm onSendMessage={handleSendMessage} isLoading={isLoading} />
+          <ChatForm onSendMessage={handleSendMessage} isLoading={isLoading || isHistoryLoading} />
         </MessageContainer>
       </ChatContainer>
       {isSuspendModalOpen && <SuspendModal onClose={handleSuspendModalClose} />}

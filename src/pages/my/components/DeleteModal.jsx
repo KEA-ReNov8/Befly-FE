@@ -14,6 +14,7 @@ const DeleteModal = ( {onClose, sessionToDelete}) => {
 
         try {
             const statusField = sessionToDelete.status === '고민중' ? 'true' : 'false';
+
             await deleteSessionMutation.mutateAsync({
                 statusField,
                 sessionId: sessionToDelete.session_id

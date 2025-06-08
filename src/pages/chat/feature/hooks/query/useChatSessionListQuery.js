@@ -19,7 +19,7 @@ export const useChatSessionListQuery = (status, enabled = true) => {
             return response.data;
         },
         enabled: enabled,
-        staleTime: 1000 * 60 * 5,
+        //staleTime: 1000 * 60 * 5,
         //retry: 2,
     });
 };

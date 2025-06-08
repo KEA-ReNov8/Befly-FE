@@ -4,6 +4,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import Footer from '@shared/ui/Footer';
+import { PageTransition } from '@/shared/ui/PageTransition';
 
 export const SelfSignupPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,17 +18,21 @@ export const SelfSignupPage = () => {
     };
 
     return (
-        <Wrapper>
-            <SelfSignUpForm onSuccess={handleSignupSuccess}/>
+        <PageTransition>
+            <Wrapper>
+                <SelfSignUpContainer>
+                    <SelfSignUpForm onSuccess={handleSignupSuccess}/>
+                </SelfSignUpContainer>
+                {isModalOpen && (
+                    <ModalOverlay>
+                        <ModalContainer>
+                            <ConfirmModal onClose={handleModalClose}/>
+                        </ModalContainer>
+                    </ModalOverlay>
+                )}
+            </Wrapper>
             <Footer />
-            {isModalOpen && (
-                <ModalOverlay>
-                    <ModalContainer>
-                        <ConfirmModal onClose={handleModalClose}/>
-                    </ModalContainer>
-                </ModalOverlay>
-            )}
-        </Wrapper>
+        </PageTransition>
     );
 };
 
@@ -36,6 +41,9 @@ const Wrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+`;
+
+const SelfSignUpContainer = styled.div`
     margin-top: 5%;
 `;
 

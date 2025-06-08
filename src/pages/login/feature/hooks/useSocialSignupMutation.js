@@ -19,7 +19,10 @@ export const useSocialSignupMutation = ({ onSuccess }) => {
             const axiosError = AxiosError.from(error);
             const status = axiosError?.response?.status;
             
-            if (status === 409 && axiosError.response?.data) {
+            if (status === 400 && axiosError.response?.data) {
+                alert(axiosError.response.data.message);
+            }
+            else if (status === 400){
                 alert(axiosError.response.data.message);
             } else {
                 alert('서버 오류가 발생했습니다.');

@@ -1,16 +1,25 @@
 import styled from 'styled-components';
 import FindPw from '@login/components/FindPw';
 import Footer from '@shared/ui/Footer';
+import { PageTransition } from '@/shared/ui/PageTransition';
 
 export const FindPwPage = () => {
 
     return (
-        <Wrapper>
-            <FindPw />
+        <PageTransition>
+            <Wrapper>
+                <FindPwContainer>
+                    <FindPw />
+                </FindPwContainer>
+            </Wrapper>
             <Footer />
-        </Wrapper>
+        </PageTransition>
     );
 };
+
+const FindPwContainer = styled.div`
+    margin-top: 15%;
+`;
 
 const Wrapper = styled.div`
     display: flex;
@@ -18,5 +27,5 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     width: 100%;
-    margin-top: 12%;
+    height: 100vh;
 `;
