@@ -15,6 +15,7 @@ export const FreePage = () => {
   const location = useLocation();
 
   const { myInfo } = useMyInfoStore();
+
   const userNickname = myInfo?.nickName;
   const { postId } = useParams();
 
