@@ -105,6 +105,10 @@ export const router = createBrowserRouter([
         element: <SharePostPage />,
       },
       {
+        path: 'edit/:postId',
+        element: <SharePostPage />,
+      },
+      {
         path: ':postId',
         element: <SharePage />,
       },
