@@ -75,12 +75,14 @@ export const getShareComments = async (shareId) => {
   try {
     const response = await apiInstance.get(`/community/solved/${shareId}/comment`);
     const rawComments = response.data.result;
+    console.log(rawComments);
 
     // 1. parentCommentId가 null인 댓글은 부모댓글
     const parentComments = rawComments
       .filter((c) => c.parentCommentId === null)
       .map((c) => ({
         id: c.commentId,
+        userId: c.userId,
         author: c.nickname,
         content: c.comment,
         date: c.createdAt,
@@ -94,6 +96,7 @@ export const getShareComments = async (shareId) => {
       .map((c) => ({
         id: c.commentId,
         parentId: c.parentCommentId.solvedCommentId, // 구조가 다름
+        userId: c.userId,
         author: c.nickname,
         content: c.comment,
         date: c.createdAt,

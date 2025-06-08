@@ -29,7 +29,7 @@ export const CommentListBox = ({
   console.log(comments);
   const { myInfo } = useMyInfoStore();
   const userId = myInfo?.userId;
-  console.log(userId); //로그인한 유저 아이디
+  console.log(userId, comments); //로그인한 유저 아이디
 
   const [deleteModalState, setDeleteModalState] = useState({
     isOpen: false,
