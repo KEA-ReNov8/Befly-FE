@@ -7,7 +7,7 @@ export const useDeleteChatSession = () => {
 
     return useMutation({
         mutationFn: async ( {statusField, sessionId} ) => {
-            const response = await apiInstance.delete(`/consult/chat/${statusField}/${sessionId}/`);
+            const response = await apiInstance.delete(`/consult/chat/${statusField}/${sessionId}`);
             console.log(response);
             return response.data;
         },
