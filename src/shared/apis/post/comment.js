@@ -29,7 +29,7 @@ export const getFreeComments = async (freeId) => {
         badge: c.badge,
         author: c.nickname,
         content: c.comment,
-        date: c.createdAt,  
+        date: c.createdAt,
         isDeleted: c.isDeleted,
         profileImage: c.profileImage,
       }));

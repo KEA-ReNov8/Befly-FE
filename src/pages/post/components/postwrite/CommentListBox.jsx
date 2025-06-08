@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { badgeSystem } from '@pages/my/util/badgeSystem';
 import defaultProfile from '@shared/assets/icons/defaultUser.svg';
+import { useMyInfoStore } from '@shared/store/useMyInfoStore';
 
 export const CommentListBox = ({
   comments,
@@ -26,6 +27,9 @@ export const CommentListBox = ({
   const { postId } = useParams();
   const navigate = useNavigate();
   console.log(comments);
+  const { myInfo } = useMyInfoStore();
+  const userId = myInfo?.userId;
+  console.log(userId); //로그인한 유저 아이디
 
   const [deleteModalState, setDeleteModalState] = useState({
     isOpen: false,
@@ -132,7 +136,10 @@ export const CommentListBox = ({
         {comments.map((comment) => (
           <CommentBlock key={comment.id}>
             <CommentRow>
-              <ProfileCircle onClick={() => handleClickCommenterProfile(comment.userId)} src={comment.profileImage}/>
+              <ProfileCircle
+                onClick={() => handleClickCommenterProfile(comment.userId)}
+                src={comment.profileImage}
+              />
               <CommentRight>
                 <CommentTop>
                   <CommentAuthor>{comment.author}</CommentAuthor>
@@ -164,7 +171,7 @@ export const CommentListBox = ({
                       답글쓰기
                     </ReplyButton>
                   )}
-                  {userNickname === comment.author &&
+                  {userId === comment.userId &&
                     !comment.isDeleted &&
                     editingComment.id !== comment.id && (
                       <EditDeleteGroup>
@@ -201,7 +208,10 @@ export const CommentListBox = ({
                     <ReplyRow>
                       <Replybox>
                         <img src={Arrow} alt="arrow" />
-                        <ReplyProfileCircle onClick={() => handleClickCommenterProfile(reply.userId)} src={reply.profileImage}/>
+                        <ReplyProfileCircle
+                          onClick={() => handleClickCommenterProfile(reply.userId)}
+                          src={reply.profileImage}
+                        />
                       </Replybox>
                       <ReplyRight>
                         <ReplyAuthor>
@@ -229,7 +239,7 @@ export const CommentListBox = ({
                         )}
                         <ReplyInfoRow>
                           <ReplyDate>{formatDate(reply.date)}</ReplyDate>
-                          {userNickname === reply.author &&
+                          {userId === reply.userId &&
                             !reply.isDeleted &&
                             editingComment.id !== reply.id && (
                               <EditDeleteGroup>

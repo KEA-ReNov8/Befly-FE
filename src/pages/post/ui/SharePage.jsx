@@ -14,10 +14,7 @@ import { useMyInfoStore } from '@shared/store/useMyInfoStore';
 import { useSharePostDetailQuery } from '@post/feature/hooks/useSharePostDetailQuery';
 import { useShareCommentsQuery } from '@post/feature/hooks/useShareCommentsQuery';
 import { useCreateShareCommentMutation } from '@post/feature/hooks/useCreateShareCommentMutation';
-import {
-  useCheckShareEmpathyQuery,
-  useToggleShareEmpathyMutation,
-} from '@post/feature/hooks/useShareEmpathy';
+import { useShareEmpathy } from '@post/feature/hooks/useShareEmpathy';
 
 export const SharePage = () => {
   const navigate = useNavigate();
@@ -27,11 +24,10 @@ export const SharePage = () => {
   const userNickname = myInfo?.nickName;
   const { postId } = useParams();
 
-  const { data: post, isLoading, error } = useSharePostDetailQuery(postId);
+  const { data: post, isLoading, error, refetch: refetchPost } = useSharePostDetailQuery(postId);
   const { data: commentData } = useShareCommentsQuery(postId);
-  const { data: isLiked } = useCheckShareEmpathyQuery(postId);
+  const { isLiked, isLoading: isLikeLoading, toggleLike } = useShareEmpathy(postId);
   const { mutate: createComment } = useCreateShareCommentMutation(postId);
-  const { mutate: toggleLike } = useToggleShareEmpathyMutation(postId, isLiked);
 
   const [commentInput, setCommentInput] = useState('');
   const [replyInput, setReplyInput] = useState({});
@@ -103,7 +99,12 @@ export const SharePage = () => {
   };
 
   const handleLikeClick = () => {
-    toggleLike();
+    if (!isLikeLoading) {
+      toggleLike(() => {
+        // 좋아요 토글 성공 후 게시글 데이터 새로고침
+        refetchPost();
+      });
+    }
   };
 
   return (

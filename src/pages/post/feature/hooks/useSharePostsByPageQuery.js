@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getSolvedPostsByPage } from '@shared/apis/post/share';
 
-export const useSharePostsByPageQuery = (page) => {
+export const useSharePostsByPageQuery = (page, options = {}) => {
   return useQuery({
     queryKey: ['sharePostsByPage', page],
     queryFn: () => getSolvedPostsByPage(page),
@@ -14,5 +14,6 @@ export const useSharePostsByPageQuery = (page) => {
     onSuccess: (data) => {
       console.log(`공유함 ${page}페이지 패칭 성공`, data);
     },
+    ...options, // 추가 옵션을 덮어쓸 수 있도록
   });
 };

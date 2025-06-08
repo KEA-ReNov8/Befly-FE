@@ -8,24 +8,22 @@ import { useMyInfoStore } from '@shared/store/useMyInfoStore';
 import { useFreePostDetailQuery } from '@post/feature/hooks/useFreePostDetailQuery';
 import { useFreeCommentsQuery } from '@post/feature/hooks/useFreeCommentsQuery';
 import { useCreateFreeCommentMutation } from '@post/feature/hooks/useCreateFreeCommentMutation';
-import {
-  useCheckFreeEmpathyQuery,
-  useToggleFreeEmpathyMutation,
-} from '@post/feature/hooks/useFreeEmpathy';
+import { useFreeEmpathy } from '@post/feature/hooks/useFreeEmpathy';
 
 export const FreePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const { myInfo } = useMyInfoStore();
+
   const userNickname = myInfo?.nickName;
   const { postId } = useParams();
 
-  const { data: post, isLoading, error } = useFreePostDetailQuery(postId);
+  const { data: post, isLoading, error, refetch: refetchPost } = useFreePostDetailQuery(postId);
+  console.log(post);
   const { data: commentData } = useFreeCommentsQuery(postId);
-  const { data: isLiked } = useCheckFreeEmpathyQuery(postId);
+  const { isLiked, isLoading: isLikeLoading, toggleLike } = useFreeEmpathy(postId);
   const { mutate: createComment } = useCreateFreeCommentMutation(postId);
-  const { mutate: toggleLike } = useToggleFreeEmpathyMutation(postId, isLiked);
 
   const [commentInput, setCommentInput] = useState('');
   const [replyInput, setReplyInput] = useState({}); // 답글 입력창의 값 상태 (댓글 id별로 관리)
@@ -103,7 +101,12 @@ export const FreePage = () => {
   };
 
   const handleLikeClick = () => {
-    toggleLike();
+    if (!isLikeLoading) {
+      toggleLike(() => {
+        // 좋아요 토글 성공 후 게시글 데이터 새로고침
+        refetchPost();
+      });
+    }
   };
 
   return (
