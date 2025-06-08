@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import TopBar from '@shared/ui/TopBar/TopBar';
 import theme from '@app/styles/theme';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import {
   PostBox,
@@ -10,20 +10,28 @@ import {
   PageBottomBox,
   MindReportSection,
 } from '../components/index';
-import { useSharePostDetailQuery } from '@post/feature/hooks/useSharePostDetailQuery';
 import { useMyInfoStore } from '@shared/store/useMyInfoStore';
+import { useSharePostDetailQuery } from '@post/feature/hooks/useSharePostDetailQuery';
 import { useShareCommentsQuery } from '@post/feature/hooks/useShareCommentsQuery';
 import { useCreateShareCommentMutation } from '@post/feature/hooks/useCreateShareCommentMutation';
+import {
+  useCheckShareEmpathyQuery,
+  useToggleShareEmpathyMutation,
+} from '@post/feature/hooks/useShareEmpathy';
 
 export const SharePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
   const { myInfo } = useMyInfoStore();
   const userNickname = myInfo?.nickName;
   const { postId } = useParams();
+
   const { data: post, isLoading, error } = useSharePostDetailQuery(postId);
   const { data: commentData } = useShareCommentsQuery(postId);
+  const { data: isLiked } = useCheckShareEmpathyQuery(postId);
   const { mutate: createComment } = useCreateShareCommentMutation(postId);
+  const { mutate: toggleLike } = useToggleShareEmpathyMutation(postId, isLiked);
 
   const [commentInput, setCommentInput] = useState('');
   const [replyInput, setReplyInput] = useState({});
@@ -94,6 +102,10 @@ export const SharePage = () => {
     }
   };
 
+  const handleLikeClick = () => {
+    toggleLike();
+  };
+
   return (
     <PageContainer>
       <TopBarWrapper>
@@ -110,7 +122,10 @@ export const SharePage = () => {
           date={post.createdAt}
           content={post.content}
           stats={{ like: post.likes, comment: post.comments }}
-          postId={post.id}
+          postId={post.postId}
+          isLiked={isLiked}
+          onToggleLike={handleLikeClick}
+          postType="share"
           // MindReportSection을 PostBox 내부에 children으로 전달
         >
           <MindReportSection reportData={post.reportData} />

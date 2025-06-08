@@ -125,6 +125,7 @@ export const FreePage = () => {
           postId={post.postId}
           isLiked={isLiked}
           onToggleLike={handleLikeClick}
+          postType="free"
         />
       )}
 

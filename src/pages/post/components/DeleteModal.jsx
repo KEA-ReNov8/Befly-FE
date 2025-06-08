@@ -1,23 +1,42 @@
 import styled from 'styled-components';
 import theme from '@app/styles/theme';
 import { useDeleteFreePostMutation } from '@post/feature/hooks/useDeleteFreePostMutation';
+import { useDeleteSharePostMutation } from '@post/feature/hooks/useDeleteSharePostMutation';
 import { useNavigate } from 'react-router-dom';
 
-const DeleteModal = ({ onClose, postId }) => {
+const DeleteModal = ({ onClose, postId, postType = 'free' }) => {
   const navigate = useNavigate();
-  const { mutate: deleteFreePost, isPending } = useDeleteFreePostMutation();
+
+  // 게시글 타입에 따라 적절한 삭제 훅 사용
+  const { mutate: deleteFreePost, isPending: isFreeDeleting } = useDeleteFreePostMutation();
+  const { mutate: deleteSharePost, isPending: isShareDeleting } = useDeleteSharePostMutation();
+
+  const isPending = postType === 'free' ? isFreeDeleting : isShareDeleting;
 
   const handleDelete = () => {
-    deleteFreePost(postId, {
-      onSuccess: () => {
-        alert('게시글이 삭제되었습니다.');
-        navigate('/free/page/1'); // 자유게시판 목록으로 이동
-      },
-      onError: (error) => {
-        console.error('삭제 실패:', error);
-        alert('게시글 삭제에 실패했습니다.');
-      },
-    });
+    if (postType === 'free') {
+      deleteFreePost(postId, {
+        onSuccess: () => {
+          alert('게시글이 삭제되었습니다.');
+          navigate('/free/page/1'); // 자유게시판 목록으로 이동
+        },
+        onError: (error) => {
+          console.error('자유글 삭제 실패:', error);
+          alert('게시글 삭제에 실패했습니다.');
+        },
+      });
+    } else if (postType === 'share') {
+      deleteSharePost(postId, {
+        onSuccess: () => {
+          alert('게시글이 삭제되었습니다.');
+          navigate('/share/page/1'); // 공유게시판 목록으로 이동
+        },
+        onError: (error) => {
+          console.error('공유글 삭제 실패:', error);
+          alert('게시글 삭제에 실패했습니다.');
+        },
+      });
+    }
   };
 
   return (
