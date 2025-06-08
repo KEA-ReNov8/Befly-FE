@@ -81,6 +81,7 @@ export const getShareComments = async (shareId) => {
       .filter((c) => c.parentCommentId === null)
       .map((c) => ({
         id: c.commentId,
+        userId: c.userId,
         author: c.nickname,
         content: c.comment,
         date: c.createdAt,
@@ -96,6 +97,7 @@ export const getShareComments = async (shareId) => {
       .map((c) => ({
         id: c.commentId,
         parentId: c.parentCommentId.solvedCommentId, // 구조가 다름
+        userId: c.userId,
         author: c.nickname,
         content: c.comment,
         date: c.createdAt,

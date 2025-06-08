@@ -13,7 +13,6 @@ export const useFreeEmpathy = (freeId) => {
       try {
         setIsLoading(true);
         const liked = await checkFreeEmpathy(freeId);
-        console.log('🎯 초기 좋아요 상태:', liked);
         setIsLiked(liked);
       } catch (error) {
         console.error('❌ 초기 좋아요 상태 확인 실패:', error);

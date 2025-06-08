@@ -18,7 +18,10 @@ const DeleteModal = ({ onClose, postId, postType = 'free' }) => {
       deleteFreePost(postId, {
         onSuccess: () => {
           alert('게시글이 삭제되었습니다.');
-          navigate('/free/page/1'); // 자유게시판 목록으로 이동
+          // 캐시 무효화가 완료된 후 네비게이션
+          setTimeout(() => {
+            navigate('/free/page/1'); // 자유게시판 목록으로 이동
+          }, 100);
         },
         onError: (error) => {
           console.error('자유글 삭제 실패:', error);
@@ -29,7 +32,10 @@ const DeleteModal = ({ onClose, postId, postType = 'free' }) => {
       deleteSharePost(postId, {
         onSuccess: () => {
           alert('게시글이 삭제되었습니다.');
-          navigate('/share/page/1'); // 공유게시판 목록으로 이동
+          // 캐시 무효화가 완료된 후 네비게이션
+          setTimeout(() => {
+            navigate('/share/page/1'); // 공유게시판 목록으로 이동
+          }, 100);
         },
         onError: (error) => {
           console.error('공유글 삭제 실패:', error);
