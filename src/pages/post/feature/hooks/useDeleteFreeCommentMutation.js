@@ -6,9 +6,14 @@ export const useDeleteFreeCommentMutation = (freeId) => {
 
   return useMutation({
     mutationFn: (commentId) => deleteFreeComment(freeId, commentId),
-    onSuccess: () => {
-      // 댓글 목록 새로고침
-      queryClient.invalidateQueries({ queryKey: ['freeComments', freeId] });
+    onSuccess: async () => {
+      // 관련 쿼리 무효화하여 최신 데이터 반영
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['freeComments', freeId] }),
+        queryClient.invalidateQueries({ queryKey: ['freePostDetail', freeId] }),
+        queryClient.invalidateQueries({ queryKey: ['freePosts'] }),
+        queryClient.invalidateQueries({ queryKey: ['latestFreePosts'] }),
+      ]);
     },
     onError: (error) => {
       console.error('댓글 삭제 실패:', error);

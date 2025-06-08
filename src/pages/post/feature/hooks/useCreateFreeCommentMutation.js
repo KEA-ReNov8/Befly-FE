@@ -6,8 +6,14 @@ export const useCreateFreeCommentMutation = (freeId) => {
 
   return useMutation({
     mutationFn: (data) => postFreeComment(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['freeComments', freeId] });
+    onSuccess: async () => {
+      // 관련 쿼리 무효화하여 최신 데이터 반영
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['freeComments', freeId] }),
+        queryClient.invalidateQueries({ queryKey: ['freePostDetail', freeId] }),
+        queryClient.invalidateQueries({ queryKey: ['freePosts'] }),
+        queryClient.invalidateQueries({ queryKey: ['latestFreePosts'] }),
+      ]);
     },
     onError: (error) => {
       console.error('댓글 등록 실패', error);

@@ -7,9 +7,12 @@ export const useUpdateFreeCommentMutation = (freeId) => {
   return useMutation({
     mutationFn: ({ commentId, postId, pcommentId, comment }) =>
       updateFreeComment(freeId, commentId, { postId, pcommentId, comment }),
-    onSuccess: () => {
-      // 댓글 목록 새로고침
-      queryClient.invalidateQueries({ queryKey: ['freeComments', freeId] });
+    onSuccess: async () => {
+      // 관련 쿼리 무효화하여 최신 데이터 반영
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['freeComments', freeId] }),
+        queryClient.invalidateQueries({ queryKey: ['freePostDetail', freeId] }),
+      ]);
     },
     onError: (error) => {
       console.error('댓글 수정 실패:', error);
