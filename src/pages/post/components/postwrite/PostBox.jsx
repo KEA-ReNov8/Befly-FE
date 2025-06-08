@@ -32,7 +32,7 @@ export const PostBox = ({
 
   const onCloseDeleteModal = () => {
     setIsDeleteModalOpen(false);
-  }; 
+  };
 
   const handleClickOwnerProfile = () => {
     navigate(`/profile/${userId}`);
