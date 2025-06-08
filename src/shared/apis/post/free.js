@@ -6,6 +6,7 @@ export const getFreePostDetail = async (freeId) => {
     const result = response.data.result;
 
     return {
+      userId: result.userId,
       postId: result.freeId,
       title: result.freeTitle,
       content: result.freeContent,

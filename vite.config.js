@@ -7,7 +7,6 @@ import fs from 'fs';
 
 // https://vite.dev/config/
 export default defineConfig({
-
   plugins: [react(), svgr()],
   assetsInclude: ['**/*.JPG', '**/*.jpg', '**/*.png', '**/*.jpeg', '**/*.gif'], // 이미지 파일 포함
   resolve: {

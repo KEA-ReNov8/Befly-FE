@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getFreePostsByPage } from '@shared/apis/post/free';
 
-export const useFreePostsByPageQuery = (page) => {
+export const useFreePostsByPageQuery = (page, options = {}) => {
   return useQuery({
     queryKey: ['freePosts', page],
     queryFn: () => getFreePostsByPage(page),
@@ -13,5 +13,6 @@ export const useFreePostsByPageQuery = (page) => {
     onSuccess: (data) => {
       console.log(`자유함 ${page}페이지 패칭 성공`, data);
     },
+    ...options, // 추가 옵션을 덮어쓸 수 있도록
   });
 };

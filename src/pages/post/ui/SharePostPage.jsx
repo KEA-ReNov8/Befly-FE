@@ -187,7 +187,7 @@ export const SharePostPage = () => {
             localStorage.removeItem('temp_share_post_content');
 
             // 공유글 목록 페이지로 이동
-            navigate('/share/page/1');
+            navigate('/share/page/1', { replace: true });
           },
           onError: (error) => {
             console.error('공유글 생성 실패:', error);
