@@ -5,20 +5,25 @@ import Advise from './Advise';
 import { useNavigate } from 'react-router-dom';
 import theme from '@app/styles/theme';
 
-const Report = ({ reportData }) => {
-
-  const { analysisData, scores, adviseItems, title } = reportData || {};
+const Report = ({ reportData, sessionId }) => {
+  const { analysisData, scores, adviseItems, title, category } = reportData || {};
 
   const navigate = useNavigate();
 
   const handleReportClick = () => {
-    navigate('/share/create-share', { state: { reportData } });
+    navigate('/share/create-share', {
+      state: {
+        reportData,
+        sessionId,
+        category,
+      },
+    });
   };
 
   const handleListClick = () => {
     navigate('/my/myworry');
   };
-  
+
   return (
     <ReportContainer>
       <ReportHeader>
@@ -93,36 +98,36 @@ const ButtonContainer = styled.div`
 `;
 
 const ReportButton = styled.button`
-    width: 148px;
-    height: 40px;
-    border-radius: 8px;
-    cursor: pointer;
-    border: none;
-    cursor: pointer;
-    color: white;
-    background-color: ${theme.colors.green.main};
-    font-size: ${theme.fontSize.md};
-    font-weight: ${theme.fontWeight.regular};
-    
-    &:hover {
-        background-color: ${theme.colors.green.hover};
-    }
+  width: 148px;
+  height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  cursor: pointer;
+  color: white;
+  background-color: ${theme.colors.green.main};
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.regular};
+
+  &:hover {
+    background-color: ${theme.colors.green.hover};
+  }
 `;
 
 const ListButton = styled.button`
-    width: 134px;
-    height: 40px;
-    border-radius: 8px;
-    cursor: pointer;
-    border: none;
-    background-color: white;
-    font-size: ${theme.fontSize.md};
-    font-weight: ${theme.fontWeight.regular};
-    border: 1px solid ${theme.colors.gray[400]};
+  width: 134px;
+  height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  background-color: white;
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.regular};
+  border: 1px solid ${theme.colors.gray[400]};
 
-    &:hover {
-        background-color: ${theme.colors.gray[500]};
-    }
+  &:hover {
+    background-color: ${theme.colors.gray[500]};
+  }
 `;
 
 export default Report;
