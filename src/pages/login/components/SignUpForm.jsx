@@ -90,8 +90,6 @@ const Container = styled.form`
     justify-content: center;
     border-radius: 8px;
     border: 1px solid ${theme.colors.gray.main};
-    margin-top: 10%;
-    margin-bottom: 80px;
     padding-bottom: 30px;
 `;
 
