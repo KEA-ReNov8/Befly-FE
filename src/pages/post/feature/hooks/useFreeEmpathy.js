@@ -7,6 +7,9 @@ export const useCheckFreeEmpathyQuery = (freeId) => {
     queryFn: () => checkFreeEmpathy(freeId),
     enabled: !!freeId,
     staleTime: 1000 * 60 * 3,
+    onError: (error) => {
+      console.error('❌ 자유글 공감 여부 확인 실패:', error);
+    },
   });
 };
 
@@ -14,41 +17,18 @@ export const useToggleFreeEmpathyMutation = (freeId, isLiked) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: isLiked ? () => deleteFreeEmpathy(freeId) : () => postFreeEmpathy(freeId),
-
-    // ✅ 낙관적 업데이트
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ['freeEmpathy', freeId] });
-
-      const prevLiked = queryClient.getQueryData(['freeEmpathy', freeId]);
-      const prevPost = queryClient.getQueryData(['freePostDetail', freeId]);
-
-      queryClient.setQueryData(['freeEmpathy', freeId], !prevLiked);
-
-      if (prevPost) {
-        queryClient.setQueryData(['freePostDetail', freeId], {
-          ...prevPost,
-          likes: prevPost.likes + (isLiked ? -1 : 1),
-        });
-      }
-
-      return { prevLiked, prevPost };
-    },
-
-    // 실패 시 롤백
-    onError: (err, _, context) => {
-      if (context?.prevLiked !== undefined) {
-        queryClient.setQueryData(['freeEmpathy', freeId], context.prevLiked);
-      }
-      if (context?.prevPost) {
-        queryClient.setQueryData(['freePostDetail', freeId], context.prevPost);
+    mutationFn: async () => {
+      if (isLiked) {
+        return deleteFreeEmpathy(freeId);
+      } else {
+        return postFreeEmpathy(freeId);
       }
     },
-
-    // 성공/실패 후 재검증
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['freeEmpathy', freeId] });
-      queryClient.invalidateQueries({ queryKey: ['freePostDetail', freeId] });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['freeEmpathyCheck', freeId] });
+    },
+    onError: (error) => {
+      console.error('❌ 자유글 공감 토글 실패:', error);
     },
   });
 };
