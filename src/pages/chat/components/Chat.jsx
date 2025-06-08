@@ -48,7 +48,7 @@ const Chat = () => {
     }
   }, [location.pathname, params.sessionId]);
 
-  const { data: chatHistoryData, error: historyError } = useChatHistoryQuery(
+  const { data: chatHistoryData, error: historyError, isLoading: isHistoryLoading } = useChatHistoryQuery(
     currentSessionId,
     !!currentSessionId,
   );
@@ -77,6 +77,13 @@ const Chat = () => {
 
   // 채팅 내역 로드 완료 시 메시지 설정
   useEffect(() => {
+    if (!currentSessionId) return;
+
+    if (isHistoryLoading) {
+      // 로딩 중일 때는 메시지를 변경하지 않음
+      return;
+    }
+
     if (
       chatHistoryData?.result?.messages &&
       Array.isArray(chatHistoryData.result.messages) &&
@@ -90,13 +97,8 @@ const Chat = () => {
         (msg) => msg.type === 'ai',
       ).length;
       setProgress(Math.min(aiMessageCount * 10, 100));
-    }
-    // chatHistoryData가 있지만 messages가 비어있는 경우는 무시 (새로운 세션이므로 초기 메시지 유지)
-  }, [chatHistoryData]);
-
-  // 새로운 채팅 세션인 경우 초기 메시지 설정
-  /*useEffect(() => {
-    if (!currentSessionId) {
+    } else if (chatHistoryData?.result?.messages && chatHistoryData.result.messages.length === 0) {
+      // 빈 배열인 경우 (새로운 세션이거나 메시지가 없는 세션)
       setMessages([
         {
           id: 1,
@@ -107,7 +109,15 @@ const Chat = () => {
       ]);
       setProgress(0);
     }
-  }, [currentSessionId]);*/
+  }, [chatHistoryData, isHistoryLoading, currentSessionId]);
+
+  // sessionId가 변경될 때 로딩 상태 표시를 위한 초기화 (메시지는 건드리지 않음)
+  useEffect(() => {
+    if (currentSessionId) {
+      // 로딩 상태만 초기화하고 메시지는 히스토리 로드 후에 처리
+      setIsLoading(false);
+    }
+  }, [currentSessionId]);
 
   const handleSuspendModalOpen = () => {
     setIsSuspendModalOpen(true);
@@ -210,10 +220,7 @@ const Chat = () => {
         </TopContainer>
         <MessageContainer>
           <MessageList ref={messageListRef}>
-            {messages.map((message) => (
-              <ChatMessage key={message.id} message={message} />
-            ))}
-            {isLoading && (
+            {isHistoryLoading ? (
               <LoadingMessage>
                 <ProfileMark src={aiLogo} />
                 <LoadingBubble>
@@ -224,9 +231,27 @@ const Chat = () => {
                   </LoadingDots>
                 </LoadingBubble>
               </LoadingMessage>
+            ) : (
+              <>
+                {messages.map((message) => (
+                  <ChatMessage key={message.id} message={message} />
+                ))}
+                {isLoading && (
+                  <LoadingMessage>
+                    <ProfileMark src={aiLogo} />
+                    <LoadingBubble>
+                      <LoadingDots>
+                        <Dot />
+                        <Dot />
+                        <Dot />
+                      </LoadingDots>
+                    </LoadingBubble>
+                  </LoadingMessage>
+                )}
+              </>
             )}
           </MessageList>
-          <ChatForm onSendMessage={handleSendMessage} isLoading={isLoading} />
+          <ChatForm onSendMessage={handleSendMessage} isLoading={isLoading || isHistoryLoading} />
         </MessageContainer>
       </ChatContainer>
       {isSuspendModalOpen && <SuspendModal onClose={handleSuspendModalClose} />}

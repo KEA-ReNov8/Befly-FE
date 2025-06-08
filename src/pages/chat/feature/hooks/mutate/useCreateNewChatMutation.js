@@ -1,8 +1,10 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiInstance } from '@shared/apis/instance';
 import { AxiosError } from 'axios';
 
 export const useCreateNewChatMutation = (onSuccess, onError) => {
+    const queryClient = useQueryClient();
+    
     const createNewChatMutation = useMutation({
         mutationFn: async (data) => {
             const response = await apiInstance.post('/consult/chat/new', data);
@@ -10,6 +12,9 @@ export const useCreateNewChatMutation = (onSuccess, onError) => {
         },
         onSuccess: (data) => {
             console.log('New chat created:', data);
+
+            // 채팅 세션 목록 쿼리 무효화하여 사이드바 목록 갱신
+            queryClient.invalidateQueries({ queryKey: ['chatList'] });
 
             const sessionInfo = data?.result;
             if (onSuccess && sessionInfo) {

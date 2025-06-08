@@ -22,7 +22,8 @@ export const useChatHistoryQuery = (sessionId, enabled = true) => {
             }
         },
         enabled: enabled && !!sessionId,
-        staleTime: 1000 * 60 * 5,
-        retry: 2,
+        staleTime: 0,
+        refetchOnMount: 'always',
+        //retry: 2,
     });
 };

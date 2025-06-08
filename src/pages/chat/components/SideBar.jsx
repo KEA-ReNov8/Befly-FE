@@ -26,6 +26,13 @@ const SideBar = ({ isOpen, onClose }) => {
 
     const chatSessions = chatList?.result || [];
 
+    // 채팅 세션을 생성 날짜 기준 최신 순으로 정렬
+    const sortedChatSessions = [...chatSessions].sort((a, b) => {
+        const dateA = new Date(a.created_at);
+        const dateB = new Date(b.created_at);
+        return dateB - dateA; // 최신 순으로 정렬
+    });
+
     const handleChatClick = (sessionId) => {
         navigate(`/chat/${sessionId}`);
     };
@@ -38,7 +45,7 @@ const SideBar = ({ isOpen, onClose }) => {
                 </MenuButton>
             </SideBarHeader>
             <SideBarContent>
-                {chatSessions.map((session) => (
+                {sortedChatSessions.map((session) => (
                     <SideBarButton
                         key={session.session_id}
                         sessionId={session.session_id}
