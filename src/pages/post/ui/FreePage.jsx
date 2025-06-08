@@ -20,6 +20,7 @@ export const FreePage = () => {
   const { postId } = useParams();
 
   const { data: post, isLoading, error, refetch: refetchPost } = useFreePostDetailQuery(postId);
+  console.log(post);
   const { data: commentData } = useFreeCommentsQuery(postId);
   const { isLiked, isLoading: isLikeLoading, toggleLike } = useFreeEmpathy(postId);
   const { mutate: createComment } = useCreateFreeCommentMutation(postId);

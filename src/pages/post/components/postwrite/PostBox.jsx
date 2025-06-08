@@ -24,7 +24,8 @@ export const PostBox = ({
   const navigate = useNavigate();
 
   // 현재 로그인된 유저가 게시글 작성자인지 확인
-  const isAuthor = myInfo?.userId === userId;
+  // const isAuthor = myInfo?.userId === userId;
+  const isAuthor = myInfo?.nickName === author;
 
   const handleDelete = () => {
     setIsDeleteModalOpen((prev) => !prev); // 이전 상태를 반전
