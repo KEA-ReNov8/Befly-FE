@@ -10,6 +10,7 @@ import { usePostListQuery } from '@my/feature/hook/Query/usePostListQuery';
 import { useInfinitePostListQuery } from '@my/feature/hook/Query/useInfinitePostListQuery';
 import { usePostCountQuery } from '@my/feature/hook/Query/usePostCountQuery';
 import { useGetProfileQuery } from '@my/feature/hook/Query/useGetProfileQuery';
+import Wait from '@shared/ui/lottieComp/wait';
 
 const MyProfile = () => {
     const { data: profileData } = useGetProfileQuery();
@@ -106,7 +107,11 @@ const MyProfile = () => {
                 <FreeButton data-active={activeTab === '자유'} onClick={() => handleTabChange('자유')}>나의 자유함</FreeButton>
             </ButtonContainer>
             <PostSection>
-                {currentPosts.length === 0 ? (
+                {((activeTab === '공유' && isLoadingPosts) || (activeTab === '자유' && isFreeLoading)) ? (
+                    <LoadingContainer>
+                        <Wait />
+                    </LoadingContainer>
+                ) : currentPosts.length === 0 ? (
                     <EmptyStateContainer>
                         {activeTab === '공유' ? (
                             <>
@@ -250,6 +255,15 @@ const EmptyDescription = styled.p`
     text-align: center;
     line-height: 1.5;
     margin: 0;
+`;
+
+const LoadingContainer = styled.div`
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 50px auto;
 `;
 
 export default MyProfile;

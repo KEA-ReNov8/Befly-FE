@@ -5,6 +5,7 @@ import PostCard from '@shared/ui/PostCard';
 import { SearchBar, Pagination, SectionTitleBar } from '@/pages/post/components/index';
 import theme from '@app/styles/theme';
 import { useFreePostsByPageQuery } from '@/pages/post/feature/hooks/useFreePostsByPageQuery';
+import Wait from '@shared/ui/lottieComp/wait';
 
 export const FreePostListPage = () => {
   const { page } = useParams();
@@ -29,7 +30,11 @@ export const FreePostListPage = () => {
         <SearchBar />
         <WriteButton onClick={() => navigate('/free/create-free')}>글쓰기</WriteButton>
       </Wrapper>
-      {isLoading && <div>로딩 중...</div>}
+      {isLoading && (
+        <LoadingContainer>
+          <Wait />
+        </LoadingContainer>
+      )}
       {error && <div>에러 발생!</div>}
       {!isLoading && !error && !posts.length && <div>게시글이 없습니다.</div>}
       {!isLoading && !error && posts.length > 0 && (
@@ -55,6 +60,15 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   background-color: ${theme.colors.gray[200]};
+`;
+
+const LoadingContainer = styled.div`
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 50px 0;
 `;
 
 const BoardGrid = styled.div`
