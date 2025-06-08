@@ -153,7 +153,7 @@ export const FreePostPage = () => {
           onSuccess: () => {
             localStorage.removeItem('temp_free_post_title');
             localStorage.removeItem('temp_free_post_content');
-            navigate('/free');
+            navigate('/free/page/1');
           },
           onError: () => {
             alert('게시글 등록에 실패했습니다.');
