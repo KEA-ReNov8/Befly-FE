@@ -110,7 +110,7 @@ export const getShareComments = async (shareId) => {
 export const postShareComment = async ({ shareId, postId, pcommentId, comment }) => {
   const response = await apiInstance.post(`/community/solved/${shareId}/comment`, {
     postId,
-    notificationType: 'FREELIKE', // 백엔드 개발자가 알려줄거임 지금은 임시로 넣음
+    notificationType: 'SOLVEDLIKE',
     pcommentId,
     comment,
   });
@@ -125,7 +125,7 @@ export const deleteShareComment = async (shareId, commentId) => {
 export const updateShareComment = async (shareId, commentId, { postId, pcommentId, comment }) => {
   const response = await apiInstance.patch(`/community/solved/${shareId}/comment/${commentId}`, {
     postId,
-    notificationType: 'FREELIKE',
+    notificationType: 'SOLVEDLIKE',
     pcommentId,
     comment,
   });
