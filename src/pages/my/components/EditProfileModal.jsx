@@ -17,7 +17,7 @@ const EditProfileModal = ({ onClose }) => {
     const { myInfo, setMyInfo } = useMyInfoStore();
     const fileInputRef = useRef(null);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [previewUrl, setPreviewUrl] = useState(myInfo?.profileImageUrl || logo);
+    const [previewUrl, setPreviewUrl] = useState(myInfo?.profileImg || defaultImage);
     const [isUploading, setIsUploading] = useState(false);
     const queryClient = useQueryClient();
     const [uploadError, setUploadError] = useState('');
@@ -47,7 +47,9 @@ const EditProfileModal = ({ onClose }) => {
             setValue('nickName', myInfo.nickName);
         }
         if (myInfo?.profileImg) {
-            setPreviewUrl('');
+            setPreviewUrl(myInfo.profileImg);
+        } else {
+            setPreviewUrl(defaultImage);
         }
     }, [myInfo, setValue]);
 
@@ -107,8 +109,11 @@ const EditProfileModal = ({ onClose }) => {
             if (promises.length > 0) {
                 await Promise.all(promises);
                 
-                // 프로필 쿼리 다시 가져오기
+                // 모든 관련 쿼리 무효화 (댓글, 게시글 등에서 사용되는 사용자 정보 업데이트)
                 await queryClient.invalidateQueries(['profile']);
+                await queryClient.invalidateQueries(['myInfo']);
+                //await queryClient.invalidateQueries(['freeComments']);
+                //await queryClient.invalidateQueries(['shareComments']);
                 
                 // 로컬 스토어 업데이트
                 const updatedInfo = {
@@ -132,7 +137,10 @@ const EditProfileModal = ({ onClose }) => {
         <ModalOverlay>
             <ModalContainer onClick={(e) => e.stopPropagation()}>
                 <Profile>
-                    <ProfileImage src={previewUrl} />
+                    <ProfileImage 
+                        src={previewUrl} 
+                        $isDefault={previewUrl === defaultImage}
+                    />
                     <AddButton onClick={handleAddButtonClick} disabled={isUploading}>+</AddButton>
                     <HiddenFileInput
                         ref={fileInputRef}
@@ -205,6 +213,8 @@ const ProfileImage = styled.img`
     height: 230px;
     border-radius: 50%;
     background-color: ${theme.colors.gray[300]};
+    object-fit: ${props => props.$isDefault ? 'contain' : 'cover'};
+    padding: ${props => props.$isDefault ? '60px' : '0'};
 `;
 
 const AddButton = styled.button`
