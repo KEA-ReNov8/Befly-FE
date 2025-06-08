@@ -8,6 +8,7 @@ export const getSharePostDetail = async (shareId) => {
     const result = response.data.result;
 
     return {
+      userId: result.userId,
       postId: result.solvedId,
       nickname: result.nickname,
       title: result.solvedTitle,
