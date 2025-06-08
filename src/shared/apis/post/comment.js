@@ -75,7 +75,6 @@ export const getShareComments = async (shareId) => {
   try {
     const response = await apiInstance.get(`/community/solved/${shareId}/comment`);
     const rawComments = response.data.result;
-    console.log(rawComments);
 
     // 1. parentCommentId가 null인 댓글은 부모댓글
     const parentComments = rawComments
