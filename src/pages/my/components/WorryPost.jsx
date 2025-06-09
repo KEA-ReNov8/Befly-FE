@@ -108,6 +108,9 @@ const PostTitle = styled.div`
     flex: 1;
     font-weight: ${theme.fontWeight.medium};
     font-size: ${theme.fontSize.smMd};
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 
 const PostInfo = styled.div`
