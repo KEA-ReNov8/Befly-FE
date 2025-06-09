@@ -34,7 +34,11 @@ export const formatTimeAgo = (createdAt) => {
       return createdAt;
     }
 
-    const diffMs = now.getTime() - created.getTime();
+    // 서버에서 받은 시간이 UTC인 경우를 대비하여 KST로 변환
+    // formatDate 함수와 동일한 방식으로 9시간 보정
+    const createdKST = new Date(created.getTime() + 9 * 60 * 60 * 1000);
+
+    const diffMs = now.getTime() - createdKST.getTime();
     const seconds = Math.floor(diffMs / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
@@ -52,9 +56,9 @@ export const formatTimeAgo = (createdAt) => {
       return `${days}일 전`;
     } else {
       // 7일 이상인 경우 YYYY-MM-DD 형태로 반환
-      const year = created.getFullYear();
-      const month = String(created.getMonth() + 1).padStart(2, '0');
-      const day = String(created.getDate()).padStart(2, '0');
+      const year = createdKST.getFullYear();
+      const month = String(createdKST.getMonth() + 1).padStart(2, '0');
+      const day = String(createdKST.getDate()).padStart(2, '0');
       return `${year}-${month}-${day}`;
     }
   } catch (error) {
