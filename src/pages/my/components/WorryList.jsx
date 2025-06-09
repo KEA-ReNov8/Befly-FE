@@ -132,8 +132,8 @@ const TabContainer = styled.div`
 `;
 
 const TabButton = styled.button`
-    width: 80px;
-    height: 35px;
+    width: 73px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -147,7 +147,7 @@ const TabButton = styled.button`
     border: 1px solid ${props => props['data-isActive'] ? theme.colors.green.light : theme.colors.gray[400]};
     cursor: pointer;
     transition: all 0.3s;
-    font-size: ${theme.fontSize.md};
+    font-size: ${theme.fontSize.smMd};
     font-weight: ${theme.fontWeight.medium};
     
     &:hover {
@@ -168,7 +168,7 @@ const CategoryStatus = styled.div`
     width: 110px;
     text-align: center;
     margin-left: 5px;
-    font-size: ${theme.fontSize.lgMd};
+    font-size: ${theme.fontSize.md};
     font-weight: ${theme.fontWeight.semibold};
     border-right: 1px solid ${theme.colors.gray[400]};
 `;
@@ -177,7 +177,7 @@ const CategoryCategory = styled.div`
     width: 110px;
     margin-left: 5px;
     text-align: center;
-    font-size: ${theme.fontSize.lgMd};
+    font-size: ${theme.fontSize.md};
     font-weight: ${theme.fontWeight.semibold};
     border-right: 1px solid ${theme.colors.gray[400]};
 `;
@@ -185,7 +185,7 @@ const CategoryCategory = styled.div`
 const CategoryTitle = styled.div` 
     width: 550px;
     text-align: center;
-    font-size: ${theme.fontSize.lgMd};
+    font-size: ${theme.fontSize.md};
     font-weight: ${theme.fontWeight.semibold};
     border-right: 1px solid ${theme.colors.gray[400]};
 `;
@@ -193,7 +193,7 @@ const CategoryTitle = styled.div`
 const CategoryDate = styled.div`
     width: 200px;
     margin-left: 80px;
-    font-size: ${theme.fontSize.lgMd};
+    font-size: ${theme.fontSize.md};
     font-weight: ${theme.fontWeight.semibold};
 `;
 
