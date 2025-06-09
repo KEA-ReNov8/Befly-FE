@@ -10,25 +10,15 @@ import { usePostListQuery } from '@my/feature/hook/Query/usePostListQuery';
 import { useInfinitePostListQuery } from '@my/feature/hook/Query/useInfinitePostListQuery';
 import { usePostCountQuery } from '@my/feature/hook/Query/usePostCountQuery';
 import { useGetProfileQuery } from '@my/feature/hook/Query/useGetProfileQuery';
+import { useMyInfoStore } from '@shared/store/useMyInfoStore';
 import Wait from '@shared/ui/lottieComp/wait';
 
 const MyProfile = () => {
     const { data: profileData } = useGetProfileQuery();
+    const { myInfo } = useMyInfoStore();
 
-    const getUserInfo = () => {
-        try {
-        const myInfoStore = localStorage.getItem('myInfoStore');
-        if (myInfoStore) {
-            const parsed = JSON.parse(myInfoStore);
-            return parsed?.state?.myInfo || null;
-        }
-        return null;
-        } catch (error) {
-        console.error('로컬스토리지 파싱 오류:', error);
-        return null;
-        }
-    };
-    const userInfo = profileData || getUserInfo();
+    // 스토어의 myInfo 또는 profileData 사용 (profileData가 우선)
+    const userInfo = profileData || myInfo;
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('공유');

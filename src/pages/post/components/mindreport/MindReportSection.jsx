@@ -4,23 +4,10 @@ import theme from '@app/styles/theme';
 import { AnalysisCardsPage } from './AnalysisCardsPage';
 import { AIAnalysisPage } from './AIAnalysisPage';
 import { AIOpinionPage } from './AIOpinionPage';
+import { useMyInfoStore } from '@shared/store/useMyInfoStore';
 
 export const MindReportSection = ({ reportData }) => {
-  const getUserInfo = () => {
-    try {
-      const myInfoStore = localStorage.getItem('myInfoStore');
-      if (myInfoStore) {
-        const parsed = JSON.parse(myInfoStore);
-        return parsed?.state?.myInfo || null;
-      }
-      return null;
-    } catch (error) {
-      console.error('로컬스토리지 파싱 오류:', error);
-      return null;
-    }
-  };
-
-  const userInfo = getUserInfo();
+  const { myInfo: userInfo } = useMyInfoStore();
 
   const [page, setPage] = useState(0);
 

@@ -4,9 +4,10 @@ import TopBar from '@shared/ui/TopBar/TopBar';
 import Report from '@report/components/Report';
 import { useGetReportQuery } from '@report/feature/hook/useGetReportQuery';
 import { useParams } from 'react-router-dom';
-import { getUserInfo } from '@shared/utils/getUserInfo';
+import { useMyInfoStore } from '@shared/store/useMyInfoStore';
+
 export const ReportPage = () => {
-  const userInfo = getUserInfo();
+  const { myInfo: userInfo } = useMyInfoStore();
 
   const { sessionId } = useParams();
 

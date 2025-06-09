@@ -5,25 +5,13 @@ import TopBar from '@shared/ui/TopBar/TopBar';
 import { useLogoutMutation } from '@my/feature/hook/mutation/useLogoutMutation';
 import { useNavigate } from 'react-router-dom';
 import useIsLoggedInStore from '@shared/store/useIsLoggedInStore';
+import { useMyInfoStore } from '@shared/store/useMyInfoStore';
 
 export const MyPage = () => {
-    const getUserInfo = () => {
-        try {
-          const myInfoStore = localStorage.getItem('myInfoStore');
-          if (myInfoStore) {
-            const parsed = JSON.parse(myInfoStore);
-            return parsed?.state?.myInfo || null;
-          }
-          return null;
-        } catch (error) {
-          console.error('로컬스토리지 파싱 오류:', error);
-          return null;
-        }
-      };
     const navigate = useNavigate();
     const { logout } = useIsLoggedInStore();
-    const userInfo = getUserInfo();
-    const logoutMutation = useLogoutMutation(userInfo?.userId);
+    const { myInfo } = useMyInfoStore();
+    const logoutMutation = useLogoutMutation(myInfo?.userId);
 
     const handleLogout = async() => {
         // 클라이언트 로그아웃은 항상 실행
