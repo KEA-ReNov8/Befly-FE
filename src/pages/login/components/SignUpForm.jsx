@@ -9,12 +9,8 @@ import { useSocialSignupMutation } from '@pages/login/feature/hooks/useSocialSig
 import { handleOnSubmit } from '@login/feature/utils/handleOnSubmit';
 import Message from './Message';
 import defaultProfile from '@shared/assets/icons/defaultUser.svg';
-//import { useSocialSignupStore } from '@login/feature/store/useSocialSignupStore';
 
 const SignUpForm = ({ onSuccess }) => {
-    //document.cookie = "tempClientId=4286064884; path=/; max-age=3600";
-
-    //const { setClientId, setNickname, setPhotoUrl } = useSocialSignupStore();
 
     const { 
         register, 
@@ -60,7 +56,7 @@ const SignUpForm = ({ onSuccess }) => {
             <Title>회원가입을 위해 <br/> 정보를 입력해주세요.</Title>
             <Profile>
                 {/*<ImageInput id="image-upload"type='file' accept="image/*" {...register('image')} />*/}
-                {/*<ProfileImage src="https://objectstorage.kr-central-2.kakaocloud.com/v1/af4c072eeaf845b5be29839350a03250/belfy-object-storage/profile_img/default-user-icon.png" />*/}
+                {/*<ProfileImage src="" />*/}
                 <img src={defaultProfile} alt="defaultProfile" />
                 {/*<AddLabel htmlFor="image-upload">+</AddLabel>*/}
             </Profile>

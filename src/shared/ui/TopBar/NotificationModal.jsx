@@ -8,7 +8,6 @@ const NotificationModal = () => {
   
   console.log('NotificationModal에서 받은 notifications:', notifications);
   
-  // 알람 세부 기능은 백 연결하고 추가
   return (
     <Wrapper>
       <ItemList>

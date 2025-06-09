@@ -146,7 +146,6 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: ${theme.colors.gray[200]};
 `;
 
 const LoadingContainer = styled.div`

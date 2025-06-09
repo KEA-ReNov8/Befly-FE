@@ -7,7 +7,6 @@ import { useCreateNewChatMutation } from '@chat/feature/hooks/mutate/useCreateNe
 
 const WorryModal = ({ onClose }) => {
   const navigate = useNavigate();
-  // 나중에 고민생성하기 버튼 누르면 데이터 넘겨주는 과정 추가하면 될듯
   const [worryTitle, setWorryTitle] = useState(''); // 고민 제목
   const [selectedCategory, setSelectedCategory] = useState(''); // 고민카테고리
 

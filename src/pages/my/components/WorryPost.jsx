@@ -106,8 +106,8 @@ const TitleContainer = styled.div`
 
 const PostTitle = styled.div`
     flex: 1;
-    font-weight: ${theme.fontWeight.semibold};
-    font-size: ${theme.fontSize.md};
+    font-weight: ${theme.fontWeight.medium};
+    font-size: ${theme.fontSize.smMd};
 `;
 
 const PostInfo = styled.div`

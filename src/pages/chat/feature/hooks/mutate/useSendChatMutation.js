@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 import { apiInstance } from '@shared/apis/instance';
 import { AxiosError } from 'axios';
 
-
 export const useSendChatMutation = ( onSuccess, onError) => {
 
     const sendChatMutation = useMutation({
