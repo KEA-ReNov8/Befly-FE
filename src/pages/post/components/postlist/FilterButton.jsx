@@ -13,10 +13,11 @@ const StyledButton = styled.button`
   width: 73px;
   height: 30px;
   border-radius: 50px;
-  font-size: 14px;
+  font-size: ${theme.fontSize.smMd};
   background-color: ${theme.colors.other.white};
   color: ${theme.colors.other.black};
   border: 1px solid ${theme.colors.gray[300]};
+  font-weight: ${theme.fontWeight.medium};
   cursor: pointer;
   margin-right: 10px;
   transition:
