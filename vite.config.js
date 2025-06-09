@@ -3,11 +3,11 @@ import path from 'path';
 import svgr from 'vite-plugin-svgr';
 import react from '@vitejs/plugin-react-swc';
 import mkcert from 'vite-plugin-mkcert';
-import fs from 'fs';
+//import fs from 'fs';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), svgr()],
+  plugins: [react(), svgr(), mkcert()],
   assetsInclude: ['**/*.JPG', '**/*.jpg', '**/*.png', '**/*.jpeg', '**/*.gif'], // 이미지 파일 포함
   resolve: {
     alias: [

@@ -3,7 +3,6 @@ import useIsLoggedInStore from '@shared/store/useIsLoggedInStore';
 
 export const apiInstance = axios.create({
   baseURL: `${import.meta.env.VITE_SERVER_URL}`,
-  //baseURL: '/api', // 프록시 설정 적용
   timeout: 10000,
   withCredentials: true,
 });

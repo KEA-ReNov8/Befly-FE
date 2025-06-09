@@ -1,7 +1,7 @@
 import { apiInstance } from '@shared/apis/instance';
 
 export const searchFreePosts = async ({ page = 0, keyword = '' }) => {
-  console.log('🔍 자유글 검색 API 호출:', { page, keyword });
+  console.log('자유글 검색 API 호출:', { page, keyword });
 
   const params = new URLSearchParams();
   params.append('page', page.toString());
@@ -10,13 +10,13 @@ export const searchFreePosts = async ({ page = 0, keyword = '' }) => {
   }
 
   const response = await apiInstance.get(`/community/search/free?${params.toString()}`);
-  console.log('🔍 자유글 검색 응답:', response.data);
+  console.log('자유글 검색 응답:', response.data);
 
   return response.data.result;
 };
 
 export const searchSharePosts = async ({ page = 0, keyword = '', category = '전체' }) => {
-  console.log('🔍 공유글 검색 API 호출:', { page, keyword, category });
+  console.log('공유글 검색 API 호출:', { page, keyword, category });
 
   const params = new URLSearchParams();
   params.append('page', page.toString());
@@ -28,7 +28,7 @@ export const searchSharePosts = async ({ page = 0, keyword = '', category = '전
   }
 
   const response = await apiInstance.get(`/community/search/solved?${params.toString()}`);
-  console.log('🔍 공유글 검색 응답:', response.data);
+  console.log('공유글 검색 응답:', response.data);
 
   return response.data.result;
 };
