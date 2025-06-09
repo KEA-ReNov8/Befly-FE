@@ -13,7 +13,7 @@ export const getSharePostDetail = async (shareId) => {
       nickname: result.nickname,
       title: result.solvedTitle,
       content: result.solvedContent,
-      imageUrls: result.imageUrls ?? [],
+      imageUrls: result.imageUrls,
       likes: result.likeCount,
       comments: result.commentCount,
       createdAt: result.createdAt,
@@ -47,7 +47,7 @@ export const getSolvedPostsByPage = async (page = 0) => {
       categoryName: post.category,
       postId: post.solvedId,
       currentPage: result.number,
-      cardImage: post.imageUrls?.[0] ?? null,
+      cardImage: post.imageUrls ?? null,
     }));
 
     return {
@@ -76,7 +76,7 @@ export const getLatestSharePosts = async () => {
       categoryName: post.category || '', // API 명세에 맞춰 수정
       postId: post.solvedId,
       currentPage: 0, // 메인페이지용이므로 0
-      cardImage: post.imageUrls?.[0] ?? null,
+      cardImage: post.imageUrls ?? null,
     }));
   } catch (error) {
     console.error('최신 공유글 조회 실패:', error);
