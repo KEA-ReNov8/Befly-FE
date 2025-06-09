@@ -14,7 +14,7 @@ export const FreePostPage = () => {
   const navigate = useNavigate();
   const { postId } = useParams(); // URL에서 postId 추출
   const editorRef = useRef(null);
-  const imageUrlsRef = useRef([]);
+  const imageUrlsRef = useRef('');
 
   const [title, setTitle] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,7 +40,7 @@ export const FreePostPage = () => {
         editorRef.current.getInstance().setHTML(existingPost.content);
       }
       // 기존 이미지 정보도 설정 (필요시)
-      imageUrlsRef.current = existingPost.imageUrls || [];
+      imageUrlsRef.current = existingPost.imageUrls;
     } else if (!isEditMode) {
       // 새 글 작성 모드: 임시저장된 내용 복원
       const savedTitle = localStorage.getItem('temp_free_post_title');
@@ -83,7 +83,7 @@ export const FreePostPage = () => {
       if (result && result.imageUrl) {
         // 쿼리 파라미터(? 이후)를 제거하여 깔끔한 URL로 만들기
         const cleanImageUrl = result.imageUrl.split('?')[0];
-        imageUrlsRef.current.push(result.imageUrl);
+        imageUrlsRef.current = cleanImageUrl;
         callback(cleanImageUrl, '업로드 이미지');
       } else {
         throw new Error('업로드 결과가 올바르지 않습니다.');
