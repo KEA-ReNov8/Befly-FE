@@ -10,10 +10,10 @@ import { useUploadImageMutation } from '@/shared/hooks/useUploadImageMutation';
 import { useCreateSharePostMutation } from '@post/feature/hooks/useCreateSharePostMutation';
 import { useUpdateSharePostMutation } from '@post/feature/hooks/useUpdateSharePostMutation';
 import { useSharePostDetailQuery } from '@post/feature/hooks/useSharePostDetailQuery';
-import { getUserInfo } from '@shared/utils/getUserInfo';
+import { useMyInfoStore } from '@shared/store/useMyInfoStore';
 
 export const SharePostPage = () => {
-  const userInfo = getUserInfo();
+  const { myInfo: userInfo } = useMyInfoStore();
   const navigate = useNavigate();
   const location = useLocation();
   const { postId } = useParams(); // URL에서 postId 추출
