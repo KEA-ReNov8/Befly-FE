@@ -112,11 +112,11 @@ export const FreePostPage = () => {
     const imgTagRegex = /<img[^>]+src="([^"]+)"/g;
     const firstImageMatch = imgTagRegex.exec(html);
 
-    let representativeImage = [];
+    let representativeImage = '';
     if (firstImageMatch) {
       const firstImageSrc = firstImageMatch[1];
       // HTML에서 추출한 첫 번째 이미지 URL을 직접 사용
-      representativeImage = [firstImageSrc];
+      representativeImage = firstImageSrc; //배열이 아닌 문자열로 저장
     }
 
     if (isEditMode) {

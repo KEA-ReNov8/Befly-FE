@@ -65,7 +65,7 @@ export const SharePostListPage = () => {
     time: formatTimestamp(post.createdAt),
     nickname: post.nickname,
     categoryName: post.category,
-    cardImage: post.imageKeys?.[0] || null,
+    cardImage: post.imageKeys ?? null,
     type: 'shared',
   });
 

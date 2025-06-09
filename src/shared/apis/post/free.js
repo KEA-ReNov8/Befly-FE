@@ -11,7 +11,7 @@ export const getFreePostDetail = async (freeId) => {
       title: result.freeTitle,
       content: result.freeContent,
       nickname: result.nickname,
-      imageUrls: result.imageUrl ?? [], // null이면 빈 배열로 처리
+      imageUrls: result.imageUrl ?? null, // null이면 빈 배열로 처리
       likes: result.likes,
       comments: result.comments,
       createdAt: result.createdAt,
@@ -38,7 +38,7 @@ export const getFreePostsByPage = async (page = 0) => {
       categoryName: '', // 자유함은 없음
       postId: post.postId,
       currentPage: result.number, // 현재 페이지 번호 포함
-      cardImage: post.imageUrl?.[0] ?? null,
+      cardImage: post.imageUrl ?? null,
     }));
 
     return {
@@ -66,7 +66,7 @@ export const getLatestFreePosts = async () => {
       categoryName: '', // 자유글엔 없음
       postId: post.postId,
       currentPage: 0, // 리스트 페이지 개념이 없으므로 0으로 설정
-      cardImage: post.imageUrl?.[0] || null,
+      cardImage: post.imageUrl ?? null,
     }));
   } catch (error) {
     throw error;

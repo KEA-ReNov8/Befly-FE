@@ -9,7 +9,6 @@ import { useFreePostsByPageQuery } from '@/pages/post/feature/hooks/useFreePosts
 import Wait from '@shared/ui/lottieComp/wait';
 import { useSearchFreePostsQuery } from '@/pages/post/feature/hooks/useSearchFreePostsQuery';
 
-
 export const FreePostListPage = () => {
   const { page } = useParams();
   const pageNumFromParam = Number(page) || 1; // 사용자가 보는 페이지는 1부터 시작
@@ -62,7 +61,7 @@ export const FreePostListPage = () => {
     comments: post.commentCount,
     time: formatTimestamp(post.createdAt),
     nickname: post.nickname,
-    cardImage: post.imageKeys?.[0] || null,
+    cardImage: post.imageKeys ?? null,
     type: 'free',
   });
 
