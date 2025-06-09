@@ -68,7 +68,7 @@ const PostItem = styled.div`
 `;
 
 const StatusContainer = styled.div`
-    width: 100px;
+    width: 97px;
     text-align: center;
     align-items: center;
     justify-content: center;

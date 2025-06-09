@@ -23,7 +23,7 @@ const SharePostCard = ( { post } ) => {
 
     return (
     <CardContainer onClick={handleClick}>
-      <CardImage src={post.imageUrl || defaultImage} alt="게시글 이미지"/>
+      <CardImage src={post.imageUrls || defaultImage} alt="게시글 이미지"/>
       {post.category && (
         <CategoryPill color={theme.colors.category[post.category]}>{post.category}</CategoryPill>
       )}

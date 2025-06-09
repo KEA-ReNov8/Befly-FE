@@ -110,7 +110,7 @@ export const FreePostListPage = () => {
       )}
       {error && <div>에러 발생!</div>}
       {!isLoading && !error && !posts.length && (
-        <div>{isSearchMode ? '검색 결과가 없습니다.' : '게시글이 없습니다.'}</div>
+        <EmptyContainer>{isSearchMode ? '검색 결과가 없습니다.' : '게시글이 없습니다.'}</EmptyContainer>
       )}
       {!isLoading && !error && posts.length > 0 && (
         <BoardGrid>
@@ -150,7 +150,7 @@ const Container = styled.div`
 
 const LoadingContainer = styled.div`
   width: 200px;
-  height: 200px;
+  height: 500px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -200,6 +200,14 @@ const ClearButton = styled.button`
   &:hover {
     background: ${theme.colors.gray[100]};
   }
+`;
+
+const EmptyContainer = styled.div`
+  width: 1044px;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 // 자유글 작성 버튼 스타일

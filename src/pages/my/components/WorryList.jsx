@@ -128,7 +128,7 @@ const TabContainer = styled.div`
     align-items: center;    
     margin-top: 30px;
     margin-left: 100px;
-    gap: 30px;
+    gap: 20px;
 `;
 
 const TabButton = styled.button`

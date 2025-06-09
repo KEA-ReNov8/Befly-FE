@@ -6,6 +6,7 @@ export const useInfinitePostListQuery = (userId) => {
         queryKey: ['infinitePostList', userId],
         queryFn: async ({ pageParam = 0 }) => {
             const response = await apiInstance.get(`/community/solved/user/${userId}/page/${pageParam}`);
+            console.log(response.data);
             return response.data;
         },
         getNextPageParam: (lastPage) => {
