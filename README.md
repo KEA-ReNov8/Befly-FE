@@ -86,10 +86,10 @@
     <td align="center"><a href="https://github.com/KwonHalim">권하림</td>
   </tr>
   <tr>
-    <td align="center">자유함</td>
-    <td align="center">공유함</td>
-    <td align="center">유저</td>
-    <td align="center">알림, AI</td>
+    <td align="center"></td>
+    <td align="center"></td>
+    <td align="center"></td>
+    <td align="center"></td>
   </tr>
     <tr>
     <td align="center">BE PL</td>
@@ -187,55 +187,49 @@
 
 
 ## ⚙️ 아키텍처 구조
-<table align="center" style="border-collapse: collapse; width: 100%; margin: 20px auto;">
-  <tr>
-    <td align="center" style="width: 50%; padding: 10px;">
-      <img src="https://github.com/user-attachments/assets/3fc1c89b-6b29-4ea9-b4e1-b4a2166e2732" alt="운영아키텍처" style="width: 100%; max-width: 500px;">
-    </td>
-    <td align="center" style="width: 50%; padding: 10px;">
-      <img src="https://github.com/user-attachments/assets/268e6ba5-0394-467d-b2a1-6675008873d8" alt="배포 파이프라인" style="width: 100%; max-width: 500px;">
-    </td>
-  </tr>
-  <tr>
-    <td align="center" style="width: 50%; padding: 10px;">
-      <strong>운영 아키텍처</strong>
-    </td>
-    <td align="center" style="width: 50%; padding: 10px;">
-      <strong>배포 파이프라인</strong>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" style="width: 50%; padding: 10px;">
-      <img src="https://github.com/user-attachments/assets/b1720052-68d9-4762-8adf-c73a8f5cee59" alt="DB 모니터링 아키텍처" style="width: 100%; max-width: 500px;">
-    </td>
-    <td align="center" style="width: 50%; padding: 10px;">
-      <img src="https://github.com/user-attachments/assets/3a3425e5-bf2b-452a-9297-327937486f95" alt="MSA 모니터링 아키텍처" style="width: 100%; max-width: 500px;">
-    </td>
-  </tr>
-  <tr>
-    <td align="center" style="width: 50%; padding: 10px;">
-      <strong>DB 모니터링 아키텍처</strong>
-    </td>
-    <td align="center" style="width: 50%; padding: 10px;">
-      <strong>MSA 모니터링 아키텍처</strong>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" style="width: 50%; padding: 10px;">
-      <img src="https://github.com/user-attachments/assets/5b1ec448-7cc1-4e68-80ea-2259adf233df" alt="AI아키텍처" style="width:500px; max-width: 500px;">
-    </td>
-    <td align="center" style="width: 50%; padding: 10px;">
-      <img src="https://github.com/user-attachments/assets/0cae38e3-f617-48e8-9897-c223e951debc" alt="CDC" style="width: 100%; max-width: 500px;">
-    </td>
-  </tr>
-  <tr>
-    <td align="center" style="width: 50%; padding: 10px;">
-      <strong>AI 아키텍처</strong>
-    </td>
-    <td align="center" style="width: 50%; padding: 10px;">
-      <strong>CDC 아키텍처</strong>
-    </td>
-  </tr>
+<table align="center" style="border-collapse: collapse; width: 100%; max-width: 1200px; margin: 20px auto;">
+    <tr>
+        <td colspan="2" align="center" style="padding: 10px;">
+            <img src="https://github.com/user-attachments/assets/3fc1c89b-6b29-4ea9-b4e1-b4a2166e2732" alt="운영아키텍처" style="width: 90%; max-width: 900px;">
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" align="center" style="padding: 10px;">
+            <strong>운영 아키텍처 / CDC 아키텍처</strong>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" style="padding: 10px;">
+            <img src="https://github.com/user-attachments/assets/b1720052-68d9-4762-8adf-c73a8f5cee59" alt="DB 모니터링 아키텍처" style="width: 500px; max-width: 500px;">
+        </td>
+        <td align="center" style="padding: 10px;">
+            <img src="https://github.com/user-attachments/assets/3a3425e5-bf2b-452a-9297-327937486f95" alt="MSA 모니터링 아키텍처" style="width: 500px; max-width: 500px;">
+        </td>
+    </tr>
+    <tr>
+        <td align="center" style="padding: 10px;">
+            <strong>DB 모니터링 아키텍처</strong>
+        </td>
+        <td align="center" style="padding: 10px;">
+            <strong>MSA 모니터링 아키텍처</strong>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" style="padding: 10px;">
+            <img src="https://github.com/user-attachments/assets/5b1ec448-7cc1-4e68-80ea-2259adf233df" alt="AI아키텍처" style="width: 500px; max-width: 500px;">
+        </td>
+        <td align="center" style="padding: 10px;">
+            <img src="https://github.com/user-attachments/assets/268e6ba5-0394-467d-b2a1-6675008873d8" alt="배포 파이프라인" style="width: 500px; max-width: 500px;">
+        </td>
+    </tr>
+    <tr>
+        <td align="center" style="padding: 10px;">
+            <strong>AI 아키텍처</strong>
+        </td>
+        <td align="center" style="padding: 10px;">
+            <strong>배포 파이프라인</strong>
+        </td>
+    </tr>
 </table>
 
 ## 🛠️ 기술 스택
@@ -270,7 +264,8 @@
 ![Terraform](https://img.shields.io/badge/Terraform-623CE4?style=flat&logo=terraform&logoColor=white)
 ![Amplify](https://img.shields.io/badge/AWS%20Amplify-FF9900?style=flat&logo=awsamplify&logoColor=white)
 ![Route53](https://img.shields.io/badge/Route53-FF9900?style=flat&logo=amazonaws&logoColor=white)
-![Kakao Cloud](https://img.shields.io/badge/Kakao%20Cloud-FFCD00?style=flat&logo=kakaotalk&logoColor=black)
+![Kakao Cloud](https://img.shields.io/badge/Kakao%20Cloud-FFCD00?style=flat&logoColor=black)
+![Load Balancer](https://img.shields.io/badge/LB-FFCD00?style=flat&logoColor=black)
 ![GCP](https://img.shields.io/badge/GCP-4285F4?style=flat&logo=googlecloud&logoColor=white)
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=flat&logo=kubernetes&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat&logo=githubactions&logoColor=white)
